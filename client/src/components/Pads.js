@@ -32,7 +32,7 @@ function Pads () {
     <div className='pads'>
       {pads.map((row, rowIndex) => {
         return (
-          <div className='row' key={rowIndex}>a
+          <div className='row' key={rowIndex}>
             {row.map((pad, index) => {
               return <Pad
                 key={index}

@@ -1,9 +1,11 @@
 import React from 'react';
 
 function Controls (props) {
+  let buttonText = props.playing ? 'Stop' : 'Play';
+
   return (
     <div className="controls">
-        Controls
+        <button onClick={props.togglePlaying}>{buttonText}</button>
     </div>
   );
 }
