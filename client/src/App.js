@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import './App.css';
 import Pads from './components/Pads';
 import Controls from './components/Controls';
