@@ -1,36 +1,10 @@
-import React, { useState } from 'react';
-
 import Pad from './Pad'
 
-function Pads () {
-
-  const initialPads =  [
-    [0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0]
-  ];
-
-  const [pads, setPads] = useState(initialPads)
-
-  function toggleActive (rowIndex, id) {
-    let padsCopy = [...pads];
-    let padState = padsCopy[rowIndex][id];
-    if (padState === 1) {
-      pads[rowIndex][id] = 0;
-    } else {
-      pads[rowIndex][id] = 1;
-    }
-    setPads(padsCopy);
-  }
+function Pads (props) {
 
   return (
     <div className='pads'>
-      {pads.map((row, rowIndex) => {
+      {props.pads.map((row, rowIndex) => {
         return (
           <div className='row' key={rowIndex}>
             {row.map((pad, index) => {
@@ -39,7 +13,8 @@ function Pads () {
                 rowIndex={rowIndex}
                 id={index}
                 state={pad}
-                toggleActive={toggleActive} />
+                pos={props.pos}
+                toggleActive={() => props.toggleActive(rowIndex, index)} />
             })}
           </div>
         )
