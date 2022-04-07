@@ -29,6 +29,8 @@ function App () {
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
   ];
 
+  const savedPads = JSON.parse(localStorage.getItem('pads'));
+
   // TODO change this for howlerjs lib
   const [playKick1] = useSound(kick1);
   const [playKick2] = useSound(kick2);
@@ -40,7 +42,7 @@ function App () {
   const [playScratch] = useSound(scratch);
 
 
-  const [pads, setPads] = useState(localStorage.getItem('pads') | initialPads)
+  const [pads, setPads] = useState(savedPads ? savedPads : initialPads)
   const [playing, setPlaying] = useState(false);
   const [pos, setPos] = useState(0);
   const [bpm, setBpm] = useState(220);
@@ -143,7 +145,7 @@ function App () {
       pads[rowIndex][id] = 1;
     }
     setPads(padsCopy);
-    localStorage.setItem('pads', padsCopy);
+    localStorage.setItem('pads', JSON.stringify(padsCopy));
   }
 
   return (
