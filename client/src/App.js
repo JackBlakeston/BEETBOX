@@ -1,7 +1,14 @@
 import React, { useState } from 'react';
+import useSound from 'use-sound';
+
 import './App.css';
 import Pads from './components/Pads';
 import Controls from './components/Controls';
+
+// Audio file imports
+import kick from './assets/sounds/kick.wav'
+import snare from './assets/sounds/snare.wav'
+import hhClosed from './assets/sounds/hh_closed.wav'
 
 
 function App () {
@@ -18,12 +25,9 @@ function App () {
   ];
 
   // TODO change this for howlerjs lib
-  const frequencies = [130.81, 146.83, 164.81, 174.61, 196.00, 220.00, 246.94, 261.63];
-
-  const audioCx = new (window.AudioContext || window.webkitAudioContext)();
-  const gain = audioCx.createGain();
-  gain.connect(audioCx.destination);
-  gain.gain.value = 1;
+  const [playKick] = useSound(kick);
+  const [playSnare] = useSound(snare);
+  const [playHhClosed] = useSound(hhClosed);
 
 
   const [pads, setPads] = useState(initialPads)
@@ -62,18 +66,12 @@ function App () {
     // Returns a ref to the interval ID in case you want to clear it manually:
     return intervalRef;
   }
-  ////////
 
   function togglePlaying () {
     if (playing) clearInterval(timerId);
 
     setPlaying(!playing);
   }
-
-  // function setTimer () {
-  //   const newTimerId = setInterval(() => tick(), calculateTempo(bpm));
-  //   setTimerId(newTimerId);
-  // }
 
   const timerId = useInterval(tick, playing ? calculateTempo(bpm) : null)
 
@@ -99,15 +97,14 @@ function App () {
   }
 
   function playSound(rowIndex) {
-    let freq = frequencies[rowIndex];
-    let node = audioCx.createOscillator();
-    let currentTime = audioCx.currentTime;
-    node.frequency.value = freq;
-    node.detune.value = 0;
-    node.type = 'sine';
-    node.connect(gain);
-    node.start(currentTime);
-    node.stop(currentTime + 0.2);
+    if (rowIndex === 0) playKick();
+    if (rowIndex === 1) playSnare();
+    if (rowIndex === 2) playHhClosed();
+    // if (rowIndex === 3) play;
+    // if (rowIndex === 4) play;
+    // if (rowIndex === 5) play;
+    // if (rowIndex === 6) play;
+    // if (rowIndex === 7) play;
   }
 
 
