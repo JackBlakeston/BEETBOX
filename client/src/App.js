@@ -40,7 +40,7 @@ function App () {
   const [playScratch] = useSound(scratch);
 
 
-  const [pads, setPads] = useState(initialPads)
+  const [pads, setPads] = useState(localStorage.getItem('pads') | initialPads)
   const [playing, setPlaying] = useState(false);
   const [pos, setPos] = useState(0);
   const [bpm, setBpm] = useState(220);
@@ -143,6 +143,7 @@ function App () {
       pads[rowIndex][id] = 1;
     }
     setPads(padsCopy);
+    localStorage.setItem('pads', padsCopy);
   }
 
   return (
