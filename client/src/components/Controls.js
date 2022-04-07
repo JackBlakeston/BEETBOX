@@ -5,7 +5,7 @@ function Controls (props) {
 
   return (
     <div className="controls">
-        <button onClick={props.togglePlaying}>{buttonText}</button>
+        <button className='play-button' onClick={props.togglePlaying}>{buttonText}</button>
 
         <div className='bpm'>
           <label>BPM:</label>

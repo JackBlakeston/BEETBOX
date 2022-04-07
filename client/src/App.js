@@ -6,14 +6,14 @@ import Pads from './components/Pads';
 import Controls from './components/Controls';
 
 // Audio file imports
-import kick1 from './assets/sounds/kick_1.wav'
-import kick2 from './assets/sounds/kick_2.wav'
-import snare from './assets/sounds/snare.wav'
-import hhClosed from './assets/sounds/hh_closed.wav'
-import hhOpen from './assets/sounds/hh_open.wav'
-import shaker from './assets/sounds/shaker.wav'
-import clap from './assets/sounds/clap.wav'
-import scratch from './assets/sounds/scratch.wav'
+import kick1 from './assets/sounds/kick_1.wav';
+import kick2 from './assets/sounds/kick_2.wav';
+import snare from './assets/sounds/snare.wav';
+import hhClosed from './assets/sounds/hh_closed.wav';
+import hhOpen from './assets/sounds/hh_open.wav';
+import shaker from './assets/sounds/shaker.wav';
+import clap from './assets/sounds/clap.wav';
+import scratch from './assets/sounds/scratch.wav';
 
 
 function App () {

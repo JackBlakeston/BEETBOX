@@ -2,6 +2,25 @@
   margin: 40px 0 0 40px;
 }
 
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 100px;
+  margin: 0 0 40px 40px;
+}
+
+.play-button {
+  background-color: rgba(252, 202, 0, 0.907);
+  border-radius: 4px;
+  height: 40px;
+  width: 100px;
+  transition: 0.2s;
+}
+
+.play-button:hover {
+  transform: scale(1.05);
+}
+
 .row {
   clear: both;
 }
