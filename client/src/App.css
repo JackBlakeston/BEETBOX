@@ -14,3 +14,10 @@
 .pad.active {
   background: green;
 }
+
+.pad.playing {
+  background: silver;
+}
+.pad.active.playing {
+  background: lime;
+}
