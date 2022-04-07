@@ -6,28 +6,38 @@ import Pads from './components/Pads';
 import Controls from './components/Controls';
 
 // Audio file imports
-import kick from './assets/sounds/kick.wav'
+import kick1 from './assets/sounds/kick_1.wav'
+import kick2 from './assets/sounds/kick_2.wav'
 import snare from './assets/sounds/snare.wav'
 import hhClosed from './assets/sounds/hh_closed.wav'
+import hhOpen from './assets/sounds/hh_open.wav'
+import shaker from './assets/sounds/shaker.wav'
+import clap from './assets/sounds/clap.wav'
+import scratch from './assets/sounds/scratch.wav'
 
 
 function App () {
 
   const initialPads =  [
-    [0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0]
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
   ];
 
   // TODO change this for howlerjs lib
-  const [playKick] = useSound(kick);
+  const [playKick1] = useSound(kick1);
+  const [playKick2] = useSound(kick2);
   const [playSnare] = useSound(snare);
   const [playHhClosed] = useSound(hhClosed);
+  const [playHhOpen] = useSound(hhOpen);
+  const [playShaker] = useSound(shaker);
+  const [playClap] = useSound(clap);
+  const [playScratch] = useSound(scratch);
 
 
   const [pads, setPads] = useState(initialPads)
@@ -68,7 +78,10 @@ function App () {
   }
 
   function togglePlaying () {
-    if (playing) clearInterval(timerId);
+    if (playing) {
+      clearInterval(timerId);
+      setPos(0);
+    }
 
     setPlaying(!playing);
   }
@@ -79,7 +92,7 @@ function App () {
     let currentPos = pos;
     currentPos++;
 
-    if (currentPos > 7) currentPos = 0;
+    if (currentPos > 15) currentPos = 0;
     setPos(currentPos);
 
     checkPad();
@@ -97,14 +110,14 @@ function App () {
   }
 
   function playSound(rowIndex) {
-    if (rowIndex === 0) playKick();
-    if (rowIndex === 1) playSnare();
-    if (rowIndex === 2) playHhClosed();
-    // if (rowIndex === 3) play;
-    // if (rowIndex === 4) play;
-    // if (rowIndex === 5) play;
-    // if (rowIndex === 6) play;
-    // if (rowIndex === 7) play;
+    if (rowIndex === 0) playKick1();
+    if (rowIndex === 1) playKick2();
+    if (rowIndex === 2) playSnare();
+    if (rowIndex === 3) playHhClosed();
+    if (rowIndex === 4) playHhOpen();
+    if (rowIndex === 5) playShaker();
+    if (rowIndex === 6) playClap();
+    if (rowIndex === 7) playScratch();
   }
 
 
@@ -139,7 +152,19 @@ function App () {
         togglePlaying={togglePlaying}
         handleChange={changeBpm}
         bpm={bpm} />
-      <Pads pos={pos} pads={pads} toggleActive={toggleActive} />
+      <div className='pad-and-names-container'>
+        <div className='names-container'>
+          <p>Kick 1</p>
+          <p>Kick 2</p>
+          <p>Snare</p>
+          <p>HH - Closed</p>
+          <p>HH - Open</p>
+          <p>Shaker</p>
+          <p>Clap</p>
+          <p>Scratch</p>
+        </div>
+        <Pads pos={pos} pads={pads} toggleActive={toggleActive} />
+      </div>
     </div>
   );
 }
