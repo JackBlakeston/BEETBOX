@@ -1,19 +1,10 @@
-import React, { useState } from 'react';
-import useSound from 'use-sound';
+import React, { useEffect, useState } from 'react';
 
 import './App.css';
-import Pads from './components/Pads';
+import PadRow from './components/PadRow';
 import Controls from './components/Controls';
+import { getAllUrls } from './audio-service';
 
-// Audio file imports
-import kick1 from './assets/sounds/kick_1.wav';
-import kick2 from './assets/sounds/kick_2.wav';
-import snare from './assets/sounds/snare.wav';
-import hhClosed from './assets/sounds/hh_closed.wav';
-import hhOpen from './assets/sounds/hh_open.wav';
-import shaker from './assets/sounds/shaker.wav';
-import clap from './assets/sounds/clap.wav';
-import scratch from './assets/sounds/scratch.wav';
 
 
 function App () {
@@ -31,22 +22,21 @@ function App () {
 
   const savedPads = JSON.parse(localStorage.getItem('pads'));
 
-  // TODO change this for howlerjs lib
-  const [playKick1] = useSound(kick1);
-  const [playKick2] = useSound(kick2);
-  const [playSnare] = useSound(snare);
-  const [playHhClosed] = useSound(hhClosed);
-  const [playHhOpen] = useSound(hhOpen);
-  const [playShaker] = useSound(shaker);
-  const [playClap] = useSound(clap);
-  const [playScratch] = useSound(scratch);
-
 
   const [pads, setPads] = useState(savedPads ? savedPads : initialPads)
-  const [playing, setPlaying] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
   const [pos, setPos] = useState(0);
   const [bpm, setBpm] = useState(220);
+  const [activeRows, setActiveRows] = useState([false, false, false, false, false, false, false, false]);
 
+  const [urlList, setUrlList] = useState([]);
+
+  useEffect(() => {
+    getAllUrls().then(response => {
+      setUrlList(response);
+    });
+
+  }, []);
 
   function useInterval(callback, delay) {
     const intervalRef = React.useRef();
@@ -80,15 +70,14 @@ function App () {
   }
 
   function togglePlaying () {
-    if (playing) {
+    if (isPlaying) {
       clearInterval(timerId);
       setPos(0);
     }
-
-    setPlaying(!playing);
+    setIsPlaying(!isPlaying);
   }
 
-  const timerId = useInterval(tick, playing ? calculateTempo(bpm) : null)
+  const timerId = useInterval(tick, isPlaying ? calculateTempo(bpm) : null)
 
   function tick () {
     let currentPos = pos;
@@ -102,26 +91,16 @@ function App () {
   // ?? Any way to do this without useInterval hook?
 
   function checkPad () {
+    let activeRowsAux = [false, false, false, false, false, false, false, false];
     pads.forEach((row, rowIndex) => {
       row.forEach((pad, index) => {
         if (index === pos && pad === 1) {
-          playSound(rowIndex);
+          activeRowsAux[rowIndex] = true;
         }
       })
-    })
+    });
+    setActiveRows(activeRowsAux);
   }
-
-  function playSound(rowIndex) {
-    if (rowIndex === 0) playKick1();
-    if (rowIndex === 1) playKick2();
-    if (rowIndex === 2) playSnare();
-    if (rowIndex === 3) playHhClosed();
-    if (rowIndex === 4) playHhOpen();
-    if (rowIndex === 5) playShaker();
-    if (rowIndex === 6) playClap();
-    if (rowIndex === 7) playScratch();
-  }
-
 
   function calculateTempo (bpm) {
     return 60000 / bpm;
@@ -130,9 +109,9 @@ function App () {
   function changeBpm (event) {
     const newBpm = Number(event.target.value);
     setBpm(newBpm);
-    if (playing) {
+    if (isPlaying) {
       clearInterval(timerId)
-      setPlaying(false);
+      setIsPlaying(false);
     }
   }
 
@@ -151,22 +130,34 @@ function App () {
   return (
     <div className='App'>
       <Controls
-        playing={playing}
+        playing={isPlaying}
         togglePlaying={togglePlaying}
         handleChange={changeBpm}
         bpm={bpm} />
       <div className='pad-and-names-container'>
         <div className='names-container'>
-          <p>Kick 1</p>
-          <p>Kick 2</p>
+
+          {/* <p>Kick 2</p>
           <p>Snare</p>
           <p>HH - Closed</p>
           <p>HH - Open</p>
           <p>Shaker</p>
           <p>Clap</p>
-          <p>Scratch</p>
+          <p>Scratch</p> */}
         </div>
-        <Pads pos={pos} pads={pads} toggleActive={toggleActive} />
+        <div className='pads'>
+          {
+          urlList.map((sampleObj) => {
+            return <PadRow key={sampleObj.name}
+              sampleName={sampleObj.name}
+              pos={pos}
+              pads={pads[sampleObj.rowPosition]}
+              toggleActive={toggleActive}
+              soundFileUrl={sampleObj.url}
+              rowIndex={sampleObj.rowPosition}
+              isPlaying={activeRows[sampleObj.rowPosition]} />
+          })}
+        </div>
       </div>
     </div>
   );
