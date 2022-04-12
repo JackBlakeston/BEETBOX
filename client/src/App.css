@@ -59,8 +59,3 @@
   background: rgb(230,183,178);
   background: radial-gradient(circle, rgba(230,183,178,1) 0%, rgba(255,112,59,1) 100%);
 }
-
-.pad-and-names-container {
-  display: flex;
-  gap: 20px;
-}

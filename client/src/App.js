@@ -22,12 +22,13 @@ function App () {
 
   const savedPads = JSON.parse(localStorage.getItem('pads'));
 
+  const [pads, setPads] = useState(savedPads ? savedPads : initialPads);
 
-  const [pads, setPads] = useState(savedPads ? savedPads : initialPads)
   const [isPlaying, setIsPlaying] = useState(false);
   const [pos, setPos] = useState(0);
   const [bpm, setBpm] = useState(220);
-  const [activeRows, setActiveRows] = useState([false, false, false, false, false, false, false, false]);
+  const [activeRows, setActiveRows] = useState(Array(8).fill(false));
+  const [isLooped, setIsLooped] = useState(false); // Necessary for fixing visual delay
 
   const [urlList, setUrlList] = useState([]);
 
@@ -73,6 +74,8 @@ function App () {
     if (isPlaying) {
       clearInterval(timerId);
       setPos(0);
+      setActiveRows(Array(8).fill(false));
+      setIsLooped(false);
     }
     setIsPlaying(!isPlaying);
   }
@@ -83,7 +86,10 @@ function App () {
     let currentPos = pos;
     currentPos++;
 
-    if (currentPos > 15) currentPos = 0;
+    if (currentPos > 15) {
+      currentPos = 0;
+      setIsLooped(true);
+    }
     setPos(currentPos);
 
     checkPad();
@@ -91,7 +97,8 @@ function App () {
   // ?? Any way to do this without useInterval hook?
 
   function checkPad () {
-    let activeRowsAux = [false, false, false, false, false, false, false, false];
+    const activeRowsAux = Array(8).fill(false);
+
     pads.forEach((row, rowIndex) => {
       row.forEach((pad, index) => {
         if (index === pos && pad === 1) {
@@ -99,6 +106,7 @@ function App () {
         }
       })
     });
+
     setActiveRows(activeRowsAux);
   }
 
@@ -109,10 +117,6 @@ function App () {
   function changeBpm (event) {
     const newBpm = Number(event.target.value);
     setBpm(newBpm);
-    if (isPlaying) {
-      clearInterval(timerId)
-      setIsPlaying(false);
-    }
   }
 
   function toggleActive (rowIndex, id) {
@@ -134,17 +138,7 @@ function App () {
         togglePlaying={togglePlaying}
         handleChange={changeBpm}
         bpm={bpm} />
-      <div className='pad-and-names-container'>
-        <div className='names-container'>
 
-          {/* <p>Kick 2</p>
-          <p>Snare</p>
-          <p>HH - Closed</p>
-          <p>HH - Open</p>
-          <p>Shaker</p>
-          <p>Clap</p>
-          <p>Scratch</p> */}
-        </div>
         <div className='pads'>
           {
           urlList.map((sampleObj) => {
@@ -155,10 +149,10 @@ function App () {
               toggleActive={toggleActive}
               soundFileUrl={sampleObj.url}
               rowIndex={sampleObj.rowPosition}
-              isPlaying={activeRows[sampleObj.rowPosition]} />
+              isTriggering={activeRows[sampleObj.rowPosition]}
+              isLooped={isLooped}/>
           })}
         </div>
-      </div>
     </div>
   );
 }

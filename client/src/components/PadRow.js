@@ -3,16 +3,16 @@ import useSound from 'use-sound';
 
 import Pad from './Pad';
 
-function PadRow ({soundFileUrl, pads, pos, toggleActive, isPlaying, rowIndex, sampleName}) {
+function PadRow ({soundFileUrl, pads, pos, toggleActive, isTriggering, rowIndex, sampleName, isLooped}) {
 
   // TODO change this for howlerjs lib
   const [playSound] = useSound(soundFileUrl);
 
   useEffect(() => {
-    if (isPlaying) {
+    if (isTriggering) {
       playSound();
     }
-  }, [pos, isPlaying, playSound]);
+  }, [pos, isTriggering, playSound]);
 
   return (
     <div className='row-container'>
@@ -24,7 +24,7 @@ function PadRow ({soundFileUrl, pads, pos, toggleActive, isPlaying, rowIndex, sa
               rowIndex={rowIndex}
               id={index}
               state={pad}
-              pos={pos}
+              pos={ pos === 0 && isLooped ? 15 : pos - 1 } // Fixes visual delay
               toggleActive={() => toggleActive(rowIndex, index)} />
           })}
         </div>

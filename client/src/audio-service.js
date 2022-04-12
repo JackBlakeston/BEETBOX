@@ -25,10 +25,11 @@ export async function getAllUrls () {
   const urlList = list.map(async (element, index) => {
     const elementPath = element._location.path;
     const elementRef = ref(storage, elementPath);
+
     return {
       url: await getDownloadURL(elementRef),
       rowPosition: index,
-      name: elementPath.replace(samplesPath, '').replace('.wav', ''),
+      name: elementRef.name.replace('.wav', ''),
     }
   });
   return (await Promise.all(urlList));
