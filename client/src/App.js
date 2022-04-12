@@ -3,43 +3,44 @@ import React, { useEffect, useState } from 'react';
 import './App.css';
 import PadRow from './components/PadRow';
 import Controls from './components/Controls';
-import { getAllUrls, getSampleList } from './audio-service';
+import { getSampleList } from './audio-service';
 
 
 
 function App () {
 
-  const initialPads =  [
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-  ];
+  const initialTrackList = ['kick', 'snare', 'hh'];
+
+  // const initialPads =  [
+  //   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  //   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  //   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  //   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  //   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  //   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  //   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  //   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+  // ];
+
+  const initialPads = initialTrackList.map(track => Array(16).fill(0)); // TODO Change 16 for variable length
 
   const savedPads = JSON.parse(localStorage.getItem('pads'));
+  const savedTrackList = JSON.parse(localStorage.getItem('trackList'));
 
+  const [sampleList, setSampleList] = useState([]);
+
+  // State of tracks and pads
+  const [trackList, setTrackList] = useState(savedTrackList ? savedTrackList : initialTrackList);
   const [pads, setPads] = useState(savedPads ? savedPads : initialPads);
+  const [trackCounter, setTrackCounter] = useState(trackList.length + 1);
 
   const [isPlaying, setIsPlaying] = useState(false);
   const [pos, setPos] = useState(0);
   const [bpm, setBpm] = useState(220);
-  const [activeRows, setActiveRows] = useState(Array(8).fill(false));
+  const [activeRows, setActiveRows] = useState(Array(trackList.length).fill(false));
   const [isLooped, setIsLooped] = useState(false); // Necessary for fixing visual delay
 
-  const [urlList, setUrlList] = useState([]);
-
-  const [sampleList, setSampleList] = useState();
-  // const [currentSample, setCurrentSample] = useState();
-
   useEffect(() => {
-    getAllUrls().then(response => {
-      setUrlList(response);
-    });
-
     getSampleList().then(list => {
       setSampleList(list);
     });
@@ -80,7 +81,7 @@ function App () {
     if (isPlaying) {
       clearInterval(timerId);
       setPos(0);
-      setActiveRows(Array(8).fill(false));
+      setActiveRows(Array(trackList.length).fill(false));
       setIsLooped(false);
     }
     setIsPlaying(!isPlaying);
@@ -92,7 +93,7 @@ function App () {
     let currentPos = pos;
     currentPos++;
 
-    if (currentPos > 15) {
+    if (currentPos > 15) { // TODO Make length a changeable state
       currentPos = 0;
       setIsLooped(true);
     }
@@ -103,7 +104,7 @@ function App () {
   // ?? Any way to do this without useInterval hook?
 
   function checkPad () {
-    const activeRowsAux = Array(8).fill(false);
+    const activeRowsAux = Array(trackList.length).fill(false);
 
     pads.forEach((row, rowIndex) => {
       row.forEach((pad, index) => {
@@ -137,30 +138,64 @@ function App () {
     localStorage.setItem('pads', JSON.stringify(padsCopy));
   }
 
+  function handleClickNewTrack () {
+    const trackListCopy = [...trackList];
+    trackListCopy.push(`Track ${ trackCounter }`); // TODO change for categories
+    setTrackCounter(trackCounter + 1);
+
+    const padsCopy = [...pads];
+    padsCopy.push(Array(16).fill(0));
+
+    setTrackList(trackListCopy);
+    setPads(padsCopy);
+
+    localStorage.setItem('trackList', JSON.stringify(trackListCopy));
+    localStorage.setItem('pads', JSON.stringify(padsCopy));
+  }
+
+  function handleClickDelete (rowIndex) {
+    const trackListCopy = [...trackList]
+    trackListCopy.splice(rowIndex, 1);
+
+    const padsCopy = [...pads];
+    padsCopy.splice(rowIndex, 1);
+
+    setTrackList(trackListCopy);
+    setPads(padsCopy);
+
+    localStorage.setItem('trackList', JSON.stringify(trackListCopy));
+    localStorage.setItem('pads', JSON.stringify(padsCopy));
+  }
+
   return (
     <div className='App'>
       <Controls
         playing={isPlaying}
         togglePlaying={togglePlaying}
         handleChange={changeBpm}
-        bpm={bpm} />
+        bpm={bpm}
+      />
 
         <div className='pads'>
-          {
-          urlList.map((sampleObj) => {
-            return <PadRow key={sampleObj.name}
-              defaultSampleName={sampleObj.name}
-              pos={pos}
-              pads={pads[sampleObj.rowPosition]}
-              toggleActive={toggleActive}
-              defaultUrl={sampleObj.url}
-              rowIndex={sampleObj.rowPosition}
-              isTriggering={activeRows[sampleObj.rowPosition]}
-              isLooped={isLooped}
-              sampleList={sampleList}
-              />
-          })}
+          { trackList.map((track, index) => {
+            return <PadRow
+            key={track}
+            pos={pos}
+            pads={pads[index]}
+            toggleActive={ toggleActive }
+            handleClickDelete={ handleClickDelete }
+            rowIndex={index}
+            isTriggering={activeRows[index]}
+            isLooped={isLooped}
+            sampleList={sampleList}
+            />
+          }) }
         </div>
+
+      <div className='new-track-container'>
+        <button className='new-track-button' onClick={handleClickNewTrack}>NEW TRACK</button>
+      </div>
+
     </div>
   );
 }

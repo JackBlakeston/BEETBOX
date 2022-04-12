@@ -42,7 +42,10 @@ export async function getSampleList () {
     const elementPath = element._location.path;
     return ref(storage, elementPath);
   });
-  return refList;
+
+  const filteredList = refList.filter(ref => ref.name !== 'Placeholder.wav');
+
+  return filteredList;
 }
 
 export function getSampleRef (samplePath) {

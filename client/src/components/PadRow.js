@@ -4,14 +4,18 @@ import { getSampleName, getSampleRef, getSampleUrl } from '../audio-service';
 
 import Pad from './Pad';
 
-function PadRow ({defaultUrl, pads, pos, toggleActive, isTriggering, rowIndex, defaultSampleName, isLooped, sampleList}) {
+function PadRow ({pads, pos, toggleActive, isTriggering, rowIndex, isLooped, sampleList, handleClickDelete}) {
+
+  const placeholderUrl = 'https://firebasestorage.googleapis.com/v0/b/jb-drum-sequencer.appspot.com/o/Samples%2FPlaceholder.wav?alt=media&token=07570a97-669a-4968-96e5-53f37a6210db';
+
+  const previousConfig = JSON.parse(localStorage.getItem(`track ${rowIndex}`));
+
+  const [url, setUrl] = useState(previousConfig ? previousConfig.url : placeholderUrl);
+  const [sampleRef, setSampleRef] = useState(previousConfig ? previousConfig.ref : '')
+  const [sampleName, setSampleName] = useState(previousConfig ? previousConfig.name : 'No sample loaded');
 
   // TODO change this for howlerjs lib
-
-  const [url, setUrl] = useState(defaultUrl);
-  const [sampleName, setSampleName] = useState(defaultSampleName);
-
-  const [playSound, exposedData] = useSound(url);
+  const [playSound] = useSound(url);
 
   useEffect(() => {
     if (isTriggering) {
@@ -21,7 +25,6 @@ function PadRow ({defaultUrl, pads, pos, toggleActive, isTriggering, rowIndex, d
 
   async function handleClickList (event) {
     const samplePath = event.target.value;
-    console.log('exposed data: ', exposedData);
 
     const newRef = getSampleRef(samplePath);
     const newName = getSampleName(newRef);
@@ -29,19 +32,27 @@ function PadRow ({defaultUrl, pads, pos, toggleActive, isTriggering, rowIndex, d
 
     setSampleName(newName);
     setUrl(newUrl);
+    setSampleRef(newRef);
+
+    localStorage.setItem(`track ${rowIndex}`, JSON.stringify({
+      name: newName,
+      url: newUrl,
+      ref: newRef
+    }));
   }
 
   return (
     <div className='row-container'>
+      <button onClick={() => handleClickDelete(rowIndex) }>Del</button>
       {sampleList &&
-        <select onChange={handleClickList}>
-          {sampleList.map(sampleRef => {
-            return <option key={sampleRef.name} value={sampleRef} >{ getSampleName(sampleRef) }</option>
+        <select value={''} onChange={handleClickList}>
+           <option hidden value="">{sampleName}</option>
+          {sampleList.map(ref => {
+            return <option key={ref.name} value={ref} >{ getSampleName(ref) }</option>
           })}
         </select>}
-      <p>{sampleName}</p>
       <div className='row'>
-        {pads.map((pad, index) => {
+        {sampleRef && pads.map((pad, index) => {
           return <Pad
             key={index}
             rowIndex={rowIndex}

@@ -26,8 +26,10 @@
   gap: 30px;
 }
 
-.row-container p {
-  width: 100px;
+.row-container select {
+  width: 150px;
+  height: 55px;
+  text-align: right;
 }
 
 .row {
