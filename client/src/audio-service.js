@@ -34,3 +34,25 @@ export async function getAllUrls () {
   });
   return (await Promise.all(urlList));
 }
+
+export async function getSampleList () {
+  const list = (await listAll(SamplesRef)).items;
+
+  const refList = list.map(element => {
+    const elementPath = element._location.path;
+    return ref(storage, elementPath);
+  });
+  return refList;
+}
+
+export function getSampleRef (samplePath) {
+  return ref(storage, samplePath);
+}
+
+export async function getSampleUrl (sampleRef) {
+  return await getDownloadURL(sampleRef);
+}
+
+export function getSampleName (sampleRef) {
+  return sampleRef.name.replace('.wav', '');
+}

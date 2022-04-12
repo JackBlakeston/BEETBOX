@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import './App.css';
 import PadRow from './components/PadRow';
 import Controls from './components/Controls';
-import { getAllUrls } from './audio-service';
+import { getAllUrls, getSampleList } from './audio-service';
 
 
 
@@ -32,11 +32,17 @@ function App () {
 
   const [urlList, setUrlList] = useState([]);
 
+  const [sampleList, setSampleList] = useState();
+  // const [currentSample, setCurrentSample] = useState();
+
   useEffect(() => {
     getAllUrls().then(response => {
       setUrlList(response);
     });
 
+    getSampleList().then(list => {
+      setSampleList(list);
+    });
   }, []);
 
   function useInterval(callback, delay) {
@@ -143,14 +149,16 @@ function App () {
           {
           urlList.map((sampleObj) => {
             return <PadRow key={sampleObj.name}
-              sampleName={sampleObj.name}
+              defaultSampleName={sampleObj.name}
               pos={pos}
               pads={pads[sampleObj.rowPosition]}
               toggleActive={toggleActive}
-              soundFileUrl={sampleObj.url}
+              defaultUrl={sampleObj.url}
               rowIndex={sampleObj.rowPosition}
               isTriggering={activeRows[sampleObj.rowPosition]}
-              isLooped={isLooped}/>
+              isLooped={isLooped}
+              sampleList={sampleList}
+              />
           })}
         </div>
     </div>
