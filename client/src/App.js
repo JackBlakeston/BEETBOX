@@ -9,7 +9,7 @@ import { getSampleList } from './audio-service';
 
 function App () {
 
-  const initialTrackList = ['kick', 'snare', 'hh'];
+  const initialTrackList = [];
 
   // const initialPads =  [
   //   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -27,18 +27,19 @@ function App () {
   const savedPads = JSON.parse(localStorage.getItem('pads'));
   const savedTrackList = JSON.parse(localStorage.getItem('trackList'));
 
-  const [sampleList, setSampleList] = useState([]);
 
+  const [sampleList, setSampleList] = useState([]);
   // State of tracks and pads
-  const [trackList, setTrackList] = useState(savedTrackList ? savedTrackList : initialTrackList);
+  const [trackList, setTrackList] = useState(savedTrackList ? savedTrackList.trackList : initialTrackList);
   const [pads, setPads] = useState(savedPads ? savedPads : initialPads);
-  const [trackCounter, setTrackCounter] = useState(trackList.length + 1);
+  const [trackCounter, setTrackCounter] = useState(savedTrackList ? savedTrackList.trackCounter : trackList.length);
 
   const [isPlaying, setIsPlaying] = useState(false);
   const [pos, setPos] = useState(0);
   const [bpm, setBpm] = useState(220);
   const [activeRows, setActiveRows] = useState(Array(trackList.length).fill(false));
   const [isLooped, setIsLooped] = useState(false); // Necessary for fixing visual delay
+  console.log(trackList, pads)
 
   useEffect(() => {
     getSampleList().then(list => {
@@ -140,7 +141,7 @@ function App () {
 
   function handleClickNewTrack () {
     const trackListCopy = [...trackList];
-    trackListCopy.push(`Track ${ trackCounter }`); // TODO change for categories
+    trackListCopy.push(`Track ${ trackCounter + 1 }`); // TODO change for categories
     setTrackCounter(trackCounter + 1);
 
     const padsCopy = [...pads];
@@ -149,13 +150,13 @@ function App () {
     setTrackList(trackListCopy);
     setPads(padsCopy);
 
-    localStorage.setItem('trackList', JSON.stringify(trackListCopy));
+    localStorage.setItem('trackList', JSON.stringify({trackList: trackListCopy, trackCounter: trackCounter + 1}));
     localStorage.setItem('pads', JSON.stringify(padsCopy));
   }
 
   function handleClickDelete (rowIndex) {
     const trackListCopy = [...trackList]
-    trackListCopy.splice(rowIndex, 1);
+    const removedTrackId = trackListCopy.splice(rowIndex, 1);
 
     const padsCopy = [...pads];
     padsCopy.splice(rowIndex, 1);
@@ -163,8 +164,9 @@ function App () {
     setTrackList(trackListCopy);
     setPads(padsCopy);
 
-    localStorage.setItem('trackList', JSON.stringify(trackListCopy));
+    localStorage.setItem('trackList', JSON.stringify({trackList: trackListCopy, trackCounter}));
     localStorage.setItem('pads', JSON.stringify(padsCopy));
+    localStorage.removeItem(`${removedTrackId}`);
   }
 
   return (
@@ -177,9 +179,10 @@ function App () {
       />
 
         <div className='pads'>
-          { trackList.map((track, index) => {
+          { trackList.map((trackId, index) => {
             return <PadRow
-            key={track}
+            trackId={trackId}
+            key={trackId}
             pos={pos}
             pads={pads[index]}
             toggleActive={ toggleActive }

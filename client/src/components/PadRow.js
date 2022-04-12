@@ -4,11 +4,11 @@ import { getSampleName, getSampleRef, getSampleUrl } from '../audio-service';
 
 import Pad from './Pad';
 
-function PadRow ({pads, pos, toggleActive, isTriggering, rowIndex, isLooped, sampleList, handleClickDelete}) {
+function PadRow ({pads, pos, toggleActive, isTriggering, rowIndex, isLooped, sampleList, handleClickDelete, trackId}) {
 
   const placeholderUrl = 'https://firebasestorage.googleapis.com/v0/b/jb-drum-sequencer.appspot.com/o/Samples%2FPlaceholder.wav?alt=media&token=07570a97-669a-4968-96e5-53f37a6210db';
 
-  const previousConfig = JSON.parse(localStorage.getItem(`track ${rowIndex}`));
+  const previousConfig = JSON.parse(localStorage.getItem(`${trackId}`));
 
   const [url, setUrl] = useState(previousConfig ? previousConfig.url : placeholderUrl);
   const [sampleRef, setSampleRef] = useState(previousConfig ? previousConfig.ref : '')
@@ -34,7 +34,7 @@ function PadRow ({pads, pos, toggleActive, isTriggering, rowIndex, isLooped, sam
     setUrl(newUrl);
     setSampleRef(newRef);
 
-    localStorage.setItem(`track ${rowIndex}`, JSON.stringify({
+    localStorage.setItem(`${trackId}`, JSON.stringify({
       name: newName,
       url: newUrl,
       ref: newRef
