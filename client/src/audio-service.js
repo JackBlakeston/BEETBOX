@@ -10,41 +10,43 @@ const firebaseConfig = {
   messagingSenderId: "1061179749725",
   appId: "1:1061179749725:web:944192655c039a90a7e4b4"
 };
+const samplesPath = 'Samples/';
 
 const firebaseApp = initializeApp(firebaseConfig);
 const storage = getStorage(firebaseApp, "gs://jb-drum-sequencer.appspot.com/");
 
-const samplesPath = 'Samples/';
-
-const SamplesRef = ref(storage, samplesPath);
+const samplesRef = ref(storage, samplesPath);
 
 
-export async function getAllUrls () {
-  const list = (await listAll(SamplesRef)).items;
+// export async function getAllUrls () {
+//   const list = (await listAll(samplesRef)).items;
 
-  const urlList = list.map(async (element, index) => {
-    const elementPath = element._location.path;
-    const elementRef = ref(storage, elementPath);
+//   const urlList = list.map(async (element, index) => {
+//     const elementPath = element._location.path;
+//     const elementRef = ref(storage, elementPath);
 
-    return {
-      url: await getDownloadURL(elementRef),
-      rowPosition: index,
-      name: elementRef.name.replace('.wav', ''),
-    }
-  });
-  return (await Promise.all(urlList));
-}
+//     return {
+//       url: await getDownloadURL(elementRef),
+//       rowPosition: index,
+//       name: elementRef.name.replace('.wav', ''),
+//     }
+//   });
+//   return (await Promise.all(urlList));
+// }
 
 export async function getSampleList () {
-  const refList = (await listAll(SamplesRef)).items;
+  const list = (await listAll(samplesRef));
+  const rootRefList = list.items;
+  const categoryList = list.prefixes;
 
-  // const refList = list.map(element => {
-  //   const elementPath = element._location.path;
-  //   return ref(storage, elementPath);
-  // });
+  const childrenRefList = await Promise.all( categoryList.map(async categoryRef => {
+    const list = await listAll(categoryRef);
+    return list.items;
+  }));
 
+  const concatenatedRefList = rootRefList.concat(childrenRefList).flat();
 
-  const filteredList = refList.filter(ref => ref.name !== 'Placeholder.wav');
+  const filteredList = concatenatedRefList.filter(ref => ref.name !== 'Placeholder.wav');
 
   return filteredList;
 }
@@ -54,7 +56,7 @@ export function getRefByPath (samplePath) {
 }
 
 export function getRefByName (sampleName) {
-  return ref(SamplesRef, sampleName);
+  return ref(samplesRef, sampleName);
 }
 
 export async function getSampleUrl (sampleRef) {
