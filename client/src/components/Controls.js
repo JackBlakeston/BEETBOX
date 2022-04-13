@@ -1,6 +1,12 @@
+import styled from '@emotion/styled';
 import { Button, Slider } from '@mui/material';
 import { Box } from '@mui/system';
 import React from 'react';
+
+// ! Example for custom styles
+// const RedSlider = styled(Slider)({
+//   color: 'red'
+// });
 
 function Controls (props) {
   let buttonText = props.playing ? 'Stop' : 'Play';
