@@ -1,12 +1,12 @@
 .App {
-  margin: 40px 0 0 40px;
+  margin: 40px 0 0 20px;
 }
 
 .controls {
   display: flex;
   align-items: center;
   gap: 100px;
-  margin: 0 0 40px 67px;
+  margin: 0 0 40px 58px;
 }
 
 .play-button {

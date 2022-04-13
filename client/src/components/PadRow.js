@@ -8,6 +8,9 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 
+import IconButton from '@mui/material/IconButton';
+import DeleteIcon from '@mui/icons-material/Delete';
+
 import { getSampleName, getSampleUrl, getRefByPath } from '../audio-service';
 import Pad from './Pad';
 
@@ -54,7 +57,9 @@ function PadRow ({pads, pos, toggleActive, isTriggering, rowIndex, isLooped, sam
 
   return (
     <div className='row-container'>
-      <button onClick={() => handleClickDelete(rowIndex) }>Del</button>
+      <IconButton aria-label="delete" size="small" onClick={() => handleClickDelete(rowIndex) }>
+        <DeleteIcon fontSize="inherit" />
+      </IconButton>
       {sampleList &&
         <Box sx={{ minWidth: 120 }} className='select-container'>
           <FormControl fullWidth >

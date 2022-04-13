@@ -1,4 +1,3 @@
-import styled from '@emotion/styled';
 import { Button, Slider } from '@mui/material';
 import { Box } from '@mui/system';
 import React from 'react';
