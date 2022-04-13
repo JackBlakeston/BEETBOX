@@ -40,7 +40,7 @@ function PadRow ({pads, pos, toggleActive, isTriggering, rowIndex, isLooped, /* 
         setSampleList(list);
       });
     }
-  }, []);
+  }, [bankPath]);
 
   useEffect(() => {
     if (isTriggering) {
@@ -73,7 +73,6 @@ function PadRow ({pads, pos, toggleActive, isTriggering, rowIndex, isLooped, /* 
     const newBankPath = event.target.value;
     const newBankRef = getRefByPath(newBankPath);
     const newBankName = newBankRef.name;
-    const newSampleList = await getSamplesInBank(newBankPath);
 
     setSampleName('No sample');
     setUrl(placeholderUrl);
@@ -81,8 +80,6 @@ function PadRow ({pads, pos, toggleActive, isTriggering, rowIndex, isLooped, /* 
 
     setBankPath(newBankPath);
     setBankName(newBankName);
-
-    setSampleList(newSampleList);
 
     localStorage.setItem(`${trackId}`, JSON.stringify({
       sampleName: 'No sample',
