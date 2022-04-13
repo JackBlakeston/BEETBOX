@@ -39,10 +39,10 @@ function App () {
   const [bpm, setBpm] = useState(220);
   const [activeRows, setActiveRows] = useState(Array(trackList.length).fill(false));
   const [isLooped, setIsLooped] = useState(false); // Necessary for fixing visual delay
-  console.log(trackList, pads)
 
   useEffect(() => {
     getSampleList().then(list => {
+
       setSampleList(list);
     });
   }, []);

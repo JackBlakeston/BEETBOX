@@ -36,20 +36,25 @@ export async function getAllUrls () {
 }
 
 export async function getSampleList () {
-  const list = (await listAll(SamplesRef)).items;
+  const refList = (await listAll(SamplesRef)).items;
 
-  const refList = list.map(element => {
-    const elementPath = element._location.path;
-    return ref(storage, elementPath);
-  });
+  // const refList = list.map(element => {
+  //   const elementPath = element._location.path;
+  //   return ref(storage, elementPath);
+  // });
+
 
   const filteredList = refList.filter(ref => ref.name !== 'Placeholder.wav');
 
   return filteredList;
 }
 
-export function getSampleRef (samplePath) {
+export function getRefByPath (samplePath) {
   return ref(storage, samplePath);
+}
+
+export function getRefByName (sampleName) {
+  return ref(SamplesRef, sampleName);
 }
 
 export async function getSampleUrl (sampleRef) {

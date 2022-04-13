@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import useSound from 'use-sound';
-import { getSampleName, getSampleRef, getSampleUrl } from '../audio-service';
+import { getSampleName, getRefByPath, getSampleUrl, getRefByName } from '../audio-service';
 
 import Pad from './Pad';
 
@@ -24,10 +24,9 @@ function PadRow ({pads, pos, toggleActive, isTriggering, rowIndex, isLooped, sam
   }, [pos, isTriggering, playSound]);
 
   async function handleClickList (event) {
-    const samplePath = event.target.value;
+    const newName = event.target.value;
 
-    const newRef = getSampleRef(samplePath);
-    const newName = getSampleName(newRef);
+    const newRef = getRefByName(newName + '.wav');
     const newUrl = await getSampleUrl(newRef);
 
     setSampleName(newName);
@@ -45,10 +44,10 @@ function PadRow ({pads, pos, toggleActive, isTriggering, rowIndex, isLooped, sam
     <div className='row-container'>
       <button onClick={() => handleClickDelete(rowIndex) }>Del</button>
       {sampleList &&
-        <select value={''} onChange={handleClickList}>
+        <select value={sampleName} onChange={handleClickList}>
            <option hidden value="">{sampleName}</option>
           {sampleList.map(ref => {
-            return <option key={ref.name} value={ref} >{ getSampleName(ref) }</option>
+            return <option key={ref.name} label={getSampleName(ref)} value={getSampleName(ref)} >{ getSampleName(ref) }</option>
           })}
         </select>}
       <div className='row'>
