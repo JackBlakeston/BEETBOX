@@ -20,6 +20,10 @@
   gap: 10px;
 }
 
+.bpm-slider-box {
+  margin-top: 3px;
+}
+
 /* Tracks */
 .row-container {
   display: flex;
