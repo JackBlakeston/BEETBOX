@@ -1,3 +1,4 @@
+import { Button } from '@mui/material';
 import React from 'react';
 
 function Controls (props) {
@@ -5,10 +6,10 @@ function Controls (props) {
 
   return (
     <div className="controls">
-        <button className='play-button' onClick={props.togglePlaying}>{buttonText}</button>
+        <Button variant='contained' className='play-button' onClick={props.togglePlaying}>{buttonText}</Button>
 
         <div className='bpm'>
-          <label>BPM:</label>
+          <label>BPM</label>
           <input
             type='range'
             id='bpm'

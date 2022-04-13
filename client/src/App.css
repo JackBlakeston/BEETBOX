@@ -6,58 +6,65 @@
   display: flex;
   align-items: center;
   gap: 100px;
-  margin: 0 0 40px 40px;
+  margin: 0 0 40px 67px;
 }
 
 .play-button {
-  background-color: rgba(252, 202, 0, 0.907);
-  border-radius: 4px;
   height: 40px;
   width: 100px;
-  transition: 0.2s;
 }
 
-.play-button:hover {
-  transform: scale(1.05);
+.bpm {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
+/* Tracks */
 .row-container {
   display: flex;
+  align-items: center;
   gap: 30px;
+  height: 55px;
 }
 
-.row-container select {
+.select-container {
   width: 150px;
-  height: 55px;
   text-align: right;
+}
+
+.select {
+  height: 45px;
 }
 
 .row {
   clear: both;
+  display: flex;
 }
 
+.new-track-button {
+  width: 1056px;
+}
+
+
+/* Pads */
 .pad {
   width: 50px;
   height: 50px;
   float: left;
   margin: 0 5px 5px 0;
   cursor: pointer;
-  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px, rgb(51, 51, 51) 0px 0px 0px 2.5px;
 
-  background: rgb(177,177,177);
-  background: radial-gradient(circle, rgba(177,177,177,1) 0%, rgba(129,128,128,1) 100%);
+  background:rgba(129,128,128,1);
 }
 
 .pad.active {
-  background: rgb(164,223,158);
-  background: radial-gradient(circle, rgba(164,223,158,1) 0%, rgba(24,139,0,1) 100%);
+  background: rgba(25,118,210,255);
 }
 
 .pad.playing {
-  background: rgb(230,204,178);
-  background: radial-gradient(circle, rgba(230,204,178,1) 0%, rgba(255,149,59,1) 100%);
+  background: rgb(255, 190, 133);
 }
 .pad.active.playing {
-  background: rgb(230,183,178);
-  background: radial-gradient(circle, rgba(230,183,178,1) 0%, rgba(255,112,59,1) 100%);
+  background:rgb(252, 95, 37);
 }

@@ -1,8 +1,17 @@
 import { useEffect, useState } from 'react';
 import useSound from 'use-sound';
-import { getSampleName, getSampleUrl, getRefByPath } from '../audio-service';
 
+// Material UI Imports
+import Box from '@mui/material/Box';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
+
+import { getSampleName, getSampleUrl, getRefByPath } from '../audio-service';
 import Pad from './Pad';
+
+
 
 function PadRow ({pads, pos, toggleActive, isTriggering, rowIndex, isLooped, sampleList, handleClickDelete, trackId}) {
 
@@ -12,7 +21,7 @@ function PadRow ({pads, pos, toggleActive, isTriggering, rowIndex, isLooped, sam
 
   const [url, setUrl] = useState(previousConfig ? previousConfig.url : placeholderUrl);
   const [samplePath, setSamplePath] = useState(previousConfig ? previousConfig.path : '')
-  const [sampleName, setSampleName] = useState(previousConfig ? previousConfig.name : 'No sample loaded');
+  const [sampleName, setSampleName] = useState(previousConfig ? previousConfig.name : 'No sample');
 
   // TODO change this for howlerjs lib
   const [playSound] = useSound(url);
@@ -41,17 +50,25 @@ function PadRow ({pads, pos, toggleActive, isTriggering, rowIndex, isLooped, sam
     }));
   }
 
+
+
   return (
     <div className='row-container'>
       <button onClick={() => handleClickDelete(rowIndex) }>Del</button>
       {sampleList &&
+        <Box sx={{ minWidth: 120 }} className='select-container'>
+          <FormControl fullWidth >
+          <InputLabel shrink id="demo-simple-select-label">Sample</InputLabel>
+          <Select notched className='select' displayEmpty value={samplePath} onChange={handleClickList} labelId="demo-simple-select-label" id="demo-simple-select" label='Sample'>
+            <MenuItem style={{ display: "none" }} disabled value={samplePath}>{sampleName}</MenuItem>
+            { sampleList.map(ref => {
+              return <MenuItem key={ref.name} value={ref.fullPath} >{ getSampleName(ref) }</MenuItem>
+            })}
+          </Select>
+          </FormControl>
+        </Box>
+      }
 
-        <select label='Sample' value={samplePath} onChange={handleClickList}>
-          <option hidden value="">{sampleName}</option>
-          {sampleList.map(ref => {
-            return <option key={ref.name} label={getSampleName(ref)} value={ref.fullPath} >{ getSampleName(ref) }</option>
-          })}
-        </select>}
       <div className='row'>
         {samplePath && pads.map((pad, index) => {
           return <Pad

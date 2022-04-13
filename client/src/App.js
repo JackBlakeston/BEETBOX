@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Box, Button } from '@mui/material';
 
 import './App.css';
 import PadRow from './components/PadRow';
@@ -195,9 +196,9 @@ function App () {
           }) }
         </div>
 
-      <div className='new-track-container'>
-        <button className='new-track-button' onClick={handleClickNewTrack}>NEW TRACK</button>
-      </div>
+      <Box ml={8} mt={2} className='new-track-container'>
+        <Button variant="outlined" className='new-track-button' onClick={handleClickNewTrack}>NEW TRACK</Button>
+      </Box>
 
     </div>
   );
