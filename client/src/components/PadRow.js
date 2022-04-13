@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import useSound from 'use-sound';
-import { getSampleName, getSampleUrl, getRefByName, getRefByPath } from '../audio-service';
+import { getSampleName, getSampleUrl, getRefByPath } from '../audio-service';
 
 import Pad from './Pad';
 
