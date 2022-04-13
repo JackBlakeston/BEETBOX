@@ -45,7 +45,8 @@ function PadRow ({pads, pos, toggleActive, isTriggering, rowIndex, isLooped, sam
     <div className='row-container'>
       <button onClick={() => handleClickDelete(rowIndex) }>Del</button>
       {sampleList &&
-        <select value={samplePath} onChange={handleClickList}>
+
+        <select label='Sample' value={samplePath} onChange={handleClickList}>
           <option hidden value="">{sampleName}</option>
           {sampleList.map(ref => {
             return <option key={ref.name} label={getSampleName(ref)} value={ref.fullPath} >{ getSampleName(ref) }</option>
