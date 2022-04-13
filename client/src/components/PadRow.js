@@ -11,23 +11,36 @@ import Select from '@mui/material/Select';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 
-import { getSampleName, getSampleUrl, getRefByPath } from '../audio-service';
+import { getSampleName, getSampleUrl, getRefByPath, getSamplesInBank } from '../audio-service';
 import Pad from './Pad';
 
 
 
-function PadRow ({pads, pos, toggleActive, isTriggering, rowIndex, isLooped, sampleList, handleClickDelete, trackId}) {
+function PadRow ({pads, pos, toggleActive, isTriggering, rowIndex, isLooped, /* sampleList, */ handleClickDelete, trackId, bankList}) {
 
   const placeholderUrl = 'https://firebasestorage.googleapis.com/v0/b/jb-drum-sequencer.appspot.com/o/Samples%2FPlaceholder.wav?alt=media&token=07570a97-669a-4968-96e5-53f37a6210db';
 
   const previousConfig = JSON.parse(localStorage.getItem(`${trackId}`));
 
-  const [url, setUrl] = useState(previousConfig ? previousConfig.url : placeholderUrl);
-  const [samplePath, setSamplePath] = useState(previousConfig ? previousConfig.path : '')
-  const [sampleName, setSampleName] = useState(previousConfig ? previousConfig.name : 'No sample');
+  const [url, setUrl] = useState(previousConfig ? previousConfig.sampleUrl : placeholderUrl);
+  const [samplePath, setSamplePath] = useState(previousConfig ? previousConfig.samplePath : '')
+  const [sampleName, setSampleName] = useState(previousConfig ? previousConfig.sampleName : 'No sample');
+
+  const [bankName, setBankName] = useState(previousConfig ? previousConfig.bankName : 'No bank');
+  const [bankPath, setBankPath] = useState(previousConfig ? previousConfig.bankPath : '');
+
+  const [sampleList, setSampleList] = useState([]);
 
   // TODO change this for howlerjs lib
   const [playSound] = useSound(url);
+
+  useEffect(() => {
+    if (bankPath) {
+      getSamplesInBank(bankPath).then(list => {
+        setSampleList(list);
+      });
+    }
+  }, []);
 
   useEffect(() => {
     if (isTriggering) {
@@ -35,7 +48,7 @@ function PadRow ({pads, pos, toggleActive, isTriggering, rowIndex, isLooped, sam
     }
   }, [pos, isTriggering, playSound]);
 
-  async function handleClickList (event) {
+  async function handleSampleChange (event) {
     const newPath = event.target.value;
 
     const newRef = getRefByPath (newPath);
@@ -47,24 +60,65 @@ function PadRow ({pads, pos, toggleActive, isTriggering, rowIndex, isLooped, sam
     setSamplePath(newRef.fullPath);
 
     localStorage.setItem(`${trackId}`, JSON.stringify({
-      name: newName,
-      url: newUrl,
-      path: newRef.fullPath
+      sampleName: newName,
+      sampleUrl: newUrl,
+      samplePath: newRef.fullPath,
+      bankPath: bankPath,
+      bankName: bankName
     }));
   }
 
+  async function handleBankChange (event) {
+    console.log(event.target.value)
+    const newBankPath = event.target.value;
+    const newBankRef = getRefByPath(newBankPath);
+    const newBankName = newBankRef.name;
+    const newSampleList = await getSamplesInBank(newBankPath);
 
+    setSampleName('No sample');
+    setUrl(placeholderUrl);
+    setSamplePath('');
+
+    setBankPath(newBankPath);
+    setBankName(newBankName);
+
+    setSampleList(newSampleList);
+
+    localStorage.setItem(`${trackId}`, JSON.stringify({
+      sampleName: 'No sample',
+      sampleUrl: placeholderUrl,
+      samplePath: '',
+      bankPath: newBankPath,
+      bankName: newBankName
+    }));
+  }
 
   return (
     <div className='row-container'>
+
       <IconButton aria-label="delete" size="small" onClick={() => handleClickDelete(rowIndex) }>
         <DeleteIcon fontSize="inherit" />
       </IconButton>
-      {sampleList &&
+
+      {bankList &&
+        <Box sx={{ minWidth: 120 }} className='select-container'>
+          <FormControl fullWidth >
+          <InputLabel shrink id="demo-simple-select-label">Bank</InputLabel>
+          <Select notched className='select' displayEmpty value={bankPath} onChange={handleBankChange} labelId="demo-simple-select-label" id="demo-simple-select" label='Bank'>
+            <MenuItem style={{ display: "none" }} disabled value={bankPath}>{bankName || 'No bank'}</MenuItem>
+            { bankList.map(ref => {
+              return <MenuItem key={ref.name} value={ref.fullPath} >{ getSampleName(ref) }</MenuItem>
+            })}
+          </Select>
+          </FormControl>
+        </Box>
+      }
+
+      {bankName !== 'No bank' &&
         <Box sx={{ minWidth: 120 }} className='select-container'>
           <FormControl fullWidth >
           <InputLabel shrink id="demo-simple-select-label">Sample</InputLabel>
-          <Select notched className='select' displayEmpty value={samplePath} onChange={handleClickList} labelId="demo-simple-select-label" id="demo-simple-select" label='Sample'>
+          <Select notched className='select' displayEmpty value={samplePath} onChange={handleSampleChange} labelId="demo-simple-select-label" id="demo-simple-select" label='Sample'>
             <MenuItem style={{ display: "none" }} disabled value={samplePath}>{sampleName}</MenuItem>
             { sampleList.map(ref => {
               return <MenuItem key={ref.name} value={ref.fullPath} >{ getSampleName(ref) }</MenuItem>

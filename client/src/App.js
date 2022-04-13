@@ -4,7 +4,7 @@ import { Box, Button } from '@mui/material';
 import './App.css';
 import PadRow from './components/PadRow';
 import Controls from './components/Controls';
-import { getSampleList } from './audio-service';
+import { getBankRefList, getSampleList } from './audio-service';
 
 
 
@@ -28,8 +28,10 @@ function App () {
   const savedPads = JSON.parse(localStorage.getItem('pads'));
   const savedTrackList = JSON.parse(localStorage.getItem('trackList'));
 
-
+  // Categories from DB
   const [sampleList, setSampleList] = useState([]);
+  const [bankList, setBanklist] = useState([]);
+
   // State of tracks and pads
   const [trackList, setTrackList] = useState(savedTrackList ? savedTrackList.trackList : initialTrackList);
   const [pads, setPads] = useState(savedPads ? savedPads : initialPads);
@@ -43,8 +45,11 @@ function App () {
 
   useEffect(() => {
     getSampleList().then(list => {
-
       setSampleList(list);
+    });
+
+    getBankRefList().then(list => {
+      setBanklist(list);
     });
   }, []);
 
@@ -192,11 +197,12 @@ function App () {
             isTriggering={activeRows[index]}
             isLooped={isLooped}
             sampleList={sampleList}
+            bankList={bankList}
             />
           }) }
         </div>
 
-      <Box ml={8} mt={2} className='new-track-container'>
+      <Box ml={7.2} mt={2} className='new-track-container'>
         <Button variant="outlined" className='new-track-button' onClick={handleClickNewTrack}>NEW TRACK</Button>
       </Box>
 

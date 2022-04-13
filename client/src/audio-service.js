@@ -17,7 +17,6 @@ const storage = getStorage(firebaseApp, "gs://jb-drum-sequencer.appspot.com/");
 
 const samplesRef = ref(storage, samplesPath);
 
-
 // export async function getAllUrls () {
 //   const list = (await listAll(samplesRef)).items;
 
@@ -49,6 +48,15 @@ export async function getSampleList () {
   const filteredList = concatenatedRefList.filter(ref => ref.name !== 'Placeholder.wav');
 
   return filteredList;
+}
+
+export async function getBankRefList () {
+  return (await listAll(samplesRef)).prefixes;
+}
+
+export async function getSamplesInBank (bankPath) {
+  const bankRef = ref(storage, bankPath)
+  return (await listAll(bankRef)).items;
 }
 
 export function getRefByPath (samplePath) {
