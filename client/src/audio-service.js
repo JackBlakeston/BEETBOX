@@ -10,28 +10,12 @@ const firebaseConfig = {
   messagingSenderId: "1061179749725",
   appId: "1:1061179749725:web:944192655c039a90a7e4b4"
 };
-const samplesPath = 'Samples/';
 
 const firebaseApp = initializeApp(firebaseConfig);
 const storage = getStorage(firebaseApp, "gs://jb-drum-sequencer.appspot.com/");
 
+const samplesPath = 'Samples/';
 const samplesRef = ref(storage, samplesPath);
-
-// export async function getAllUrls () {
-//   const list = (await listAll(samplesRef)).items;
-
-//   const urlList = list.map(async (element, index) => {
-//     const elementPath = element._location.path;
-//     const elementRef = ref(storage, elementPath);
-
-//     return {
-//       url: await getDownloadURL(elementRef),
-//       rowPosition: index,
-//       name: elementRef.name.replace('.wav', ''),
-//     }
-//   });
-//   return (await Promise.all(urlList));
-// }
 
 export async function getSampleList () {
   const list = (await listAll(samplesRef));
