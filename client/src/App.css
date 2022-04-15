@@ -60,6 +60,7 @@
   cursor: pointer;
 
   background:rgba(129,128,128,1);
+  border-radius: 5px;
 }
 
 .pad.active {
