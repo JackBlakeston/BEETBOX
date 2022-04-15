@@ -57,7 +57,9 @@
   cursor: pointer;
 
   background:rgba(129,128,128,1);
-  border-radius: 5px;
+  border-radius: 10px;
+
+  border: solid 2px black;
 }
 
 .pad.active {
