@@ -1,5 +1,6 @@
-import { Button, Slider } from '@mui/material';
+import { Button, IconButton, Slider } from '@mui/material';
 import { Box } from '@mui/system';
+import DarkModeIcon from '@mui/icons-material/DarkMode';
 import React from 'react';
 
 // ! Example for custom styles
@@ -11,8 +12,19 @@ function Controls (props) {
   let buttonText = props.playing ? 'Stop' : 'Play';
 
   return (
-    <div className="controls">
-        <Button variant='contained' className='play-button' onClick={props.togglePlaying}>{buttonText}</Button>
+    <div
+      className="controls"
+      style={{
+        backgroundColor: props.useDarkMode ? 'rgb(40, 40, 40)' : 'rgb(235 235 235)'
+      }}
+    >
+        <Button
+        sx={{ fontSize:'18px' }}
+        variant='contained'
+        className='play-button'
+        onClick={props.togglePlaying}
+        >{buttonText}
+        </Button>
 
         <div className='bpm'>
           <label>BPM</label>
@@ -29,6 +41,14 @@ function Controls (props) {
             {props.bpm}
           </output>
         </div>
+
+        <IconButton
+        aria-label="dark-mode"
+        size="small"
+        onClick={() => props.setUseDarkMode(!props.useDarkMode) }
+        >
+          <DarkModeIcon/>
+        </IconButton>
 
     </div>
   );

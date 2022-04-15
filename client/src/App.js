@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Button } from '@mui/material';
+import { Box, Button, CssBaseline} from '@mui/material';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { purple } from '@mui/material/colors';
 
 import './App.css';
 import PadRow from './components/PadRow';
@@ -7,21 +9,9 @@ import Controls from './components/Controls';
 import { getBankRefList, getSampleList } from './audio-service';
 
 
-
 function App () {
 
   const initialTrackList = [];
-
-  // const initialPads =  [
-  //   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  //   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  //   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  //   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  //   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  //   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  //   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  //   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-  // ];
 
   const initialPads = initialTrackList.map(track => Array(16).fill(0)); // TODO Change 16 for variable length
 
@@ -42,6 +32,10 @@ function App () {
   const [bpm, setBpm] = useState(220);
   const [activeRows, setActiveRows] = useState(Array(trackList.length).fill(false));
   const [isLooped, setIsLooped] = useState(false); // Necessary for fixing visual delay
+
+
+  // Dark mode
+  const [useDarkMode, setUseDarkMode] = useState(true);
 
   useEffect(() => {
     getSampleList().then(list => {
@@ -175,38 +169,76 @@ function App () {
     localStorage.removeItem(`${removedTrackId}`);
   }
 
+  const theme = createTheme({
+    palette: {
+      mode: useDarkMode ? 'dark' : 'light',
+      primary: {
+        main: purple[600]
+      },
+      secondary: {
+        main: purple[600]
+      },
+      background: {
+        default: useDarkMode ? '#2D2D2D' : '#F1F1F1'
+      }
+    }
+  });
+
+
   return (
-    <div className='App'>
-      <Controls
-        playing={isPlaying}
-        togglePlaying={togglePlaying}
-        handleChange={changeBpm}
-        bpm={bpm}
-      />
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
 
-        <div className='pads'>
-          { trackList.map((trackId, index) => {
-            return <PadRow
-            trackId={trackId}
-            key={trackId}
-            pos={pos}
-            pads={pads[index]}
-            toggleActive={ toggleActive }
-            handleClickDelete={ handleClickDelete }
-            rowIndex={index}
-            isTriggering={activeRows[index]}
-            isLooped={isLooped}
-            sampleList={sampleList}
-            bankList={bankList}
-            />
-          }) }
-        </div>
+      <div className='App'>
+        <Controls
+          playing={isPlaying}
+          togglePlaying={togglePlaying}
+          handleChange={changeBpm}
+          bpm={bpm}
+          useDarkMode={useDarkMode}
+          setUseDarkMode={setUseDarkMode}
+        />
 
-      <Box ml={7.2} mt={2} className='new-track-container'>
-        <Button variant="outlined" className='new-track-button' onClick={handleClickNewTrack}>NEW TRACK</Button>
-      </Box>
+          <div className='pads'>
+            { trackList.map((trackId, index) => {
+              return <PadRow
+              trackId={trackId}
+              key={trackId}
+              pos={pos}
+              pads={pads[index]}
+              toggleActive={ toggleActive }
+              handleClickDelete={ handleClickDelete }
+              rowIndex={index}
+              isTriggering={activeRows[index]}
+              isLooped={isLooped}
+              sampleList={sampleList}
+              bankList={bankList}
+              />
+            }) }
+          </div>
 
-    </div>
+        <Box ml={7.2} mt={2} className='new-track-container'>
+          <Button
+            sx={{
+              border:'1.7px solid #8e25aa',
+              fontSize: '20px',
+              fontWeight: 'bold',
+              backgroundColor: useDarkMode && 'rgb(99 25 118 / 14%)',
+              color: useDarkMode && 'white',
+              ':hover': {
+                border:'1.7px solid #8e25aa',
+                backgroundColor: useDarkMode ? 'rgb(99 25 118 / 40%)' : 'rgb(142 36 170 / 7%)'
+              }
+            }}
+            variant={useDarkMode ? 'contained' : 'outlined'}
+            className='new-track-button'
+            onClick={handleClickNewTrack}
+            >NEW TRACK
+          </Button>
+        </Box>
+
+      </div>
+    </ThemeProvider>
   );
 }
 

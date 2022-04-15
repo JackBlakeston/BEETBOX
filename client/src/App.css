@@ -1,12 +1,9 @@
-.App {
-  margin: 40px 0 0 20px;
-}
-
 .controls {
   display: flex;
   align-items: center;
-  gap: 100px;
-  margin: 0 0 40px 58px;
+  justify-content: space-between;
+  padding: 30px 58px 30px 58px;
+  margin-bottom: 20px;
 }
 
 .play-button {
@@ -64,12 +61,12 @@
 }
 
 .pad.active {
-  background: rgba(25,118,210,255);
+  background: rgba(142,37,170,255);
 }
 
 .pad.playing {
-  background: rgb(255, 190, 133);
+  background:#618456;
 }
 .pad.active.playing {
-  background:rgb(252, 95, 37);
+  background:#22710d;
 }
