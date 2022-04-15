@@ -11,28 +11,27 @@ import { getBankRefList, getSampleList } from './audio-service';
 
 function App () {
 
-  const initialTrackList = [];
-
-  const initialPads = initialTrackList.map(track => Array(16).fill(0)); // TODO Change 16 for variable length
-
   const savedPads = JSON.parse(localStorage.getItem('pads'));
   const savedTrackList = JSON.parse(localStorage.getItem('trackList'));
+  const savedGridSize = JSON.parse(localStorage.getItem('gridSize'));
 
   // Categories from DB
   const [sampleList, setSampleList] = useState([]);
   const [bankList, setBanklist] = useState([]);
 
   // State of tracks and pads
-  const [trackList, setTrackList] = useState(savedTrackList ? savedTrackList.trackList : initialTrackList);
-  const [pads, setPads] = useState(savedPads ? savedPads : initialPads);
+  const [gridSize, setGridSize] = useState(savedGridSize ? savedGridSize : 16);
+  const [trackList, setTrackList] = useState(savedTrackList ? savedTrackList.trackList : []);
+  const [pads, setPads] = useState(savedPads ? savedPads : []);
   const [trackCounter, setTrackCounter] = useState(savedTrackList ? savedTrackList.trackCounter : trackList.length);
 
+  // Audio control
   const [isPlaying, setIsPlaying] = useState(false);
   const [pos, setPos] = useState(0);
   const [bpm, setBpm] = useState(220);
-  const [activeRows, setActiveRows] = useState(Array(trackList.length).fill(false));
-  const [isLooped, setIsLooped] = useState(false); // Necessary for fixing visual delay
 
+  const [activeRows, setActiveRows] = useState(Array(trackList.length).fill(false)); // Tells all tracks if they should play or not
+  const [isLooped, setIsLooped] = useState(false); // Necessary for fixing visual delay
 
   // Dark mode
   const [useDarkMode, setUseDarkMode] = useState(true);
@@ -94,7 +93,7 @@ function App () {
     let currentPos = pos;
     currentPos++;
 
-    if (currentPos > 15) { // TODO Make length a changeable state
+    if (currentPos > gridSize - 1) {
       currentPos = 0;
       setIsLooped(true);
     }
@@ -127,6 +126,13 @@ function App () {
     setBpm(newBpm);
   }
 
+  function changeGridSize (event) {
+    if (isPlaying) togglePlaying();
+    const newSize = Number(event.target.value);
+    setGridSize(newSize);
+    localStorage.setItem('gridSize', JSON.stringify(newSize));
+  }
+
   function toggleActive (rowIndex, id) {
     let padsCopy = [...pads];
     let padState = padsCopy[rowIndex][id];
@@ -145,7 +151,7 @@ function App () {
     setTrackCounter(trackCounter + 1);
 
     const padsCopy = [...pads];
-    padsCopy.push(Array(16).fill(0));
+    padsCopy.push(Array(32).fill(0));
 
     setTrackList(trackListCopy);
     setPads(padsCopy);
@@ -169,6 +175,11 @@ function App () {
     localStorage.removeItem(`${removedTrackId}`);
   }
 
+
+
+
+
+  // MUI Theming
   const theme = createTheme({
     palette: {
       mode: useDarkMode ? 'dark' : 'light',
@@ -184,7 +195,6 @@ function App () {
     }
   });
 
-
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
@@ -193,10 +203,12 @@ function App () {
         <Controls
           playing={isPlaying}
           togglePlaying={togglePlaying}
-          handleChange={changeBpm}
+          handleTempoChange={changeBpm}
           bpm={bpm}
           useDarkMode={useDarkMode}
           setUseDarkMode={setUseDarkMode}
+          gridSize={gridSize}
+          handleGridSizeChange={changeGridSize}
         />
 
           <div className='pads'>
@@ -213,6 +225,7 @@ function App () {
               isLooped={isLooped}
               sampleList={sampleList}
               bankList={bankList}
+              gridSize={gridSize}
               />
             }) }
           </div>

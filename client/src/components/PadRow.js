@@ -16,7 +16,7 @@ import Pad from './Pad';
 
 
 
-function PadRow ({pads, pos, toggleActive, isTriggering, rowIndex, isLooped, handleClickDelete, trackId, bankList}) {
+function PadRow ({pads, pos, toggleActive, isTriggering, rowIndex, isLooped, handleClickDelete, trackId, bankList, gridSize}) {
 
   const placeholderUrl = 'https://firebasestorage.googleapis.com/v0/b/jb-drum-sequencer.appspot.com/o/Samples%2FPlaceholder.wav?alt=media&token=07570a97-669a-4968-96e5-53f37a6210db';
 
@@ -126,13 +126,13 @@ function PadRow ({pads, pos, toggleActive, isTriggering, rowIndex, isLooped, han
       }
 
       <div className='row'>
-        {samplePath && pads.map((pad, index) => {
+        {samplePath && pads.slice(0, gridSize).map((pad, index) => {
           return <Pad
             key={index}
             rowIndex={rowIndex}
             id={index}
             state={pad}
-            pos={ pos === 0 && isLooped ? 15 : pos - 1 } // Fixes visual delay
+            pos={ pos === 0 && isLooped ? gridSize - 1 : pos - 1 } // Fixes visual delay
             toggleActive={() => toggleActive(rowIndex, index)}
           />
         })}

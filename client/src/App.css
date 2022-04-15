@@ -11,15 +11,20 @@
   width: 100px;
 }
 
-.bpm {
+.slider-container {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 13px;
 }
 
 .bpm-slider-box {
-  margin-top: 3px;
+  margin-top: 8px;
 }
+
+.size-slider-box {
+  margin-top: 10px;
+}
+
 
 /* Tracks */
 .row-container {
