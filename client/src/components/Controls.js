@@ -12,16 +12,11 @@ import React from 'react';
 function Controls (props) {
   let buttonText = props.playing ? 'Stop' : 'Play';
   const marks = [4, 8, 16, 32].map(mark => {
-    return { value: mark, label: mark };
+    return { value: mark };
     });
 
   return (
-    <div
-      className="controls"
-      style={{
-        backgroundColor: props.useDarkMode ? 'rgb(40, 40, 40)' : 'rgb(235 235 235)'
-      }}
-    >
+    <div className="controls">
         <Button
         sx={{ fontSize:'18px' }}
         variant='contained'

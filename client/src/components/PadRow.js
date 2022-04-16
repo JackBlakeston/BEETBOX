@@ -97,6 +97,7 @@ function PadRow ({pads, pos, toggleActive, isTriggering, rowIndex, isLooped, han
         <DeleteIcon fontSize="inherit" />
       </IconButton>
 
+      <div className='sound-selector-container'>
       {bankList &&
         <Box sx={{ minWidth: 120 }} className='select-container'>
           <FormControl fullWidth >
@@ -124,9 +125,10 @@ function PadRow ({pads, pos, toggleActive, isTriggering, rowIndex, isLooped, han
           </FormControl>
         </Box>
       }
+      </div>
 
       <div className='row'>
-        {samplePath && pads.slice(0, gridSize).map((pad, index) => {
+        {pads.slice(0, gridSize).map((pad, index) => {
           return <Pad
             key={index}
             rowIndex={rowIndex}
@@ -134,6 +136,7 @@ function PadRow ({pads, pos, toggleActive, isTriggering, rowIndex, isLooped, han
             state={pad}
             pos={ pos === 0 && isLooped ? gridSize - 1 : pos - 1 } // Fixes visual delay
             toggleActive={() => toggleActive(rowIndex, index)}
+            isDisabled={!samplePath}
           />
         })}
       </div>

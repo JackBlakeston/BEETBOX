@@ -127,8 +127,8 @@ function App () {
   }
 
   function changeGridSize (event) {
-    if (isPlaying) togglePlaying();
     const newSize = Number(event.target.value);
+    if (isPlaying && newSize < gridSize && pos > newSize) togglePlaying();
     setGridSize(newSize);
     localStorage.setItem('gridSize', JSON.stringify(newSize));
   }
@@ -200,18 +200,24 @@ function App () {
       <CssBaseline />
 
       <div className='App'>
-        <Controls
-          playing={isPlaying}
-          togglePlaying={togglePlaying}
-          handleTempoChange={changeBpm}
-          bpm={bpm}
-          useDarkMode={useDarkMode}
-          setUseDarkMode={setUseDarkMode}
-          gridSize={gridSize}
-          handleGridSizeChange={changeGridSize}
-        />
+        <div
+          style={{
+            backgroundColor: useDarkMode ? 'rgb(40, 40, 40)' : 'rgb(235 235 235)'
+          }}
+        >
+          <Controls
+            playing={isPlaying}
+            togglePlaying={togglePlaying}
+            handleTempoChange={changeBpm}
+            bpm={bpm}
+            useDarkMode={useDarkMode}
+            setUseDarkMode={setUseDarkMode}
+            gridSize={gridSize}
+            handleGridSizeChange={changeGridSize}
+          />
+        </div>
 
-          <div className='pads'>
+          <div className='pads-container'>
             { trackList.map((trackId, index) => {
               return <PadRow
               trackId={trackId}

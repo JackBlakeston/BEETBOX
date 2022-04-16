@@ -1,4 +1,8 @@
 .controls {
+  position: sticky;
+  top: 0px;
+  width: 100vw;
+
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -18,12 +22,37 @@
 }
 
 .bpm-slider-box {
-  margin-top: 8px;
+  margin-top: 7px;
 }
 
 .size-slider-box {
-  margin-top: 10px;
+  margin-top: 9px;
 }
+
+
+/* Tracks and pads */
+.pads-container {
+  overflow: hidden;
+  padding: 0 0 10px 5px;
+}
+
+.pads-container::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+.pads-container::-webkit-scrollbar-track {
+  background-color: transparent;
+  border-radius: 10px;
+}
+.pads-container::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.4);
+  border-radius: 10px;
+}
+
+.pads-container:hover {
+  overflow-x: overlay;
+}
+
 
 
 /* Tracks */
@@ -31,7 +60,13 @@
   display: flex;
   align-items: center;
   gap: 30px;
-  height: 55px;
+  height: 65px;
+}
+
+.sound-selector-container {
+  display: flex;
+  gap: 20px;
+  min-width: 320px;
 }
 
 .select-container {
@@ -46,17 +81,14 @@
 .row {
   clear: both;
   display: flex;
-}
-
-.new-track-button {
-  width: 1237px;
+  padding-right: 100px;
 }
 
 
 /* Pads */
 .pad {
-  width: 50px;
-  height: 50px;
+  width: 60px;
+  height: 60px;
   float: left;
   margin: 0 5px 5px 0;
   cursor: pointer;
@@ -76,4 +108,26 @@
 }
 .pad.active.playing {
   background:#22710d;
+}
+
+.pad.disabled {
+  background:rgb(67, 67, 67);
+}
+
+.pad.playing.disabled {
+
+}
+
+
+/* NEW TRACK */
+.new-track-container {
+  /* position: sticky; */ /* TODO */
+  bottom: 0px;
+  margin-top: 30px;
+  display: flex;
+  justify-content: center;
+}
+
+.new-track-button {
+  width: 1237px;
 }
