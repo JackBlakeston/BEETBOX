@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import useSound from 'use-sound';
+import CircularSlider from 'react-circular-slider-svg';
 
 // Material UI Imports
 import Box from '@mui/material/Box';
@@ -22,17 +23,22 @@ function PadRow ({pads, pos, toggleActive, isTriggering, rowIndex, isLooped, han
 
   const previousConfig = JSON.parse(localStorage.getItem(`${trackId}`));
 
-  const [url, setUrl] = useState(previousConfig ? previousConfig.sampleUrl : placeholderUrl);
-  const [samplePath, setSamplePath] = useState(previousConfig ? previousConfig.samplePath : '')
-  const [sampleName, setSampleName] = useState(previousConfig ? previousConfig.sampleName : 'No sample');
-
   const [bankName, setBankName] = useState(previousConfig ? previousConfig.bankName : 'No bank');
   const [bankPath, setBankPath] = useState(previousConfig ? previousConfig.bankPath : '');
 
   const [sampleList, setSampleList] = useState([]);
 
-  // TODO change this for howlerjs lib
-  const [playSound] = useSound(url);
+  const [url, setUrl] = useState(previousConfig ? previousConfig.sampleUrl : placeholderUrl);
+  const [samplePath, setSamplePath] = useState(previousConfig ? previousConfig.samplePath : '')
+  const [sampleName, setSampleName] = useState(previousConfig ? previousConfig.sampleName : 'No sample');
+
+  const [playSound, exposedData] = useSound(url);
+
+  const [trackVolume, setTrackVolume] = useState(previousConfig ? previousConfig.trackVolume : 100);
+
+  useEffect(() => {
+    exposedData.sound?.volume(trackVolume / 100);
+  }, [trackVolume, exposedData]);
 
   useEffect(() => {
     if (bankPath) {
@@ -64,7 +70,8 @@ function PadRow ({pads, pos, toggleActive, isTriggering, rowIndex, isLooped, han
       sampleUrl: newUrl,
       samplePath: newRef.fullPath,
       bankPath: bankPath,
-      bankName: bankName
+      bankName: bankName,
+      trackVolume: trackVolume,
     }));
   }
 
@@ -85,7 +92,21 @@ function PadRow ({pads, pos, toggleActive, isTriggering, rowIndex, isLooped, han
       sampleUrl: placeholderUrl,
       samplePath: '',
       bankPath: newBankPath,
-      bankName: newBankName
+      bankName: newBankName,
+      trackVolume: trackVolume,
+    }));
+  }
+
+  function handleVolumeChange (newVolume) {
+    setTrackVolume(newVolume);
+
+    localStorage.setItem(`${trackId}`, JSON.stringify({
+      sampleName: sampleName,
+      sampleUrl: url,
+      samplePath: samplePath,
+      bankPath: bankPath,
+      bankName: bankName,
+      trackVolume: trackVolume,
     }));
   }
 
@@ -124,6 +145,23 @@ function PadRow ({pads, pos, toggleActive, isTriggering, rowIndex, isLooped, han
           </FormControl>
         </Box>
       }
+      </div>
+
+      <div className='track-control-container'>
+        {sampleName !== 'No sample' &&
+          <CircularSlider
+          handle1={{
+            value: trackVolume,
+            onChange: value => handleVolumeChange(value)
+          }}
+          handleSize={0}
+          size={70}
+          arcColor="#8e24aa"
+          startAngle={40}
+          endAngle={320}
+          />
+        }
+        {/* <p>{trackVolume}</p> */}
       </div>
 
       <div className='row'>

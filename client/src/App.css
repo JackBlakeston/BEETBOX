@@ -59,7 +59,7 @@
 .row-container {
   display: flex;
   align-items: center;
-  gap: 30px;
+  gap: 15px;
   height: 65px;
 }
 
@@ -76,6 +76,10 @@
 
 .select {
   height: 45px;
+}
+
+.track-control-container {
+  min-width: 70px;
 }
 
 .row {
