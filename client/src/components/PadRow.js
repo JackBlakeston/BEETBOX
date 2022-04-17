@@ -69,7 +69,6 @@ function PadRow ({pads, pos, toggleActive, isTriggering, rowIndex, isLooped, han
   }
 
   async function handleBankChange (event) {
-    console.log(event.target.value)
     const newBankPath = event.target.value;
     const newBankRef = getRefByPath(newBankPath);
     const newBankName = newBankRef.name;
