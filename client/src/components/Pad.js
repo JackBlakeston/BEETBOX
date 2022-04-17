@@ -5,7 +5,7 @@ function Pad (props) {
     <div
       className={'pad ' +
         (props.state && !props.isDisabled ? 'active' : '') +
-        (props.pos === props.id ? ' playing' : '') +
+        (props.pos === props.id && !props.isDisabled ? ' playing' : '') +
         (props.isDisabled ? 'disabled' : '')
       }
       onClick={() => !props.isDisabled && props.toggleActive(props.rowIndex, props.id)}>
