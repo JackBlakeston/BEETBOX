@@ -79,7 +79,10 @@
 }
 
 .track-control-container {
-  min-width: 70px;
+  min-width: 140px;
+  gap: 10px;
+  display: flex;
+  align-items: center;
 }
 
 .row {

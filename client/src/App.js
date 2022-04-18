@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Box, Button, CssBaseline} from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { purple } from '@mui/material/colors';
+import * as Tone from 'tone';
 
 import './App.css';
 import PadRow from './components/PadRow';
@@ -78,6 +79,7 @@ function App () {
   }
 
   function togglePlaying () {
+    Tone.start();
     if (isPlaying) {
       clearInterval(timerId);
       setPos(0);

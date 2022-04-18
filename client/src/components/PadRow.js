@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react';
-import useSound from 'use-sound';
+import { useEffect, useRef, useState } from 'react';
 import CircularSlider from 'react-circular-slider-svg';
+import * as Tone from 'tone';
 
 // Material UI Imports
 import Box from '@mui/material/Box';
@@ -14,7 +14,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 
 import { getSampleName, getSampleUrl, getRefByPath, getSamplesInBank } from '../audio-service';
 import Pad from './Pad';
-
+import { Slider } from '@mui/material';
 
 
 function PadRow ({pads, pos, toggleActive, isTriggering, rowIndex, isLooped, handleClickDelete, trackId, bankList, gridSize}) {
@@ -32,13 +32,31 @@ function PadRow ({pads, pos, toggleActive, isTriggering, rowIndex, isLooped, han
   const [samplePath, setSamplePath] = useState(previousConfig ? previousConfig.samplePath : '')
   const [sampleName, setSampleName] = useState(previousConfig ? previousConfig.sampleName : 'No sample');
 
-  const [playSound, exposedData] = useSound(url);
-
+  const [trackPanning, setTrackPanning] = useState(previousConfig ? previousConfig.trackPanning : 0);
   const [trackVolume, setTrackVolume] = useState(previousConfig ? previousConfig.trackVolume : 100);
 
+  const player = useRef(null);
+  const panner = useRef(new Tone.Panner(trackPanning / 100).toDestination());
+
   useEffect(() => {
-    exposedData.sound?.volume(trackVolume / 100);
-  }, [trackVolume, exposedData]);
+    if (!player.current) {
+      player.current = new Tone.Player(url, () => {
+        player.current.connect(panner.current);
+      }); // No need to do .toDestination() on player when we are using a panner
+    } else {
+      player.current.load(url);
+    }
+  }, [url]);
+
+  useEffect(() => {
+    if (panner.current) {
+      panner.current.pan.rampTo( trackPanning / 100);
+    }
+  }, [trackPanning]);
+
+  useEffect(() => {
+    if (player.current) player.current.volume.value = 10 * Math.log10(trackVolume / 100);
+  }, [trackVolume]);
 
   useEffect(() => {
     if (bankPath) {
@@ -50,9 +68,9 @@ function PadRow ({pads, pos, toggleActive, isTriggering, rowIndex, isLooped, han
 
   useEffect(() => {
     if (isTriggering) {
-      playSound();
+      player.current?.start();
     }
-  }, [pos, isTriggering, playSound]);
+  }, [pos, isTriggering, player]);
 
   async function handleSampleChange (event) {
     const newPath = event.target.value;
@@ -72,6 +90,7 @@ function PadRow ({pads, pos, toggleActive, isTriggering, rowIndex, isLooped, han
       bankPath: bankPath,
       bankName: bankName,
       trackVolume: trackVolume,
+      trackPanning: trackPanning
     }));
   }
 
@@ -94,6 +113,7 @@ function PadRow ({pads, pos, toggleActive, isTriggering, rowIndex, isLooped, han
       bankPath: newBankPath,
       bankName: newBankName,
       trackVolume: trackVolume,
+      trackPanning: trackPanning
     }));
   }
 
@@ -107,6 +127,22 @@ function PadRow ({pads, pos, toggleActive, isTriggering, rowIndex, isLooped, han
       bankPath: bankPath,
       bankName: bankName,
       trackVolume: trackVolume,
+      trackPanning: trackPanning
+    }));
+  }
+
+  function handlePanningChange (event) {
+    const newPanning = event.target.value;
+    setTrackPanning(newPanning);
+
+    localStorage.setItem(`${trackId}`, JSON.stringify({
+      sampleName: sampleName,
+      sampleUrl: url,
+      samplePath: samplePath,
+      bankPath: bankPath,
+      bankName: bankName,
+      trackVolume: trackVolume,
+      trackPanning: newPanning,
     }));
   }
 
@@ -161,7 +197,20 @@ function PadRow ({pads, pos, toggleActive, isTriggering, rowIndex, isLooped, han
           endAngle={320}
           />
         }
-        {/* <p>{trackVolume}</p> */}
+
+        {sampleName !== 'No sample' &&
+          <Box className='pan-slider-box' width={50}>
+            <Slider
+              valueLabelDisplay="auto"
+              size='small'
+              min={-100}
+              max={100}
+              step={1}
+              value={trackPanning}
+              onChange={handlePanningChange}
+            />
+          </Box>
+        }
       </div>
 
       <div className='row'>
