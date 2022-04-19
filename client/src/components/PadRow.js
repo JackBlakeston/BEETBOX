@@ -198,6 +198,7 @@ function PadRow ({pads, pos, toggleActive, isTriggering, rowIndex, isLooped, han
           />
         }
 
+
         {sampleName !== 'No sample' &&
           <Box className='pan-slider-box' width={50}>
             <Slider
