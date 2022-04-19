@@ -26,6 +26,10 @@
 
 #grid-size-controls {
   min-width: 308px;
+  text-align: center;
+}
+#grid-size-controls p {
+  margin: unset;
 }
 
 #bpm-controls {
@@ -98,7 +102,7 @@
 
 /* Pads */
 .pad {
-  width: 60px;
+  /* width: 60px; */
   height: 60px;
   float: left;
   margin: 0 5px 5px 0;

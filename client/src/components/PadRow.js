@@ -17,7 +17,7 @@ import Pad from './Pad';
 import { Slider } from '@mui/material';
 
 
-function PadRow ({pads, pos, toggleActive, isTriggering, rowIndex, isLooped, handleClickDelete, trackId, bankList, gridSize}) {
+function PadRow ({pads, pos, toggleActive, isTriggering, rowIndex, isLooped, handleClickDelete, trackId, bankList, gridSize, precision}) {
 
   const placeholderUrl = 'https://firebasestorage.googleapis.com/v0/b/jb-drum-sequencer.appspot.com/o/Samples%2FPlaceholder.wav?alt=media&token=07570a97-669a-4968-96e5-53f37a6210db';
 
@@ -37,6 +37,7 @@ function PadRow ({pads, pos, toggleActive, isTriggering, rowIndex, isLooped, han
 
   const player = useRef(null);
   const panner = useRef(new Tone.Panner(trackPanning / 100).toDestination());
+
 
   useEffect(() => {
     if (!player.current) {
@@ -157,7 +158,7 @@ function PadRow ({pads, pos, toggleActive, isTriggering, rowIndex, isLooped, han
       {bankList &&
         <Box sx={{ minWidth: 120 }} className='select-container'>
           <FormControl fullWidth >
-          <InputLabel shrink id="demo-simple-select-label">Bank</InputLabel>
+          <InputLabel shrink id="demo-simple-select-label">Bank</InputLabel> {/* CHECK THIS!! */}
           <Select notched className='select' displayEmpty value={bankPath} onChange={handleBankChange} labelId="demo-simple-select-label" id="demo-simple-select" label='Bank'>
             <MenuItem style={{ display: "none" }} disabled value={bankPath}>{bankName || 'No bank'}</MenuItem>
             { bankList.map(ref => {
@@ -215,15 +216,16 @@ function PadRow ({pads, pos, toggleActive, isTriggering, rowIndex, isLooped, han
       </div>
 
       <div className='row'>
-        {pads.slice(0, gridSize).map((pad, index) => {
+        {pads && pads.slice(0, gridSize / precision).map((pad, index) => {
           return <Pad
             key={index}
             rowIndex={rowIndex}
             id={index}
             state={pad}
-            pos={ pos === 0 && isLooped ? gridSize - 1 : pos - 1 } // Fixes visual delay
+            pos={ pos === 0 && isLooped ? (gridSize / precision) - 1 : pos - 1 } // Fixes visual delay
             toggleActive={() => toggleActive(rowIndex, index)}
             isDisabled={!samplePath}
+            precision={precision}
           />
         })}
       </div>

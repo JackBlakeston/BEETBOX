@@ -2,18 +2,18 @@ import { Button, IconButton, Slider } from '@mui/material';
 import { Box } from '@mui/system';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 import React from 'react';
+var Fraction = require('fractional').Fraction
 
-
-// ! Example for custom styles
-// const RedSlider = styled(Slider)({
-//   color: 'red'
-// });
 
 function Controls (props) {
   let buttonText = props.playing ? 'Stop' : 'Play';
-  const marks = [4, 8, 16, 32].map(mark => {
+  const sizeMarks = [4, 8, 16, 32].map(mark => {
     return { value: mark };
-    });
+  });
+
+  const precisionMarks = [0.25, 0.5, 1].map(mark => {
+    return { value: mark }
+  });
 
   return (
     <div className="controls">
@@ -43,20 +43,41 @@ function Controls (props) {
         </div>
 
         <div className='slider-container' id='grid-size-controls'>
-          <label>Grid Size</label>
+          <label><p>Grid Size</p><p>(Beats)</p></label>
           <Box className='slider-box' width={200}>
             <Slider
-              marks={marks}
+              marks={sizeMarks}
               step={null}
               valueLabelDisplay="auto"
               min={4}
               max={32}
               value={props.gridSize}
               onChange={props.handleGridSizeChange}
+              // TODO make scale linear
+              // TODO remove markers that appeared for no reason
             />
           </Box>
           <output>
             {props.gridSize}
+          </output>
+        </div>
+
+        <div className='slider-container' id='precision-controls'>
+          <label>Grid Precision</label>
+          <Box className='slider-box' width={200}>
+            <Slider
+              marks={precisionMarks}
+              step={null}
+              valueLabelDisplay="auto"
+              min={1/4}
+              max={1}
+              value={props.precision}
+              onChange={props.handlePrecisionChange}
+              track={false}
+            />
+          </Box>
+          <output>
+            {new Fraction(props.precision).toString()}
           </output>
         </div>
 

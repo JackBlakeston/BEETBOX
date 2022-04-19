@@ -15,13 +15,16 @@ function App () {
   const savedPads = JSON.parse(localStorage.getItem('pads'));
   const savedTrackList = JSON.parse(localStorage.getItem('trackList'));
   const savedGridSize = JSON.parse(localStorage.getItem('gridSize'));
+  const savedPrecision = JSON.parse(localStorage.getItem('precision'));
+  const savedBpm = 220 // todo add this to storage and read it
 
   // Categories from DB
   const [sampleList, setSampleList] = useState([]);
   const [bankList, setBanklist] = useState([]);
 
   // State of tracks and pads
-  const [gridSize, setGridSize] = useState(savedGridSize ? savedGridSize : 16);
+  const [gridSize, setGridSize] = useState(savedGridSize ? savedGridSize : 16); // Grid size in number of beats
+  const [precision, setPrecision] = useState(savedPrecision ? savedPrecision : 1);
   const [trackList, setTrackList] = useState(savedTrackList ? savedTrackList.trackList : []);
   const [pads, setPads] = useState(savedPads ? savedPads : []);
   const [trackCounter, setTrackCounter] = useState(savedTrackList ? savedTrackList.trackCounter : trackList.length);
@@ -89,13 +92,13 @@ function App () {
     setIsPlaying(!isPlaying);
   }
 
-  const timerId = useInterval(tick, isPlaying ? calculateTempo(bpm) : null)
+  const timerId = useInterval(tick, isPlaying ? calculateTempo(bpm) * precision : null)
 
   function tick () {
     let currentPos = pos;
     currentPos++;
 
-    if (currentPos > gridSize - 1) {
+    if (currentPos > (gridSize / precision) - 1) {
       currentPos = 0;
       setIsLooped(true);
     }
@@ -104,6 +107,7 @@ function App () {
     checkPad();
   }
   // ?? Any way to do this without useInterval hook?
+  // If we use tone js we don't need intervals
 
   function checkPad () {
     const activeRowsAux = Array(trackList.length).fill(false);
@@ -135,6 +139,38 @@ function App () {
     localStorage.setItem('gridSize', JSON.stringify(newSize));
   }
 
+  function changePrecision (event) {
+    const newPrecision = Number(event.target.value);
+    if (isPlaying) togglePlaying();
+    const padsCopy = [...pads];
+    const factor = precision / newPrecision;
+    let newPads;
+
+    if (factor > 1) {
+      newPads = padsCopy.map(padRow => padRow.map(pad => {
+        const splitPadArr = Array(factor - 1).fill(0);
+        splitPadArr.unshift(pad);
+        return splitPadArr;
+      }).flat());
+
+    } else if (factor < 1) {
+      newPads = padsCopy.map(padRow => {
+        const joinedPadArr = [];
+        for( let i = 0; i < padRow.length; i += (1 / factor) ) {
+          joinedPadArr.push(padRow[i]);
+        }
+        return joinedPadArr;
+      });
+    } else {
+      return;
+    }
+    setPads(newPads);
+    setPrecision(newPrecision);
+
+    localStorage.setItem('pads', JSON.stringify(newPads));
+    localStorage.setItem('precision', JSON.stringify(newPrecision));
+  }
+
   function toggleActive (rowIndex, id) {
     let padsCopy = [...pads];
     let padState = padsCopy[rowIndex][id];
@@ -145,15 +181,16 @@ function App () {
     }
     setPads(padsCopy);
     localStorage.setItem('pads', JSON.stringify(padsCopy));
+    console.log('PADCLICK at row ', rowIndex, 'position ', id);
   }
 
   function handleClickNewTrack () {
     const trackListCopy = [...trackList];
-    trackListCopy.push(`Track ${ trackCounter + 1 }`); // TODO change for categories
+    trackListCopy.push(`Track ${ trackCounter + 1 }`);
     setTrackCounter(trackCounter + 1);
 
     const padsCopy = [...pads];
-    padsCopy.push(Array(32).fill(0));
+    padsCopy.push(Array(32 / precision).fill(0));
 
     setTrackList(trackListCopy);
     setPads(padsCopy);
@@ -176,8 +213,6 @@ function App () {
     localStorage.setItem('pads', JSON.stringify(padsCopy));
     localStorage.removeItem(`${removedTrackId}`);
   }
-
-
 
 
 
@@ -216,6 +251,8 @@ function App () {
             setUseDarkMode={setUseDarkMode}
             gridSize={gridSize}
             handleGridSizeChange={changeGridSize}
+            precision={precision}
+            handlePrecisionChange={changePrecision}
           />
         </div>
 
@@ -234,6 +271,7 @@ function App () {
               sampleList={sampleList}
               bankList={bankList}
               gridSize={gridSize}
+              precision={precision}
               />
             }) }
           </div>
