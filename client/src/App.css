@@ -7,7 +7,6 @@
   align-items: center;
   justify-content: space-between;
   padding: 30px 58px 30px 58px;
-  margin-bottom: 20px;
 }
 
 .play-button {
@@ -21,12 +20,16 @@
   gap: 13px;
 }
 
-.bpm-slider-box {
+.slider-box {
   margin-top: 7px;
 }
 
-.size-slider-box {
-  margin-top: 9px;
+#grid-size-controls {
+  min-width: 308px;
+}
+
+#bpm-controls {
+  min-width: 288px;
 }
 
 
@@ -34,6 +37,7 @@
 .pads-container {
   overflow: hidden;
   padding: 0 0 10px 5px;
+  padding-top: 20px;
 }
 
 .pads-container::-webkit-scrollbar {

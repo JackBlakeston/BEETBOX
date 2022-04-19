@@ -25,9 +25,9 @@ function Controls (props) {
         >{buttonText}
         </Button>
 
-        <div className='slider-container'>
+        <div className='slider-container' id='bpm-controls'>
           <label>BPM</label>
-          <Box className='bpm-slider-box' width={200}>
+          <Box className='slider-box' width={200}>
             <Slider
               valueLabelDisplay="auto"
               min={1}
@@ -42,9 +42,9 @@ function Controls (props) {
           </output>
         </div>
 
-        <div className='slider-container'>
+        <div className='slider-container' id='grid-size-controls'>
           <label>Grid Size</label>
-          <Box className='size-slider-box' width={200}>
+          <Box className='slider-box' width={200}>
             <Slider
               marks={marks}
               step={null}

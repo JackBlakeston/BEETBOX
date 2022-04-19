@@ -55,7 +55,7 @@ function PadRow ({pads, pos, toggleActive, isTriggering, rowIndex, isLooped, han
   }, [trackPanning]);
 
   useEffect(() => {
-    if (player.current) player.current.volume.value = 10 * Math.log10(trackVolume / 100);
+    if (player.current) player.current.volume.value = 25 * Math.log10(trackVolume / 100);
   }, [trackVolume]);
 
   useEffect(() => {
