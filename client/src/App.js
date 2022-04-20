@@ -16,7 +16,7 @@ function App () {
   const savedTrackList = JSON.parse(localStorage.getItem('trackList'));
   const savedGridSize = JSON.parse(localStorage.getItem('gridSize'));
   const savedPrecision = JSON.parse(localStorage.getItem('precision'));
-  const savedBpm = 220 // todo add this to storage and read it
+  // const savedBpm = 220 // todo add this to storage and read it
 
   // Categories from DB
   const [sampleList, setSampleList] = useState([]);

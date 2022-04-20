@@ -2,7 +2,7 @@ import { Button, IconButton, Slider } from '@mui/material';
 import { Box } from '@mui/system';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 import React from 'react';
-var Fraction = require('fractional').Fraction
+import Fraction from 'fraction.js'
 
 
 function Controls (props) {
@@ -77,7 +77,7 @@ function Controls (props) {
             />
           </Box>
           <output>
-            {new Fraction(props.precision).toString()}
+            {new Fraction(props.precision).toFraction()}
           </output>
         </div>
 
