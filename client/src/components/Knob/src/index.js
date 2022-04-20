@@ -6,7 +6,7 @@ import Arc from "./Arc";
 
 const viewBox = {
   height: 150,
-  width: 150
+  width: 170
 };
 
 const angleRange = 270;
@@ -166,8 +166,8 @@ class Knob extends React.Component {
             cursor: "pointer",
             userSelect: "none"
           }}
-          x={70}
-          y={outerCircle.arcWidth + 2 * outerCircle.radius + font.size + 5}
+          x={74}
+          y={outerCircle.arcWidth + 2 * outerCircle.radius + font.size + 7}
           fontSize={font.size}
         >
           {`${transform(percentage)} ${unit}`}

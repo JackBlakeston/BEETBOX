@@ -10,8 +10,7 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { Slider, SliderThumb } from '@mui/material';
-import { styled } from '@mui/material/styles';
+import { Slider } from '@mui/material';
 
 import { getSampleName, getSampleUrl, getRefByPath, getSamplesInBank } from '../audio-service';
 import Pad from './Pad';
@@ -196,16 +195,23 @@ function PadRow ({pads, pos, toggleActive, isTriggering, rowIndex, isLooped, han
             mouseSpeed={7}
             transform={p => parseInt(p * 50, 10) - 50}
             style={{
-              height: "60px",
-              color: "white",
+              height: '60px',
+              color: useDarkMode ? 'rgb(159 159 159)' : 'rgb(129 128 128)',
               margin: '0 0 14px 0',
+              fontFamily: 'Roboto'
             }}
           />
         }
 
 
         {sampleName !== 'No sample' &&
-          <Box className='pan-slider-box' width={70}>
+          <Box
+            className='pan-slider-box'
+            width={70}
+            sx={{
+              color: useDarkMode ? 'rgb(159 159 159)' : 'rgb(95 95 95)',
+            }}
+          >
             <label>L</label>
             <Slider
               valueLabelDisplay="auto"
