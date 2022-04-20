@@ -42,6 +42,7 @@
   overflow: hidden;
   padding: 0 0 10px 5px;
   padding-top: 20px;
+  margin-right: 20px;
 }
 
 .pads-container::-webkit-scrollbar {
@@ -94,7 +95,7 @@
 .row {
   clear: both;
   display: flex;
-  padding-right: 100px;
+  padding-right: 10px;
 }
 
 
