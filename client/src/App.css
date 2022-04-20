@@ -62,7 +62,6 @@
 }
 
 
-
 /* Tracks */
 .row-container {
   display: flex;
@@ -87,8 +86,7 @@
 }
 
 .track-control-container {
-  min-width: 140px;
-  gap: 10px;
+  min-width: 150px;
   display: flex;
   align-items: center;
 }
@@ -111,12 +109,11 @@
   border-radius: 10px;
 
   border: solid 2px black;
-  transition: 0.15s;
+  transition: 0.1s ease;
 }
 .pad:hover {
   background:rgb(111, 111, 111);
 }
-
 
 .pad.active {
   background: rgba(142,37,170, 1);

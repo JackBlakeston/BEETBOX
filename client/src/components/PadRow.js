@@ -1,20 +1,18 @@
 import { useEffect, useRef, useState } from 'react';
-import CircularSlider from 'react-circular-slider-svg';
+import Knob from "react-simple-knob";
 import * as Tone from 'tone';
 
-// Material UI Imports
 import Box from '@mui/material/Box';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
-
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
+import { Slider } from '@mui/material';
 
 import { getSampleName, getSampleUrl, getRefByPath, getSamplesInBank } from '../audio-service';
 import Pad from './Pad';
-import { Slider } from '@mui/material';
 
 
 function PadRow ({pads, pos, toggleActive, isTriggering, rowIndex, isLooped, handleClickDelete, trackId, bankList, gridSize, precision}) {
@@ -33,7 +31,7 @@ function PadRow ({pads, pos, toggleActive, isTriggering, rowIndex, isLooped, han
   const [sampleName, setSampleName] = useState(previousConfig ? previousConfig.sampleName : 'No sample');
 
   const [trackPanning, setTrackPanning] = useState(previousConfig ? previousConfig.trackPanning : 0);
-  const [trackVolume, setTrackVolume] = useState(previousConfig ? previousConfig.trackVolume : 100);
+  const [trackVolume, setTrackVolume] = useState(previousConfig ? previousConfig.trackVolume : -6);
 
   const player = useRef(null);
   const panner = useRef(new Tone.Panner(trackPanning / 100).toDestination());
@@ -56,7 +54,7 @@ function PadRow ({pads, pos, toggleActive, isTriggering, rowIndex, isLooped, han
   }, [trackPanning]);
 
   useEffect(() => {
-    if (player.current) player.current.volume.value = 25 * Math.log10(trackVolume / 100);
+    if (player.current) player.current.volume.value = trackVolume;
   }, [trackVolume]);
 
   useEffect(() => {
@@ -186,16 +184,20 @@ function PadRow ({pads, pos, toggleActive, isTriggering, rowIndex, isLooped, han
 
       <div className='track-control-container'>
         {sampleName !== 'No sample' &&
-          <CircularSlider
-          handle1={{
-            value: trackVolume,
-            onChange: value => handleVolumeChange(value)
-          }}
-          handleSize={0}
-          size={70}
-          arcColor="#8e24aa"
-          startAngle={40}
-          endAngle={320}
+          <Knob
+            unit="dB"
+            defaultPercentage={(trackVolume + 50) / 50}
+            onChange={handleVolumeChange}
+            value={trackVolume}
+            bg="rgb(40 40 40)"
+            fg='rgba(142,37,170, 1)'
+            mouseSpeed={2}
+            transform={p => parseInt(p * 50, 10) - 50}
+            style={{
+              height: "60px",
+              color: "white",
+              margin: '0 0 14px 0'
+            }}
           />
         }
 
