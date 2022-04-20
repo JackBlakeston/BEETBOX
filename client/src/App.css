@@ -87,9 +87,18 @@
 }
 
 .track-control-container {
-  min-width: 150px;
+  min-width: 140px;
   display: flex;
+  justify-content: space-between;
   align-items: center;
+}
+
+.pan-slider-box {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  gap: 10px;
 }
 
 .row {
@@ -105,10 +114,8 @@
   float: left;
   margin: 0 5px 5px 0;
   cursor: pointer;
-
   background:rgba(129,128,128,1);
   border-radius: 10px;
-
   border: solid 2px black;
   transition: 0.1s ease;
 }

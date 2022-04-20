@@ -272,6 +272,7 @@ function App () {
               bankList={bankList}
               gridSize={gridSize}
               precision={precision}
+              useDarkMode={useDarkMode}
               />
             }) }
           </div>

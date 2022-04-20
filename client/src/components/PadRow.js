@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
-import Knob from "react-simple-knob";
+import Knob from "./Knob/src/index";
+// import Knob from "react-simple-knob";
 import * as Tone from 'tone';
 
 import Box from '@mui/material/Box';
@@ -9,13 +10,14 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { Slider } from '@mui/material';
+import { Slider, SliderThumb } from '@mui/material';
+import { styled } from '@mui/material/styles';
 
 import { getSampleName, getSampleUrl, getRefByPath, getSamplesInBank } from '../audio-service';
 import Pad from './Pad';
 
 
-function PadRow ({pads, pos, toggleActive, isTriggering, rowIndex, isLooped, handleClickDelete, trackId, bankList, gridSize, precision}) {
+function PadRow ({pads, pos, toggleActive, isTriggering, rowIndex, isLooped, handleClickDelete, trackId, bankList, gridSize, precision, useDarkMode}) {
 
   const placeholderUrl = 'https://firebasestorage.googleapis.com/v0/b/jb-drum-sequencer.appspot.com/o/Samples%2FPlaceholder.wav?alt=media&token=07570a97-669a-4968-96e5-53f37a6210db';
 
@@ -189,30 +191,43 @@ function PadRow ({pads, pos, toggleActive, isTriggering, rowIndex, isLooped, han
             defaultPercentage={(trackVolume + 50) / 50}
             onChange={handleVolumeChange}
             value={trackVolume}
-            bg="rgb(40 40 40)"
+            bg={useDarkMode ? /* 'rgb(40 40 40)' */ 'rgb(67 67 67)' : 'rgb(205 205 205)'}
             fg='rgba(142,37,170, 1)'
-            mouseSpeed={2}
+            mouseSpeed={7}
             transform={p => parseInt(p * 50, 10) - 50}
             style={{
               height: "60px",
               color: "white",
-              margin: '0 0 14px 0'
+              margin: '0 0 14px 0',
             }}
           />
         }
 
 
         {sampleName !== 'No sample' &&
-          <Box className='pan-slider-box' width={50}>
+          <Box className='pan-slider-box' width={70}>
+            <label>L</label>
             <Slider
               valueLabelDisplay="auto"
+              track={false}
               size='small'
               min={-100}
               max={100}
-              step={1}
+              step={5}
               value={trackPanning}
               onChange={handlePanningChange}
+              sx={{
+                '& .MuiSlider-thumb': {
+                  height: 10,
+                  width: 2,
+                  borderRadius: 0,
+                  '&:hover': {
+                    boxShadow: 'unset',
+                  }
+                },
+              }}
             />
+            <label>R</label>
           </Box>
         }
       </div>
