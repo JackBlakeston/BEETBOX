@@ -111,11 +111,18 @@
   border-radius: 10px;
 
   border: solid 2px black;
+  transition: 0.15s;
+}
+.pad:hover {
+  background:rgb(111, 111, 111);
 }
 
 
 .pad.active {
-  background: rgba(142,37,170,255);
+  background: rgba(142,37,170, 1);
+}
+.pad.active:hover {
+  background: rgb(122, 28, 149);
 }
 
 .pad.playing {
@@ -126,6 +133,7 @@
 }
 
 .pad.disabled {
+  cursor: default;
   background:rgb(67, 67, 67);
 }
 
