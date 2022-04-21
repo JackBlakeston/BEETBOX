@@ -1,24 +1,28 @@
 import { Paper, Tab, Tabs, TextField } from "@mui/material";
 import { Box } from "@mui/system";
 import { createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword } from "firebase/auth";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { auth } from "../FirebaseService";
+import { UserContext } from "../contexts";
 
 function AuthScreen () {
 
   const navigate = useNavigate(); // TODO use this for navigating after login
 
   const [tabIndex, setTabIndex] = useState(0);
+
   const [loginEmail, setLoginEmail] = useState('');
   const [loginPass, setLoginPass] = useState('');
-  // const [registerUsername, setRegisterUsername] = useState('');
   const [registerEmail, setRegisterEmail] = useState('');
   const [registerPass, setRegisterPass] = useState('');
 
-  onAuthStateChanged(auth, (user) => {
-    if (user) {
+  const { setUser } = useContext(UserContext)
+
+  onAuthStateChanged(auth, (observedUser) => {
+    if (observedUser) {
+      setUser(observedUser);
       navigate('/dashboard');
     }
   });

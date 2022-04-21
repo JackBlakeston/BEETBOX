@@ -1,26 +1,21 @@
 import { onAuthStateChanged, signOut } from "firebase/auth";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { UserContext } from "../contexts";
 import { auth } from "../FirebaseService";
 
 
 
 function Dashboard () {
 
-  const navigate = useNavigate();
+  const navigate = useNavigate(); // TODO will need this for jumping out of this page after logging out
 
-  const [user, setUser] = useState(null);
-
-  onAuthStateChanged(auth, (user) => {
-    if (user) {
-      setUser(user);
-    } else {
-      navigate('/');
-    }
-  });
+  const {user, setUser} = useContext(UserContext)
 
   function handleLogoutClick () {
-    signOut(auth);
+    signOut(auth).then(() => {
+      navigate('/');
+    });
   }
 
   return (

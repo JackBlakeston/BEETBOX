@@ -3,14 +3,12 @@ import * as Tone from 'tone';
 import { IconButton, Box, Button } from '@mui/material';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 import { useNavigate } from 'react-router-dom';
-import { onAuthStateChanged } from 'firebase/auth';
-
 
 import '../App.css'; // TODO change name or refactor all styles
 import PadRow from './PadRow';
 import Controls from './Controls';
 import { auth, getBankRefList, getSampleList } from '../FirebaseService';
-import { DarkModeContext } from "../contexts";
+import { DarkModeContext, UserContext } from "../contexts";
 
 
 
@@ -47,6 +45,9 @@ function Sequencer () {
   // Dark mode
   const {useDarkMode, setUseDarkMode} = useContext(DarkModeContext);
 
+  // User info
+  const {user, setUser} = useContext(UserContext)
+
   // ! Everything stops working when i uncomment this, why??
   // const [user, setUser] = useState(null);
   // onAuthStateChanged(auth, (user) => {
@@ -58,7 +59,6 @@ function Sequencer () {
   // });
 
   const loopName = 'A really cool loop yo' // TODO change when implementing real loop saving
-  const user = 'TEST USER' // TODO change when implementing real loop saving
 
   useEffect(() => {
     getSampleList().then(list => {

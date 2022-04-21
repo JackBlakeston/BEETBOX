@@ -7,14 +7,17 @@ import { CssBaseline } from '@mui/material'
 import AuthScreen from "./components/AuthScreen";
 import Dashboard from "./components/Dashboard";
 import Sequencer from "./components/Sequencer";
-import { DarkModeContext } from "./contexts";
+import { DarkModeContext, UserContext } from "./contexts";
 
 export function App () {
 
   const [useDarkMode, setUseDarkMode] = useState(true);
-  const darkMode = { useDarkMode, setUseDarkMode };
+  const darkModeValues = { useDarkMode, setUseDarkMode };
 
-  // ?? Is possible to move to other file
+  const [user, setUser] = useState(null);
+  const userValues = { user, setUser }
+
+  // ?? Is possible to move to other file - don't know how
   const theme = createTheme({
     palette: {
       mode: useDarkMode ? 'dark' : 'light',
@@ -32,7 +35,8 @@ export function App () {
 
   return (
     <>
-      <DarkModeContext.Provider value={darkMode}>
+      <UserContext.Provider value={userValues}>
+      <DarkModeContext.Provider value={darkModeValues}>
         <ThemeProvider theme={theme}>
           <CssBaseline />
           <BrowserRouter>
@@ -44,6 +48,7 @@ export function App () {
           </BrowserRouter>
         </ThemeProvider>
       </DarkModeContext.Provider>
+      </UserContext.Provider>
     </>
   )
 }
