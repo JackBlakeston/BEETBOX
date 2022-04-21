@@ -1,9 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import { Box, Button, CssBaseline} from '@mui/material';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { purple } from '@mui/material/colors';
+import React, { useContext, useEffect, useState } from 'react';
 import * as Tone from 'tone';
-import { IconButton } from '@mui/material';
+import { IconButton, Box, Button } from '@mui/material';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 import { useNavigate } from 'react-router-dom';
 import { onAuthStateChanged } from 'firebase/auth';
@@ -13,6 +10,7 @@ import '../App.css'; // TODO change name or refactor all styles
 import PadRow from './PadRow';
 import Controls from './Controls';
 import { auth, getBankRefList, getSampleList } from '../FirebaseService';
+import { DarkModeContext } from "../contexts";
 
 
 
@@ -47,7 +45,7 @@ function Sequencer () {
   const [isLooped, setIsLooped] = useState(false); // Necessary for fixing visual delay
 
   // Dark mode
-  const [useDarkMode, setUseDarkMode] = useState(true);
+  const {useDarkMode, setUseDarkMode} = useContext(DarkModeContext);
 
   // ! Everything stops working when i uncomment this, why??
   // const [user, setUser] = useState(null);
@@ -139,7 +137,7 @@ function Sequencer () {
         if (index === pos && pad === 1) {
           activeRowsAux[rowIndex] = true;
         }
-      })
+      });
     });
 
     setActiveRows(activeRowsAux);
@@ -238,28 +236,8 @@ function Sequencer () {
   }
 
 
-
-  // TODO Move this up
-  const theme = createTheme({
-    palette: {
-      mode: useDarkMode ? 'dark' : 'light',
-      primary: {
-        main: purple[600]
-      },
-      secondary: {
-        main: purple[600]
-      },
-      background: {
-        default: useDarkMode ? '#2D2D2D' : '#F1F1F1'
-      }
-    }
-  });
-
   return (
-    // TODO MOVE THEME PROVIDER UP
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
-
+    <>
       <div
         style={{
           backgroundColor: useDarkMode ? 'rgb(35, 35, 35)' : 'rgb(220 220 220)',
@@ -316,8 +294,6 @@ function Sequencer () {
             togglePlaying={togglePlaying}
             handleTempoChange={changeBpm}
             bpm={bpm}
-            useDarkMode={useDarkMode}
-            setUseDarkMode={setUseDarkMode}
             gridSize={gridSize}
             handleGridSizeChange={changeGridSize}
             precision={precision}
@@ -341,7 +317,6 @@ function Sequencer () {
               bankList={bankList}
               gridSize={gridSize}
               precision={precision}
-              useDarkMode={useDarkMode}
               />
             }) }
           </div>
@@ -367,7 +342,7 @@ function Sequencer () {
         </Box>
 
       </div>
-    </ThemeProvider>
+    </>
   );
 }
 

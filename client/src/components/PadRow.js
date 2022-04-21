@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import Knob from "./Knob/src/index";
 // import Knob from "react-simple-knob";
 import * as Tone from 'tone';
@@ -14,9 +14,10 @@ import { Slider } from '@mui/material';
 
 import { getSampleName, getSampleUrl, getRefByPath, getSamplesInBank } from '../FirebaseService';
 import Pad from './Pad';
+import { DarkModeContext } from '../contexts';
 
 
-function PadRow ({pads, pos, toggleActive, isTriggering, rowIndex, isLooped, handleClickDelete, trackId, bankList, gridSize, precision, useDarkMode}) {
+function PadRow ({pads, pos, toggleActive, isTriggering, rowIndex, isLooped, handleClickDelete, trackId, bankList, gridSize, precision}) {
 
   const placeholderUrl = 'https://firebasestorage.googleapis.com/v0/b/jb-drum-sequencer.appspot.com/o/Samples%2FPlaceholder.wav?alt=media&token=07570a97-669a-4968-96e5-53f37a6210db';
 
@@ -33,6 +34,8 @@ function PadRow ({pads, pos, toggleActive, isTriggering, rowIndex, isLooped, han
 
   const [trackPanning, setTrackPanning] = useState(previousConfig ? previousConfig.trackPanning : 0);
   const [trackVolume, setTrackVolume] = useState(previousConfig ? previousConfig.trackVolume : -6);
+
+  const {useDarkMode} = useContext(DarkModeContext);
 
   const player = useRef(null);
   const panner = useRef(new Tone.Panner(trackPanning / 100).toDestination());
@@ -202,7 +205,7 @@ function PadRow ({pads, pos, toggleActive, isTriggering, rowIndex, isLooped, han
             defaultPercentage={(trackVolume + 50) / 50}
             onChange={handleVolumeChange}
             value={trackVolume}
-            bg={useDarkMode ? /* 'rgb(40 40 40)' */ 'rgb(67 67 67)' : 'rgb(205 205 205)'}
+            bg={useDarkMode ? 'rgb(67 67 67)' : 'rgb(205 205 205)'}
             fg='rgba(142,37,170, 1)'
             mouseSpeed={7}
             transform={p => parseInt(p * 50, 10) - 50}
