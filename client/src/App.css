@@ -1,3 +1,33 @@
+/* AUTH */
+.auth-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  text-align: center;
+}
+
+.auth-form-container {
+  display: flex;
+  justify-content: center;
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 30px;
+  height: 400px;
+  width: 400px;
+  padding-top: 30px;
+}
+
+.auth-form > * {
+  width: 350px;
+}
+
+
+
 .controls {
   position: sticky;
   top: 0px;
@@ -104,6 +134,14 @@
   align-items: center;
   font-size: 12px;
   gap: 10px;
+
+  /* TODO Put this for the whole sequencer component rather than just this part */
+  -webkit-touch-callout: none;
+    -webkit-user-select: none;
+      -khtml-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+            user-select: none;
 }
 
 .row {

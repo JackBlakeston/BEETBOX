@@ -7,7 +7,7 @@ import * as Tone from 'tone';
 import '../App.css'; // TODO change name or refactor all styles
 import PadRow from './PadRow';
 import Controls from './Controls';
-import { getBankRefList, getSampleList } from '../audio-service';
+import { getBankRefList, getSampleList } from '../FirebaseService';
 
 
 function Sequencer () {
@@ -216,7 +216,7 @@ function Sequencer () {
 
 
 
-  // MUI Theming
+  // TODO Move this up
   const theme = createTheme({
     palette: {
       mode: useDarkMode ? 'dark' : 'light',
@@ -233,6 +233,7 @@ function Sequencer () {
   });
 
   return (
+    // TODO MOVE THEME PROVIDER UP
     <ThemeProvider theme={theme}>
       <CssBaseline />
 
