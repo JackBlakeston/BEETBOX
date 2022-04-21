@@ -121,7 +121,7 @@ class Knob extends React.Component {
         // ref="box"
         onMouseDown={this.handleDown}
         style={style}
-        viewBox={`0 0 ${width} ${height}`}
+        viewBox={`0 12 ${width} ${height}`}
       >
         <text
           // ref="name"

@@ -41,7 +41,6 @@
 .pads-container {
   overflow: hidden;
   padding: 0 0 10px 5px;
-  padding-top: 20px;
   margin-right: 20px;
 }
 
@@ -68,11 +67,17 @@
   display: flex;
   align-items: center;
   gap: 15px;
-  height: 65px;
+  background-color: rgb(45 45 45);
+}
+
+.delete-icon {
+  display: flex;
+  align-items: center;
 }
 
 .sound-selector-container {
   display: flex;
+  align-items: center;
   gap: 20px;
   min-width: 320px;
 }
@@ -109,10 +114,14 @@
 
 
 /* Pads */
+.pad-container {
+  background-color: rgb(40 40 40);
+}
+
 .pad {
   height: 60px;
   float: left;
-  margin: 0 5px 5px 0;
+  margin: 2.5px;
   cursor: pointer;
   background:rgba(129,128,128,1);
   border-radius: 10px;
@@ -142,6 +151,18 @@
   background:rgb(67, 67, 67);
 }
 
+.alternative-color {
+  background-color: rgb(45 45 45);
+}
+
+.top-row-element {
+  padding: 20px 0 0 0;
+  height: 85px;
+}
+.bot-row-element {
+  padding: 0 0 20px 0;
+  height: 85px;
+}
 
 /* NEW TRACK */
 .new-track-container {

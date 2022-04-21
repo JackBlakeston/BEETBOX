@@ -37,7 +37,6 @@ function PadRow ({pads, pos, toggleActive, isTriggering, rowIndex, isLooped, han
   const player = useRef(null);
   const panner = useRef(new Tone.Panner(trackPanning / 100).toDestination());
 
-
   useEffect(() => {
     if (!player.current) {
       player.current = new Tone.Player(url, () => {
@@ -146,14 +145,29 @@ function PadRow ({pads, pos, toggleActive, isTriggering, rowIndex, isLooped, han
     }));
   }
 
+
   return (
-    <div className='row-container'>
+    <div className='row-container '>
 
-      <IconButton aria-label="delete" size="small" onClick={() => handleClickDelete(rowIndex) }>
-        <DeleteIcon fontSize="inherit" />
-      </IconButton>
+      <div
+        className={'delete-icon ' +
+          (rowIndex === 0 ? 'top-row-element ' : '')
+        }
+      >
+        <IconButton
+          aria-label="delete"
+          size="small"
+          onClick={() => handleClickDelete(rowIndex)}
+        >
+          <DeleteIcon fontSize="inherit" />
+        </IconButton>
+      </div>
 
-      <div className='sound-selector-container'>
+      <div
+        className={'sound-selector-container ' +
+          (rowIndex === 0 ? 'top-row-element ' : '')
+        }
+      >
       {bankList &&
         <Box sx={{ minWidth: 120 }} className='select-container'>
           <FormControl fullWidth >
@@ -183,7 +197,11 @@ function PadRow ({pads, pos, toggleActive, isTriggering, rowIndex, isLooped, han
       }
       </div>
 
-      <div className='track-control-container'>
+      <div
+        className={'track-control-container ' +
+          (rowIndex === 0 ? 'top-row-element ' : '')
+        }
+      >
         {sampleName !== 'No sample' &&
           <Knob
             unit="dB"
@@ -197,7 +215,6 @@ function PadRow ({pads, pos, toggleActive, isTriggering, rowIndex, isLooped, han
             style={{
               height: '60px',
               color: useDarkMode ? 'rgb(159 159 159)' : 'rgb(129 128 128)',
-              margin: '0 0 14px 0',
               fontFamily: 'Roboto'
             }}
           />
@@ -241,6 +258,7 @@ function PadRow ({pads, pos, toggleActive, isTriggering, rowIndex, isLooped, han
       <div className='row'>
         {pads && pads.slice(0, gridSize / precision).map((pad, index) => {
           return <Pad
+            isAlternativeColor={ Math.floor(index / 4) % 2 !== 0 }
             key={index}
             rowIndex={rowIndex}
             id={index}
