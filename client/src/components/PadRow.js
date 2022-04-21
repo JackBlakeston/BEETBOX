@@ -150,9 +150,7 @@ function PadRow ({pads, pos, toggleActive, isTriggering, rowIndex, isLooped, han
     <div className='row-container '>
 
       <div
-        className={'delete-icon ' +
-          (rowIndex === 0 ? 'top-row-element ' : '')
-        }
+        className={'delete-icon '}
       >
         <IconButton
           aria-label="delete"
@@ -164,14 +162,12 @@ function PadRow ({pads, pos, toggleActive, isTriggering, rowIndex, isLooped, han
       </div>
 
       <div
-        className={'sound-selector-container ' +
-          (rowIndex === 0 ? 'top-row-element ' : '')
-        }
+        className={'sound-selector-container '}
       >
       {bankList &&
         <Box sx={{ minWidth: 120 }} className='select-container'>
           <FormControl fullWidth >
-          <InputLabel shrink id="demo-simple-select-label">Bank</InputLabel> {/* CHECK THIS!! */}
+          <InputLabel shrink>Bank</InputLabel> {/* CHECK THIS!! */}
           <Select notched className='select' displayEmpty value={bankPath} onChange={handleBankChange} labelId="demo-simple-select-label" id="demo-simple-select" label='Bank'>
             <MenuItem style={{ display: "none" }} disabled value={bankPath}>{bankName || 'No bank'}</MenuItem>
             { bankList.map(ref => {
@@ -198,9 +194,7 @@ function PadRow ({pads, pos, toggleActive, isTriggering, rowIndex, isLooped, han
       </div>
 
       <div
-        className={'track-control-container ' +
-          (rowIndex === 0 ? 'top-row-element ' : '')
-        }
+        className={'track-control-container '}
       >
         {sampleName !== 'No sample' &&
           <Knob
@@ -258,7 +252,6 @@ function PadRow ({pads, pos, toggleActive, isTriggering, rowIndex, isLooped, han
       <div className='row'>
         {pads && pads.slice(0, gridSize / precision).map((pad, index) => {
           return <Pad
-            isAlternativeColor={ Math.floor(index / 4) % 2 !== 0 }
             key={index}
             rowIndex={rowIndex}
             id={index}

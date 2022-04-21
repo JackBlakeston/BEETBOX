@@ -1,6 +1,5 @@
-import { Button, IconButton, Slider } from '@mui/material';
+import { Button, Slider } from '@mui/material';
 import { Box } from '@mui/system';
-import DarkModeIcon from '@mui/icons-material/DarkMode';
 import React from 'react';
 import Fraction from 'fraction.js'
 
@@ -29,7 +28,6 @@ function Controls (props) {
           <label>BPM</label>
           <Box className='slider-box' width={200}>
             <Slider
-              valueLabelDisplay="auto"
               min={1}
               max={420}
               step={1}
@@ -48,7 +46,6 @@ function Controls (props) {
             <Slider
               marks={sizeMarks}
               step={null}
-              valueLabelDisplay="auto"
               min={4}
               max={32}
               value={props.gridSize}
@@ -68,7 +65,6 @@ function Controls (props) {
             <Slider
               marks={precisionMarks}
               step={null}
-              valueLabelDisplay="auto"
               min={1/4}
               max={1}
               value={props.precision}
@@ -80,14 +76,6 @@ function Controls (props) {
             {new Fraction(props.precision).toFraction()}
           </output>
         </div>
-
-        <IconButton
-        aria-label="dark-mode"
-        size="small"
-        onClick={() => props.setUseDarkMode(!props.useDarkMode) }
-        >
-          <DarkModeIcon/>
-        </IconButton>
 
     </div>
   );

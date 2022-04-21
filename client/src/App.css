@@ -26,8 +26,23 @@
   width: 350px;
 }
 
+/* SEQUENCER */
 
 
+/* Name display */
+.loop-name-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 60px;
+}
+.loop-name-container h4 {
+  padding: 2px 30px 2px 30px;
+  border-radius: 7px;
+  background-color: unset;
+}
+
+/* Controls */
 .controls {
   position: sticky;
   top: 0px;
@@ -36,7 +51,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 30px 58px 30px 58px;
+  padding: 15px 80px 15px 50px;
 }
 
 .play-button {
@@ -70,7 +85,7 @@
 /* Tracks and pads */
 .pads-container {
   overflow: hidden;
-  padding: 0 0 10px 5px;
+  padding: 10px 0 15px 5px;
   margin-right: 20px;
 }
 
@@ -97,7 +112,6 @@
   display: flex;
   align-items: center;
   gap: 15px;
-  background-color: rgb(45 45 45);
 }
 
 .delete-icon {
@@ -152,10 +166,6 @@
 
 
 /* Pads */
-.pad-container {
-  background-color: rgb(40 40 40);
-}
-
 .pad {
   height: 60px;
   float: left;
@@ -187,19 +197,6 @@
 .pad.disabled {
   cursor: default;
   background:rgb(67, 67, 67);
-}
-
-.alternative-color {
-  background-color: rgb(45 45 45);
-}
-
-.top-row-element {
-  padding: 20px 0 0 0;
-  height: 85px;
-}
-.bot-row-element {
-  padding: 0 0 20px 0;
-  height: 85px;
 }
 
 /* NEW TRACK */

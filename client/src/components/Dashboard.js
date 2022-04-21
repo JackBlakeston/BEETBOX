@@ -13,10 +13,8 @@ function Dashboard () {
 
   onAuthStateChanged(auth, (user) => {
     if (user) {
-      console.log('SIGNED IN: ', user.email);
       setUser(user);
     } else {
-      console.log('SIGNED OUT');
       navigate('/');
     }
   });

@@ -3,20 +3,29 @@ import { Box, Button, CssBaseline} from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { purple } from '@mui/material/colors';
 import * as Tone from 'tone';
+import { IconButton } from '@mui/material';
+import DarkModeIcon from '@mui/icons-material/DarkMode';
+import { useNavigate } from 'react-router-dom';
+import { onAuthStateChanged } from 'firebase/auth';
+
 
 import '../App.css'; // TODO change name or refactor all styles
 import PadRow from './PadRow';
 import Controls from './Controls';
-import { getBankRefList, getSampleList } from '../FirebaseService';
+import { auth, getBankRefList, getSampleList } from '../FirebaseService';
+
 
 
 function Sequencer () {
 
+  const navigate = useNavigate(); // ? Should this be out of the function?
+
+  // Loading local storage
   const savedPads = JSON.parse(localStorage.getItem('pads'));
   const savedTrackList = JSON.parse(localStorage.getItem('trackList'));
   const savedGridSize = JSON.parse(localStorage.getItem('gridSize'));
   const savedPrecision = JSON.parse(localStorage.getItem('precision'));
-  // const savedBpm = 220 // todo add this to storage and read it
+  const savedBpm = JSON.parse(localStorage.getItem('bpm'));
 
   // Categories from DB
   const [sampleList, setSampleList] = useState([]);
@@ -32,13 +41,26 @@ function Sequencer () {
   // Audio control
   const [isPlaying, setIsPlaying] = useState(false);
   const [pos, setPos] = useState(0);
-  const [bpm, setBpm] = useState(220);
+  const [bpm, setBpm] = useState(savedBpm ? savedBpm : 220);
 
   const [activeRows, setActiveRows] = useState(Array(trackList.length).fill(false)); // Tells all tracks if they should play or not
   const [isLooped, setIsLooped] = useState(false); // Necessary for fixing visual delay
 
   // Dark mode
   const [useDarkMode, setUseDarkMode] = useState(true);
+
+  // ! Everything stops working when i uncomment this, why??
+  // const [user, setUser] = useState(null);
+  // onAuthStateChanged(auth, (user) => {
+  //   if (user) {
+  //     setUser(user);
+  //   } else {
+  //     setUser(null);
+  //   }
+  // });
+
+  const loopName = 'A really cool loop yo' // TODO change when implementing real loop saving
+  const user = 'TEST USER' // TODO change when implementing real loop saving
 
   useEffect(() => {
     getSampleList().then(list => {
@@ -130,6 +152,7 @@ function Sequencer () {
   function changeBpm (event) {
     const newBpm = Number(event.target.value);
     setBpm(newBpm);
+    localStorage.setItem('bpm', JSON.stringify(newBpm));
   }
 
   function changeGridSize (event) {
@@ -237,10 +260,55 @@ function Sequencer () {
     <ThemeProvider theme={theme}>
       <CssBaseline />
 
+      <div
+        style={{
+          backgroundColor: useDarkMode ? 'rgb(35, 35, 35)' : 'rgb(220 220 220)',
+        }}
+      >
+        <div className='loop-name-container'>
+          <h4
+            style={{
+              color: useDarkMode ? 'rgb(180 180 180)' : 'rgb(70, 70, 70)',
+              backgroundColor: useDarkMode ? 'rgb(57 57 57)' : 'rgb(190 190 190)'
+            }}
+          >
+            {loopName}
+          </h4>
+        </div>
+
+        <Button
+          onClick={() => user ? navigate('/dashboard') : navigate('/')} // TODO check if user is logged in, take them
+          variant='contained'
+          size='small'
+          sx={{
+            backgroundColor: useDarkMode ? 'rgb(60 60 60)' : 'rgb(101 101 101)',
+            position: 'absolute',
+            top: 15,
+            right: 10
+          }}
+        >
+          {user ? 'DASHBOARD' : 'LOG IN'}
+        </Button>
+
+        <IconButton
+        aria-label="dark-mode"
+        size="small"
+        onClick={() => setUseDarkMode(!useDarkMode) }
+        sx={{
+          position: 'absolute',
+          top: 15,
+          right: 150
+        }}
+        >
+          <DarkModeIcon/>
+        </IconButton>
+
+      </div>
+
       <div className='Sequencer'>
         <div
           style={{
-            backgroundColor: useDarkMode ? 'rgb(40, 40, 40)' : 'rgb(235 235 235)'
+            backgroundColor: useDarkMode ? 'rgb(40, 40, 40)' : 'rgb(230 230 230)'
           }}
         >
           <Controls

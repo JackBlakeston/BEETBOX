@@ -4,11 +4,7 @@ function Pad (props) {
 
   return (
     <div
-      className={
-        'pad-container' +
-        (props.isAlternativeColor ? ' alternative-color' : '') +
-        (props.rowIndex === 0 ? ' top-row-element' : '')
-      }
+      className={'pad-container'}
     >
       <div
         className={'pad ' +
