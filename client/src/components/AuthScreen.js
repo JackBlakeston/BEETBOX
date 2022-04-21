@@ -1,44 +1,60 @@
 import { Paper, Tab, Tabs, TextField } from "@mui/material";
 import { Box } from "@mui/system";
+import { createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword } from "firebase/auth";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+import { auth } from "../FirebaseService";
 
 function AuthScreen () {
 
   const navigate = useNavigate(); // TODO use this for navigating after login
 
   const [tabIndex, setTabIndex] = useState(0);
-  const [loginUsername, setLoginUsername] = useState('');
+  const [loginEmail, setLoginEmail] = useState('');
   const [loginPass, setLoginPass] = useState('');
-  const [registerUsername, setRegisterUsername] = useState('');
-  const [registerPass, setRegisterPass] = useState('');
+  // const [registerUsername, setRegisterUsername] = useState('');
   const [registerEmail, setRegisterEmail] = useState('');
+  const [registerPass, setRegisterPass] = useState('');
+
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      navigate('/dashboard');
+    }
+  });
 
   function handleTabChange (event, newTabIndex) {
     setTabIndex(newTabIndex);
   }
 
-  function handleLoginSubmit (event, value) {
+  function handleLoginSubmit (event) {
     event.preventDefault();
-    // Check validity ?? Does firebase do this maybe¿?¿
+    // TODO Check validity ?? Does firebase do this maybe¿?¿
+
     // LOGIN with firebase
-    // ?? redirect with router
+    signInWithEmailAndPassword(auth, registerEmail, registerPass)
+      .catch((error) => {
+        console.error('LOGIN FAILED: ' + error);
+      });
   }
 
-  function handleRegisterSubmit (event, value) {
+  function handleRegisterSubmit (event) {
     event.preventDefault();
-    // Check validity ?? Does firebase do this maybe¿?¿
+    // TODO Check validity ?? Does firebase do this maybe¿?¿
+
     // REGISTER with firebase
-    // ?? redirect with router
+    createUserWithEmailAndPassword(auth, registerEmail, registerPass)
+      .catch((error) => {
+        console.error('REGISTER FAILED: ' + error);
+      });
   }
 
   function handleInputChange (event) {
     const inputName = event.target.name;
     const value = event.target.value;
 
-    if (inputName === 'loginUsername') {
-      setLoginUsername(value);
+    if (inputName === 'loginEmail') {
+      setLoginEmail(value);
     }
     if (inputName === 'loginPass') {
       setLoginPass(value);
@@ -46,9 +62,9 @@ function AuthScreen () {
     if (inputName === 'registerEmail') {
       setRegisterEmail(value);
     }
-    if (inputName === 'registerUsername') {
-      setRegisterUsername(value);
-    }
+    // if (inputName === 'registerUsername') {
+    //   setRegisterUsername(value);
+    // }
     if (inputName === 'registerPass') {
       setRegisterPass(value);
     }
@@ -66,8 +82,6 @@ function AuthScreen () {
           <Tabs
             value={tabIndex}
             onChange={handleTabChange}
-            // textColor="secondary"
-            // indicatorColor="secondary"
           >
             <Tab sx={{ width: 250 }} label="Login" />
             <Tab sx={{ width: 250 }} label="Register" />
@@ -77,10 +91,10 @@ function AuthScreen () {
         { tabIndex === 0 &&
           <div className='auth-form-container'>
             <form autoComplete='off' onSubmit={handleLoginSubmit} className='auth-form'>
-              <TextField onChange={handleInputChange} value={loginUsername} name='loginUsername' label='Username' variant='outlined' />
+              <TextField onChange={handleInputChange} value={loginEmail} name='loginEmail' label='Email' variant='outlined' />
               <TextField onChange={handleInputChange} value={loginPass} name='loginPass' label='Password' variant='outlined' type='password'/>
 
-              <button type='submit' disabled={loginUsername.length < 3} // TODO Add more conditions
+              <button type='submit' disabled={loginEmail.length < 3} // TODO Add more conditions
               >
                 LOG IN
               </button>
@@ -92,10 +106,10 @@ function AuthScreen () {
           <div className='auth-form-container'>
           <form autoComplete='off' onSubmit={handleRegisterSubmit} className='auth-form'>
             <TextField onChange={handleInputChange} value={registerEmail} name='registerEmail' label='Email' variant='outlined' />
-            <TextField onChange={handleInputChange} value={registerUsername} name='registerUsername' label='Username' variant='outlined' />
+            {/* <TextField onChange={handleInputChange} value={registerUsername} name='registerUsername' label='Username' variant='outlined' /> */}
             <TextField onChange={handleInputChange} value={registerPass} name='registerPass' label='Password' variant='outlined' type='password'/>
 
-            <button type='submit' disabled={registerUsername.length < 3} // TODO Add more conditions OR check if firebase does
+            <button type='submit' disabled={registerEmail.length < 3} // TODO Add more conditions OR check if firebase does
             >
               REGISTER
             </button>

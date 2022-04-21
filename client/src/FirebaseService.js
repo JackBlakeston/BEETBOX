@@ -1,6 +1,6 @@
 import { initializeApp } from 'firebase/app';
 import { getStorage, ref, getDownloadURL, listAll } from "firebase/storage";
-
+import { getAuth } from "firebase/auth";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAUTPulZ7brvcaL_VrU2BZ9B9zC4WihYvg",
@@ -12,6 +12,9 @@ const firebaseConfig = {
 };
 
 const firebaseApp = initializeApp(firebaseConfig);
+
+
+// AUDIO SERVICE
 const storage = getStorage(firebaseApp, "gs://jb-drum-sequencer.appspot.com/");
 
 const samplesPath = 'Samples/';
@@ -58,3 +61,6 @@ export async function getSampleUrl (sampleRef) {
 export function getSampleName (sampleRef) {
   return sampleRef.name.replace('.wav', '');
 }
+
+// AUTH
+export const auth = getAuth(firebaseApp);
