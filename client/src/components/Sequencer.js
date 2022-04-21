@@ -48,16 +48,6 @@ function Sequencer () {
   // User info
   const { user } = useContext(UserContext)
 
-  // ! Everything stops working when i uncomment this, why??
-  // const [user, setUser] = useState(null);
-  // onAuthStateChanged(auth, (user) => {
-  //   if (user) {
-  //     setUser(user);
-  //   } else {
-  //     setUser(null);
-  //   }
-  // });
-
   const loopName = 'A really cool loop yo' // TODO change when implementing real loop saving
 
   useEffect(() => {
@@ -202,7 +192,6 @@ function Sequencer () {
     }
     setPads(padsCopy);
     localStorage.setItem('pads', JSON.stringify(padsCopy));
-    console.log('PADCLICK at row ', rowIndex, 'position ', id);
   }
 
   function handleClickNewTrack () {
@@ -238,6 +227,35 @@ function Sequencer () {
 
   return (
     <>
+      <Button
+        onClick={() => user ? navigate('/dashboard') : navigate('/')}
+        variant='contained'
+        size='small'
+        sx={{
+          backgroundColor: useDarkMode ? 'rgb(60 60 60)' : 'rgb(101 101 101)',
+          position: 'absolute',
+          top: 15,
+          right: 120,
+          width: 99
+        }}
+      >
+        {user ? 'DASHBOARD' : 'LOG IN'}
+      </Button>
+
+      <IconButton
+        aria-label="dark-mode"
+        size="small"
+        onClick={() => setUseDarkMode(!useDarkMode) }
+        sx={{
+          position: 'absolute',
+          top: 14,
+          right: 40
+        }}
+      >
+        <DarkModeIcon/>
+      </IconButton>
+
+
       <div
         style={{
           backgroundColor: useDarkMode ? 'rgb(35, 35, 35)' : 'rgb(220 220 220)',
@@ -253,33 +271,6 @@ function Sequencer () {
             {loopName}
           </h4>
         </div>
-
-        <Button
-          onClick={() => user ? navigate('/dashboard') : navigate('/')} // TODO check if user is logged in, take them
-          variant='contained'
-          size='small'
-          sx={{
-            backgroundColor: useDarkMode ? 'rgb(60 60 60)' : 'rgb(101 101 101)',
-            position: 'absolute',
-            top: 15,
-            right: 10
-          }}
-        >
-          {user ? 'DASHBOARD' : 'LOG IN'}
-        </Button>
-
-        <IconButton
-        aria-label="dark-mode"
-        size="small"
-        onClick={() => setUseDarkMode(!useDarkMode) }
-        sx={{
-          position: 'absolute',
-          top: 15,
-          right: 150
-        }}
-        >
-          <DarkModeIcon/>
-        </IconButton>
 
       </div>
 

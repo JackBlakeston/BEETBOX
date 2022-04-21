@@ -17,11 +17,12 @@ function Controls (props) {
   return (
     <div className="controls">
         <Button
-        sx={{ fontSize:'18px' }}
-        variant='contained'
-        className='play-button'
-        onClick={props.togglePlaying}
-        >{buttonText}
+          sx={{ fontSize:'18px' }}
+          variant='contained'
+          className='play-button'
+          onClick={props.togglePlaying}
+        >
+          {buttonText}
         </Button>
 
         <div className='slider-container' id='bpm-controls'>

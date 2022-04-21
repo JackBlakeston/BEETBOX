@@ -1,11 +1,13 @@
-import { Paper, Tab, Tabs, TextField } from "@mui/material";
-import { Box } from "@mui/system";
 import { createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword } from "firebase/auth";
 import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import DarkModeIcon from '@mui/icons-material/DarkMode';
+import { Button, IconButton, Paper, Tab, Tabs, TextField } from "@mui/material";
+import { Box } from "@mui/system";
+
 
 import { auth } from "../FirebaseService";
-import { UserContext } from "../contexts";
+import { DarkModeContext, UserContext } from "../contexts";
 
 function AuthScreen () {
 
@@ -18,7 +20,8 @@ function AuthScreen () {
   const [registerEmail, setRegisterEmail] = useState('');
   const [registerPass, setRegisterPass] = useState('');
 
-  const { setUser } = useContext(UserContext)
+  const { setUser } = useContext(UserContext);
+  const {useDarkMode, setUseDarkMode} = useContext(DarkModeContext);
 
   onAuthStateChanged(auth, (observedUser) => {
     if (observedUser) {
@@ -49,7 +52,7 @@ function AuthScreen () {
     // REGISTER with firebase
     createUserWithEmailAndPassword(auth, registerEmail, registerPass)
       .catch((error) => {
-        console.error('REGISTER FAILED: ' + error);
+        console.error('REGISTRATION FAILED: ' + error);
       });
   }
 
@@ -75,54 +78,76 @@ function AuthScreen () {
   }
 
   return (
-    <div className='auth-container'>
-      <Paper
+    <>
+      <IconButton
+        aria-label="dark-mode"
+        size="small"
+        onClick={() => setUseDarkMode(!useDarkMode) }
         sx={{
-          height: 500,
-          width: 500
+          position: 'absolute',
+          top: 14,
+          right: 40
         }}
       >
-        <Box sx={{ borderBottom: 0.5, borderColor: 'divider' }}>
-          <Tabs
-            value={tabIndex}
-            onChange={handleTabChange}
-          >
-            <Tab sx={{ width: 250 }} label="Login" />
-            <Tab sx={{ width: 250 }} label="Register" />
-          </Tabs>
-        </Box>
+        <DarkModeIcon/>
+      </IconButton>
 
-        { tabIndex === 0 &&
-          <div className='auth-form-container'>
-            <form autoComplete='off' onSubmit={handleLoginSubmit} className='auth-form'>
-              <TextField onChange={handleInputChange} value={loginEmail} name='loginEmail' label='Email' variant='outlined' />
-              <TextField onChange={handleInputChange} value={loginPass} name='loginPass' label='Password' variant='outlined' type='password'/>
+      <div className='auth-container'>
+        <h1>BEETBOX</h1>
+        <Paper
+          sx={{
+            height: 400,
+            width: 500
+          }}
+        >
+          <Box sx={{ borderBottom: 0.5, borderColor: 'divider' }}>
+            <Tabs
+              value={tabIndex}
+              onChange={handleTabChange}
+            >
+              <Tab sx={{ width: 250 }} label="Login" />
+              <Tab sx={{ width: 250 }} label="Register" />
+            </Tabs>
+          </Box>
 
-              <button type='submit' disabled={loginEmail.length < 3} // TODO Add more conditions
+          { tabIndex === 0 &&
+            <div className='auth-form-container'>
+              <form autoComplete='off' onSubmit={handleLoginSubmit} className='auth-form'>
+                <TextField onChange={handleInputChange} value={loginEmail} name='loginEmail' label='Email' variant='outlined' />
+                <TextField onChange={handleInputChange} value={loginPass} name='loginPass' label='Password' variant='outlined' type='password'/>
+
+                <Button
+                  variant='contained'
+                  type='submit'
+                  disabled={loginEmail.length < 3 || loginPass.length < 1} // TODO Add more conditions
+                >
+                  LOG IN
+                </Button>
+              </form>
+            </div>
+          }
+
+          { tabIndex === 1 &&
+            <div className='auth-form-container'>
+            <form autoComplete='off' onSubmit={handleRegisterSubmit} className='auth-form'>
+              <TextField onChange={handleInputChange} value={registerEmail} name='registerEmail' label='Email' variant='outlined' />
+              {/* <TextField onChange={handleInputChange} value={registerUsername} name='registerUsername' label='Username' variant='outlined' /> */}
+              <TextField onChange={handleInputChange} value={registerPass} name='registerPass' label='Password' variant='outlined' type='password'/>
+
+              <Button
+                variant='contained'
+                type='submit'
+                disabled={registerEmail.length < 3 || registerPass.length < 1} // TODO Add more conditions OR check if firebase does
               >
-                LOG IN
-              </button>
+                REGISTER
+              </Button>
             </form>
           </div>
-        }
+          }
 
-        { tabIndex === 1 &&
-          <div className='auth-form-container'>
-          <form autoComplete='off' onSubmit={handleRegisterSubmit} className='auth-form'>
-            <TextField onChange={handleInputChange} value={registerEmail} name='registerEmail' label='Email' variant='outlined' />
-            {/* <TextField onChange={handleInputChange} value={registerUsername} name='registerUsername' label='Username' variant='outlined' /> */}
-            <TextField onChange={handleInputChange} value={registerPass} name='registerPass' label='Password' variant='outlined' type='password'/>
-
-            <button type='submit' disabled={registerEmail.length < 3} // TODO Add more conditions OR check if firebase does
-            >
-              REGISTER
-            </button>
-          </form>
-        </div>
-        }
-
-      </Paper>
-    </div>
+        </Paper>
+      </div>
+    </>
   )
 }
 

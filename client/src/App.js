@@ -30,7 +30,7 @@ export function App () {
       background: {
         default: useDarkMode ? '#2D2D2D' : '#F1F1F1'
       }
-    }
+    },
   });
 
   return (
