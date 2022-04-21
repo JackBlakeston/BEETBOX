@@ -32,7 +32,7 @@ function AuthScreen () {
     // TODO Check validity ?? Does firebase do this maybe¿?¿
 
     // LOGIN with firebase
-    signInWithEmailAndPassword(auth, registerEmail, registerPass)
+    signInWithEmailAndPassword(auth, loginEmail, loginPass)
       .catch((error) => {
         console.error('LOGIN FAILED: ' + error);
       });
