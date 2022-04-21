@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import '../App.css'; // TODO change name or refactor all styles
 import PadRow from './PadRow';
 import Controls from './Controls';
-import { auth, getBankRefList, getSampleList } from '../FirebaseService';
+import { getBankRefList, getSampleList } from '../FirebaseService';
 import { DarkModeContext, UserContext } from "../contexts";
 
 
@@ -46,7 +46,7 @@ function Sequencer () {
   const {useDarkMode, setUseDarkMode} = useContext(DarkModeContext);
 
   // User info
-  const {user, setUser} = useContext(UserContext)
+  const { user } = useContext(UserContext)
 
   // ! Everything stops working when i uncomment this, why??
   // const [user, setUser] = useState(null);
