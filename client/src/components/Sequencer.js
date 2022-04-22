@@ -280,11 +280,12 @@ function Sequencer () {
       </IconButton>
 
 
-      <div
+      <div className='navbar'
         style={{
           backgroundColor: useDarkMode ? 'rgb(35, 35, 35)' : 'rgb(220 220 220)',
         }}
       >
+        <h1 className='title' >BEETBOX</h1>
         <div className='loop-name-container'>
           <h4
             style={{

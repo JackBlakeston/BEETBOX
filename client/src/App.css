@@ -29,8 +29,15 @@
 }
 
 /* DASHBOARD */
-.navbar-title {
-  margin: 0 0 0 20px;
+.title-container {
+  min-height: 60px;
+}
+
+.title {
+  margin: unset;
+  position: absolute;
+  top: 6px;
+  left: 20px;
 }
 
 

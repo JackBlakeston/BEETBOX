@@ -1,6 +1,6 @@
 import { signOut } from "firebase/auth";
-import { onValue, push } from "firebase/database";
-import { useContext, useRef } from "react";
+import { get, push } from "firebase/database";
+import { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button, IconButton } from "@mui/material";
 import DarkModeIcon from '@mui/icons-material/DarkMode';
@@ -9,17 +9,27 @@ import DarkModeIcon from '@mui/icons-material/DarkMode';
 import { DarkModeContext, LoopContext, UserContext } from "../contexts";
 import { auth, dbRef } from "../FirebaseService";
 
-
+async function getLoopList () { // TODO export this to db service
+  const snapshot = await get(dbRef);
+  return snapshot.val();
+}
 
 function Dashboard () {
 
   const navigate = useNavigate();
 
-  const loopList = useRef([]);
+  const [loopList, setLoopList] = useState({});
 
   const { user } = useContext(UserContext)
   const {useDarkMode, setUseDarkMode} = useContext(DarkModeContext);
   const { setLoop } = useContext(LoopContext);
+
+  useEffect(() => {
+    getLoopList().then(data => {
+      setLoopList(data);
+    });
+  }, []);
+
 
   function handleLogoutClick () {
     signOut(auth);
@@ -47,14 +57,6 @@ function Dashboard () {
     navigate(`/sequencer/${loopRef.key}`);
   }
 
-  onValue(dbRef, snapshot => {
-    if (snapshot.exists()) {
-      const value = snapshot.val();
-      loopList.current = value;
-    } else {
-      loopList.current = [];
-    }
-  });
 
   return (
     <div>
@@ -87,8 +89,13 @@ function Dashboard () {
         <DarkModeIcon/>
       </IconButton>
 
-      <div className='navbar-title'>
-        <h1>BEETBOX</h1>
+      <div
+        className='title-container'
+        style={{
+          backgroundColor: useDarkMode ? 'rgb(35, 35, 35)' : 'rgb(220 220 220)',
+        }}
+      >
+        <h1 className='title' >BEETBOX</h1>
       </div>
       <p>Welcome to the dashboard!! {user?.displayName} Logged in with {user?.email}</p>
       <Link to={'/sequencer'}>
