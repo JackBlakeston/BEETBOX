@@ -14,7 +14,7 @@ import { Slider } from '@mui/material';
 
 import { getSampleName, getSampleUrl, getRefByPath, getSamplesInBank } from '../FirebaseService';
 import Pad from './Pad';
-import { DarkModeContext } from '../contexts';
+import { DarkModeContext, LoopContext } from '../contexts';
 import { get, update } from 'firebase/database';
 
 
@@ -40,6 +40,7 @@ function PadRow ({pads, pos, toggleActive, isTriggering, rowIndex, isLooped, han
   const [track, setTrack] = useState();
 
   const {useDarkMode} = useContext(DarkModeContext);
+  const { loop, setLoop } = useContext(LoopContext); // TODO use loop context to reduce drilling
 
   const player = useRef(null);
   const panner = useRef(new Tone.Panner(track?.trackPanning / 100 || 0).toDestination());
@@ -52,16 +53,15 @@ function PadRow ({pads, pos, toggleActive, isTriggering, rowIndex, isLooped, han
     getTrack(trackRef).then(data => {
       setTrack(data);
     });
-  }, [trackRef, setTrack]);
-
+  }, [trackRef]);
 
   useEffect(() => {
-    if (!player.current) {
+    if (!player.current && track?.sampleUrl) {
       player.current = new Tone.Player(track?.sampleUrl, () => {
         player.current.connect(panner.current);
       }); // No need to do .toDestination() on player when we are using a panner
-    } else {
-      player.current?.load(track?.sampleUrl);
+    } else if (track?.sampleUrl) {
+      player?.current?.load(track.sampleUrl);
     }
   }, [track?.sampleUrl]);
 
@@ -88,8 +88,6 @@ function PadRow ({pads, pos, toggleActive, isTriggering, rowIndex, isLooped, han
       player.current?.start();
     }
   }, [pos, isTriggering, player]);
-
-
 
   async function handleSampleChange (event) {
     const newPath = event.target.value;
@@ -133,32 +131,12 @@ function PadRow ({pads, pos, toggleActive, isTriggering, rowIndex, isLooped, han
 
     setTrack({...track, ...newProps});
     update(trackRef, newProps);
-
-    // localStorage.setItem(`${trackId}`, JSON.stringify({
-    //   sampleName: 'No sample',
-    //   sampleUrl: '',
-    //   samplePath: '',
-    //   bankPath: newBankPath,
-    //   bankName: newBankName,
-    //   trackVolume: trackVolume,
-    //   trackPanning: trackPanning
-    // }));
   }
 
   function handleVolumeChange (newVolume) {
 
     setTrack({...track, trackVolume: newVolume});
     update(trackRef, {trackVolume: newVolume});
-
-    // localStorage.setItem(`${trackId}`, JSON.stringify({
-    //   sampleName: sampleName,
-    //   sampleUrl: url,
-    //   samplePath: samplePath,
-    //   bankPath: bankPath,
-    //   bankName: bankName,
-    //   trackVolume: trackVolume,
-    //   trackPanning: trackPanning
-    // }));
   }
 
   function handlePanningChange (event) {
@@ -166,16 +144,6 @@ function PadRow ({pads, pos, toggleActive, isTriggering, rowIndex, isLooped, han
 
     setTrack({...track, trackPanning: newPanning});
     update(trackRef, {trackPanning: newPanning});
-
-    // localStorage.setItem(`${trackId}`, JSON.stringify({
-    //   sampleName: sampleName,
-    //   sampleUrl: url,
-    //   samplePath: samplePath,
-    //   bankPath: bankPath,
-    //   bankName: bankName,
-    //   trackVolume: trackVolume,
-    //   trackPanning: newPanning,
-    // }));
   }
 
 
@@ -188,7 +156,7 @@ function PadRow ({pads, pos, toggleActive, isTriggering, rowIndex, isLooped, han
         <IconButton
           aria-label="delete"
           size="small"
-          onClick={() => handleClickDelete(rowIndex)}
+          onClick={() => handleClickDelete(track.id, rowIndex)}
         >
           <DeleteIcon fontSize="inherit" />
         </IconButton>

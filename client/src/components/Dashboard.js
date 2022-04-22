@@ -38,7 +38,7 @@ function Dashboard () {
       gridSize: 16,
       precision: 1,
       pads: [],
-      trackList: [], // TODO we can probably get rid of this with a bit of refactoring in sequencer
+      trackList: {},
       trackCounter: 0,
     }
     const loopRef = push(dbRef, newLoop);

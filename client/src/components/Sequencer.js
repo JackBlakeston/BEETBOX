@@ -11,7 +11,10 @@ import { dbRef, getBankRefList, getSampleList } from '../FirebaseService';
 import { DarkModeContext, LoopContext, UserContext } from "../contexts";
 import { child, get, remove, update } from 'firebase/database';
 
-
+async function getLoop (ref) {
+  const snapshot = await get(ref);
+  return snapshot.val();
+}
 
 function Sequencer () {
 
@@ -40,10 +43,6 @@ function Sequencer () {
   const { user } = useContext(UserContext)
 
   useEffect(() => {
-    async function getLoop (ref) {
-      const snapshot = await get(ref);
-      return snapshot.val();
-    }
     getLoop(loopRef.current).then(data => {
       setLoop(data);
     });
@@ -96,13 +95,15 @@ function Sequencer () {
     if (isPlaying) {
       clearInterval(timerId);
       setPos(0);
-      setActiveRows(Array(loop.trackList.length).fill(false));
+      setActiveRows(Array(Object.keys(loop.trackList).length).fill(false));
       setIsLooped(false);
     }
     setIsPlaying(!isPlaying);
   }
 
   const timerId = useInterval(tick, isPlaying ? calculateTempo(loop.bpm) * loop.precision : null)
+  // ?? Any way to do this without useInterval hook?
+  // If we use tone js we don't need intervals
 
   function tick () {
     let currentPos = pos;
@@ -116,11 +117,9 @@ function Sequencer () {
     setPos(currentPos);
     checkPad();
   }
-  // ?? Any way to do this without useInterval hook?
-  // If we use tone js we don't need intervals
 
   function checkPad () {
-    const activeRowsAux = Array(loop.trackList.length).fill(false);
+    const activeRowsAux = Array(Object.keys(loop.trackList).length).fill(false);
 
     loop.pads.forEach((row, rowIndex) => {
       row.forEach((pad, index) => {
@@ -194,16 +193,21 @@ function Sequencer () {
     update(loopRef.current, { pads: padsCopy });
   }
 
-  function handleClickNewTrack () {
-    let trackListCopy;
-    if (loop.trackList) {
-      trackListCopy = [...loop.trackList];
+  async function handleClickNewTrack () {
+
+    const updatedLoop = await getLoop(loopRef.current);
+
+    setLoop(updatedLoop);
+
+    let updatedTrackList;
+    if (updatedLoop.trackList) {
+      updatedTrackList = updatedLoop.trackList;
     } else {
-      trackListCopy = [];
+      updatedTrackList = {};
     }
 
     const newTrack = {
-      id: `Track ${ loop.trackCounter + 1 }`,
+      id: `Track${ loop.trackCounter + 1 }`,
       sampleName: 'No sample',
       sampleUrl: '',
       samplePath: '',
@@ -211,9 +215,8 @@ function Sequencer () {
       bankName: '',
       trackVolume: -6,
       trackPanning: 0,
-    }
-
-    trackListCopy.push(newTrack);
+    };
+    updatedTrackList[`Track${ loop.trackCounter + 1 }`] = newTrack;
 
     let padsCopy;
     if (loop.pads) {
@@ -223,20 +226,25 @@ function Sequencer () {
     }
     padsCopy.push(Array(32 / loop.precision).fill(0));
 
-    setLoop({...loop, trackList: trackListCopy, trackCounter: loop.trackCounter + 1, pads: padsCopy});
-    update(loopRef.current, { trackList: trackListCopy, trackCounter: loop.trackCounter + 1, pads: padsCopy });
+    setLoop({...loop, trackList: updatedTrackList, trackCounter: loop.trackCounter + 1, pads: padsCopy});
+    update(loopRef.current, { trackList: updatedTrackList, trackCounter: loop.trackCounter + 1, pads: padsCopy });
   }
 
-  function handleClickDelete (rowIndex) {
-    const trackListCopy = [...loop.trackList]
-    const removedTrackId = trackListCopy.splice(rowIndex, 1).id;
+  function handleClickDelete (trackId, rowIndex) {
+    const trackListCopy = {...loop.trackList};
+
+    delete trackListCopy[trackId];
 
     const padsCopy = [...loop.pads];
     padsCopy.splice(rowIndex, 1);
 
-    setLoop({...loop, trackList: trackListCopy, trackCounter: loop.trackCounter, pads: padsCopy});
-    update(loopRef.current, { trackList: trackListCopy, trackCounter: loop.trackCounter, pads: padsCopy });
-    const trackRef = child(loopRef.current, removedTrackId);
+    setLoop({...loop, trackList: trackListCopy, pads: padsCopy});
+
+    // const padsRef = child(loopRef.current, `pads/${rowIndex}`)
+    // remove(padsRef);
+    update(loopRef.current, { pads: padsCopy });
+
+    const trackRef = child(loopRef.current, `trackList/${trackId}`);
     remove(trackRef);
   }
 
@@ -309,11 +317,11 @@ function Sequencer () {
         </div>
 
           <div className='pads-container'>
-            { loop && loop?.trackList?.map((track, index) => {
+            { loop?.trackList && Object.keys(loop.trackList)?.map((trackId, index) => {
               return <PadRow
-              trackRef={child(loopRef.current, `trackList/${index.toString()}`)}
-              trackId={track.id}
-              key={track.id}
+              trackRef={child(loopRef.current, `trackList/${trackId}`)}
+              trackId={trackId}
+              key={trackId}
               pos={pos}
               pads={loop?.pads[index]}
               toggleActive={ toggleActive }
