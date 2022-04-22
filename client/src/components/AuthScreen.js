@@ -1,17 +1,14 @@
-import { createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
 import { useContext, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 import { Button, IconButton, Paper, Tab, Tabs, TextField } from "@mui/material";
 import { Box } from "@mui/system";
 
 
 import { auth } from "../FirebaseService";
-import { DarkModeContext, UserContext } from "../contexts";
+import { DarkModeContext } from "../contexts";
 
 function AuthScreen () {
-
-  const navigate = useNavigate(); // TODO use this for navigating after login
 
   const [tabIndex, setTabIndex] = useState(0);
 

@@ -1,6 +1,6 @@
-import { onAuthStateChanged, signOut } from "firebase/auth";
-import { onValue, push, ref, set, update } from "firebase/database";
-import { useContext, useEffect, useRef } from "react";
+import { signOut } from "firebase/auth";
+import { onValue, push } from "firebase/database";
+import { useContext, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button, IconButton } from "@mui/material";
 import DarkModeIcon from '@mui/icons-material/DarkMode';
@@ -17,19 +17,19 @@ function Dashboard () {
 
   const loopList = useRef([]);
 
-  const { user, setUser } = useContext(UserContext)
+  const { user } = useContext(UserContext)
   const {useDarkMode, setUseDarkMode} = useContext(DarkModeContext);
-  const { loop, setLoop } = useContext(LoopContext);
+  const { setLoop } = useContext(LoopContext);
 
   function handleLogoutClick () {
     signOut(auth);
   }
 
-  function handleLoopSelect (event) {
-    // get all loop info from db
-    setLoop();
-    navigate('/sequencer');
-  }
+  // function handleLoopSelect (event) {
+  //   // get all loop info from db
+  //   setLoop();
+  //   navigate('/sequencer');
+  // }
 
   function handleNewLoopClick () {
     const newLoop = {
