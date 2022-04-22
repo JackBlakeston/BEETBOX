@@ -9,7 +9,7 @@ import PadRow from './PadRow';
 import Controls from './Controls';
 import { dbRef, getBankRefList, getSampleList } from '../FirebaseService';
 import { DarkModeContext, LoopContext, UserContext } from "../contexts";
-import { child, get, ref, remove, update } from 'firebase/database';
+import { child, get, remove, update } from 'firebase/database';
 
 
 
@@ -45,7 +45,6 @@ function Sequencer () {
       return snapshot.val();
     }
     getLoop(loopRef.current).then(data => {
-      console.log(data)
       setLoop(data);
     });
   }, [loopRef, setLoop]);
@@ -202,7 +201,19 @@ function Sequencer () {
     } else {
       trackListCopy = [];
     }
-    trackListCopy.push(`Track ${ loop.trackCounter + 1 }`);
+
+    const newTrack = {
+      id: `Track ${ loop.trackCounter + 1 }`,
+      sampleName: 'No sample',
+      sampleUrl: '',
+      samplePath: '',
+      bankPath: '',
+      bankName: '',
+      trackVolume: -6,
+      trackPanning: 0,
+    }
+
+    trackListCopy.push(newTrack);
 
     let padsCopy;
     if (loop.pads) {
@@ -218,14 +229,14 @@ function Sequencer () {
 
   function handleClickDelete (rowIndex) {
     const trackListCopy = [...loop.trackList]
-    const removedTrackId = trackListCopy.splice(rowIndex, 1);
+    const removedTrackId = trackListCopy.splice(rowIndex, 1).id;
 
     const padsCopy = [...loop.pads];
     padsCopy.splice(rowIndex, 1);
 
     setLoop({...loop, trackList: trackListCopy, trackCounter: loop.trackCounter, pads: padsCopy});
     update(loopRef.current, { trackList: trackListCopy, trackCounter: loop.trackCounter, pads: padsCopy });
-    const trackRef = ref(loopRef.current, `${removedTrackId}`);
+    const trackRef = child(loopRef.current, removedTrackId);
     remove(trackRef);
   }
 
@@ -298,10 +309,11 @@ function Sequencer () {
         </div>
 
           <div className='pads-container'>
-            { loop && loop?.trackList?.map((trackId, index) => {
+            { loop && loop?.trackList?.map((track, index) => {
               return <PadRow
-              trackId={trackId}
-              key={trackId}
+              trackRef={child(loopRef.current, `trackList/${index.toString()}`)}
+              trackId={track.id}
+              key={track.id}
               pos={pos}
               pads={loop?.pads[index]}
               toggleActive={ toggleActive }

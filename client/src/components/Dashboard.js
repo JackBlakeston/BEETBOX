@@ -40,7 +40,6 @@ function Dashboard () {
       pads: [],
       trackList: [], // TODO we can probably get rid of this with a bit of refactoring in sequencer
       trackCounter: 0,
-      tracks: {}
     }
     const loopRef = push(dbRef, newLoop);
 
