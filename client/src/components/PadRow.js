@@ -14,7 +14,7 @@ import { Slider } from '@mui/material';
 
 import { getSampleName, getSampleUrl, getRefByPath, getSamplesInBank } from '../FirebaseService';
 import Pad from './Pad';
-import { DarkModeContext, LoopContext } from '../contexts';
+import { DarkModeContext } from '../contexts';
 import { get, update } from 'firebase/database';
 
 
@@ -40,7 +40,6 @@ function PadRow ({pads, pos, toggleActive, isTriggering, rowIndex, isLooped, han
   const [track, setTrack] = useState();
 
   const {useDarkMode} = useContext(DarkModeContext);
-  const { loop, setLoop } = useContext(LoopContext); // TODO use loop context to reduce drilling
 
   const player = useRef(null);
   const panner = useRef(new Tone.Panner(track?.trackPanning / 100 || 0).toDestination());
