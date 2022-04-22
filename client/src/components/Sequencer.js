@@ -17,13 +17,13 @@ function Sequencer () {
 
   const navigate = useNavigate();
   let params = useParams();
-  const loopRef = useRef(child(dbRef, params.loopid));
 
+  const loopRef = useRef(child(dbRef, params.loopid));
   const { loop, setLoop } = useContext(LoopContext);
 
 
   // Categories from DB
-  const [sampleList, setSampleList] = useState([]); // TODO CHECKDo we need this here?
+  const [sampleList, setSampleList] = useState([]); // TODO CHECK Do we need this here?
   const [bankList, setBanklist] = useState([]); // TODO CHECK Do we need this here? Probably better in App and passed as context
 
   // Audio playback control
@@ -113,8 +113,8 @@ function Sequencer () {
       currentPos = 0;
       setIsLooped(true);
     }
-    setPos(currentPos);
 
+    setPos(currentPos);
     checkPad();
   }
   // ?? Any way to do this without useInterval hook?
@@ -233,7 +233,7 @@ function Sequencer () {
   return (
     <>
       <Button
-        onClick={() => user ? navigate('/dashboard') : navigate('/')}
+        onClick={() => navigate('/')}
         variant='contained'
         size='small'
         sx={{

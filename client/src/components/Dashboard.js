@@ -1,4 +1,4 @@
-import { signOut } from "firebase/auth";
+import { onAuthStateChanged, signOut } from "firebase/auth";
 import { onValue, push, ref, set, update } from "firebase/database";
 import { useContext, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
@@ -17,19 +17,12 @@ function Dashboard () {
 
   const loopList = useRef([]);
 
-  const { user } = useContext(UserContext)
+  const { user, setUser } = useContext(UserContext)
   const {useDarkMode, setUseDarkMode} = useContext(DarkModeContext);
   const { loop, setLoop } = useContext(LoopContext);
 
-  // TODO if we move setUser to App I think we can just use this for navigating here
-  useEffect(() => {
-    if (!user) navigate('/');
-  }, [user, navigate]);
-
   function handleLogoutClick () {
-    signOut(auth).then(() => {
-      navigate('/');
-    });
+    signOut(auth);
   }
 
   function handleLoopSelect (event) {
@@ -50,7 +43,6 @@ function Dashboard () {
       tracks: {}
     }
     const loopRef = push(dbRef, newLoop);
-    // localStorage.set('loopRef', JSON.stringify(loopRef));
 
     setLoop({...newLoop, ref: loopRef});
     navigate(`/sequencer/${loopRef.key}`);

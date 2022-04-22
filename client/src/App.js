@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { BrowserRouter, Routes, Route, useParams } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { purple } from '@mui/material/colors';
 import { CssBaseline } from '@mui/material'
@@ -8,11 +8,10 @@ import AuthScreen from "./components/AuthScreen";
 import Dashboard from "./components/Dashboard";
 import Sequencer from "./components/Sequencer";
 import { DarkModeContext, LoopContext, UserContext } from "./contexts";
-import { onValue } from "firebase/database";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "./FirebaseService";
 
 export function App () {
-
-  const params = useParams();
 
   const [useDarkMode, setUseDarkMode] = useState(true);
   const darkModeValues = { useDarkMode, setUseDarkMode };
@@ -22,6 +21,16 @@ export function App () {
 
   const [loop, setLoop] = useState(null);
   const loopValues = { loop, setLoop };
+
+  useEffect(() => {
+    onAuthStateChanged(auth, (observedUser) => {
+      if (observedUser) {
+        setUser(observedUser);
+      } else {
+        setUser(null);
+      }
+    });
+  }, [setUser]);
 
   // ?? Is possible to move to other file - don't know how
   const theme = createTheme({
@@ -48,8 +57,7 @@ export function App () {
           <CssBaseline />
           <BrowserRouter>
             <Routes>
-              <Route path="/" element={<AuthScreen/>} />
-              <Route path="/dashboard" element={<Dashboard/>} />
+              <Route path="/" element={user ? <Dashboard/> : <AuthScreen/>} />
               <Route path="/sequencer" element={<Sequencer/>} />
               <Route path="/sequencer/:loopid" element={<Sequencer/>} />
             </Routes>
