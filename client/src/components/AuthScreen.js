@@ -23,6 +23,7 @@ function AuthScreen () {
   const { setUser } = useContext(UserContext);
   const {useDarkMode, setUseDarkMode} = useContext(DarkModeContext);
 
+  // TODO see if we can move this to App and navigate from there
   onAuthStateChanged(auth, (observedUser) => {
     if (observedUser) {
       setUser(observedUser);

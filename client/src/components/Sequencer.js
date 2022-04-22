@@ -1,45 +1,36 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import * as Tone from 'tone';
 import { IconButton, Box, Button } from '@mui/material';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import '../App.css'; // TODO change name or refactor all styles
 import PadRow from './PadRow';
 import Controls from './Controls';
-import { getBankRefList, getSampleList } from '../FirebaseService';
-import { DarkModeContext, UserContext } from "../contexts";
+import { dbRef, getBankRefList, getSampleList } from '../FirebaseService';
+import { DarkModeContext, LoopContext, UserContext } from "../contexts";
+import { child, get, ref, remove, update } from 'firebase/database';
 
 
 
 function Sequencer () {
 
-  const navigate = useNavigate(); // ? Should this be out of the function?
+  const navigate = useNavigate();
+  let params = useParams();
+  const loopRef = useRef(child(dbRef, params.loopid));
 
-  // Loading local storage
-  const savedPads = JSON.parse(localStorage.getItem('pads'));
-  const savedTrackList = JSON.parse(localStorage.getItem('trackList'));
-  const savedGridSize = JSON.parse(localStorage.getItem('gridSize'));
-  const savedPrecision = JSON.parse(localStorage.getItem('precision'));
-  const savedBpm = JSON.parse(localStorage.getItem('bpm'));
+  const { loop, setLoop } = useContext(LoopContext);
+
 
   // Categories from DB
-  const [sampleList, setSampleList] = useState([]);
-  const [bankList, setBanklist] = useState([]);
+  const [sampleList, setSampleList] = useState([]); // TODO CHECKDo we need this here?
+  const [bankList, setBanklist] = useState([]); // TODO CHECK Do we need this here? Probably better in App and passed as context
 
-  // State of tracks and pads
-  const [gridSize, setGridSize] = useState(savedGridSize ? savedGridSize : 16); // Grid size in number of beats
-  const [precision, setPrecision] = useState(savedPrecision ? savedPrecision : 1);
-  const [trackList, setTrackList] = useState(savedTrackList ? savedTrackList.trackList : []);
-  const [pads, setPads] = useState(savedPads ? savedPads : []);
-  const [trackCounter, setTrackCounter] = useState(savedTrackList ? savedTrackList.trackCounter : trackList.length);
-
-  // Audio control
-  const [isPlaying, setIsPlaying] = useState(false);
+  // Audio playback control
   const [pos, setPos] = useState(0);
-  const [bpm, setBpm] = useState(savedBpm ? savedBpm : 220);
+  const [isPlaying, setIsPlaying] = useState(false);
 
-  const [activeRows, setActiveRows] = useState(Array(trackList.length).fill(false)); // Tells all tracks if they should play or not
+  const [activeRows, setActiveRows] = useState([]); // Tells all tracks if they should play or not
   const [isLooped, setIsLooped] = useState(false); // Necessary for fixing visual delay
 
   // Dark mode
@@ -48,7 +39,16 @@ function Sequencer () {
   // User info
   const { user } = useContext(UserContext)
 
-  const loopName = 'A really cool loop yo' // TODO change when implementing real loop saving
+  useEffect(() => {
+    async function getLoop (ref) {
+      const snapshot = await get(ref);
+      return snapshot.val();
+    }
+    getLoop(loopRef.current).then(data => {
+      console.log(data)
+      setLoop(data);
+    });
+  }, [loopRef, setLoop]);
 
   useEffect(() => {
     getSampleList().then(list => {
@@ -58,6 +58,7 @@ function Sequencer () {
     getBankRefList().then(list => {
       setBanklist(list);
     });
+
   }, []);
 
   function useInterval(callback, delay) {
@@ -96,19 +97,19 @@ function Sequencer () {
     if (isPlaying) {
       clearInterval(timerId);
       setPos(0);
-      setActiveRows(Array(trackList.length).fill(false));
+      setActiveRows(Array(loop.trackList.length).fill(false));
       setIsLooped(false);
     }
     setIsPlaying(!isPlaying);
   }
 
-  const timerId = useInterval(tick, isPlaying ? calculateTempo(bpm) * precision : null)
+  const timerId = useInterval(tick, isPlaying ? calculateTempo(loop.bpm) * loop.precision : null)
 
   function tick () {
     let currentPos = pos;
     currentPos++;
 
-    if (currentPos > (gridSize / precision) - 1) {
+    if (currentPos > (loop.gridSize / loop.precision) - 1) {
       currentPos = 0;
       setIsLooped(true);
     }
@@ -120,16 +121,15 @@ function Sequencer () {
   // If we use tone js we don't need intervals
 
   function checkPad () {
-    const activeRowsAux = Array(trackList.length).fill(false);
+    const activeRowsAux = Array(loop.trackList.length).fill(false);
 
-    pads.forEach((row, rowIndex) => {
+    loop.pads.forEach((row, rowIndex) => {
       row.forEach((pad, index) => {
         if (index === pos && pad === 1) {
           activeRowsAux[rowIndex] = true;
         }
       });
     });
-
     setActiveRows(activeRowsAux);
   }
 
@@ -139,22 +139,24 @@ function Sequencer () {
 
   function changeBpm (event) {
     const newBpm = Number(event.target.value);
-    setBpm(newBpm);
-    localStorage.setItem('bpm', JSON.stringify(newBpm));
+
+    setLoop({...loop, bpm: newBpm});
+    update(loopRef.current, { bpm: newBpm });
   }
 
   function changeGridSize (event) {
     const newSize = Number(event.target.value);
-    if (isPlaying && newSize < gridSize && pos > newSize) togglePlaying();
-    setGridSize(newSize);
-    localStorage.setItem('gridSize', JSON.stringify(newSize));
+    if (isPlaying && newSize < loop.gridSize && pos > newSize) togglePlaying();
+
+    setLoop({...loop, gridSize: newSize});
+    update(loopRef.current, { gridSize: newSize });
   }
 
   function changePrecision (event) {
     const newPrecision = Number(event.target.value);
     if (isPlaying) togglePlaying();
-    const padsCopy = [...pads];
-    const factor = precision / newPrecision;
+    const padsCopy = [...loop.pads];
+    const factor = loop.precision / newPrecision;
     let newPads;
 
     if (factor > 1) {
@@ -175,53 +177,56 @@ function Sequencer () {
     } else {
       return;
     }
-    setPads(newPads);
-    setPrecision(newPrecision);
 
-    localStorage.setItem('pads', JSON.stringify(newPads));
-    localStorage.setItem('precision', JSON.stringify(newPrecision));
+    setLoop({...loop, pads: newPads, precision: newPrecision});
+    update(loopRef.current, { pads: newPads, precision: newPrecision });
   }
 
   function toggleActive (rowIndex, id) {
-    let padsCopy = [...pads];
+    let padsCopy = [...loop.pads];
     let padState = padsCopy[rowIndex][id];
     if (padState === 1) {
-      pads[rowIndex][id] = 0;
+      loop.pads[rowIndex][id] = 0; // ???? DO WE NEED TO CHANGE THIS FOR PADSCOPY??
     } else {
-      pads[rowIndex][id] = 1;
+      loop.pads[rowIndex][id] = 1;
     }
-    setPads(padsCopy);
-    localStorage.setItem('pads', JSON.stringify(padsCopy));
+
+    setLoop({...loop, pads: padsCopy});
+    update(loopRef.current, { pads: padsCopy });
   }
 
   function handleClickNewTrack () {
-    const trackListCopy = [...trackList];
-    trackListCopy.push(`Track ${ trackCounter + 1 }`);
-    setTrackCounter(trackCounter + 1);
+    let trackListCopy;
+    if (loop.trackList) {
+      trackListCopy = [...loop.trackList];
+    } else {
+      trackListCopy = [];
+    }
+    trackListCopy.push(`Track ${ loop.trackCounter + 1 }`);
 
-    const padsCopy = [...pads];
-    padsCopy.push(Array(32 / precision).fill(0));
+    let padsCopy;
+    if (loop.pads) {
+      padsCopy = [...loop.pads];
+    } else {
+      padsCopy = [];
+    }
+    padsCopy.push(Array(32 / loop.precision).fill(0));
 
-    setTrackList(trackListCopy);
-    setPads(padsCopy);
-
-    localStorage.setItem('trackList', JSON.stringify({trackList: trackListCopy, trackCounter: trackCounter + 1}));
-    localStorage.setItem('pads', JSON.stringify(padsCopy));
+    setLoop({...loop, trackList: trackListCopy, trackCounter: loop.trackCounter + 1, pads: padsCopy});
+    update(loopRef.current, { trackList: trackListCopy, trackCounter: loop.trackCounter + 1, pads: padsCopy });
   }
 
   function handleClickDelete (rowIndex) {
-    const trackListCopy = [...trackList]
+    const trackListCopy = [...loop.trackList]
     const removedTrackId = trackListCopy.splice(rowIndex, 1);
 
-    const padsCopy = [...pads];
+    const padsCopy = [...loop.pads];
     padsCopy.splice(rowIndex, 1);
 
-    setTrackList(trackListCopy);
-    setPads(padsCopy);
-
-    localStorage.setItem('trackList', JSON.stringify({trackList: trackListCopy, trackCounter}));
-    localStorage.setItem('pads', JSON.stringify(padsCopy));
-    localStorage.removeItem(`${removedTrackId}`);
+    setLoop({...loop, trackList: trackListCopy, trackCounter: loop.trackCounter, pads: padsCopy});
+    update(loopRef.current, { trackList: trackListCopy, trackCounter: loop.trackCounter, pads: padsCopy });
+    const trackRef = ref(loopRef.current, `${removedTrackId}`);
+    remove(trackRef);
   }
 
 
@@ -268,7 +273,7 @@ function Sequencer () {
               backgroundColor: useDarkMode ? 'rgb(57 57 57)' : 'rgb(190 190 190)'
             }}
           >
-            {loopName}
+            {loop?.name}
           </h4>
         </div>
 
@@ -280,25 +285,25 @@ function Sequencer () {
             backgroundColor: useDarkMode ? 'rgb(40, 40, 40)' : 'rgb(230 230 230)'
           }}
         >
-          <Controls
+          { loop && <Controls
             playing={isPlaying}
             togglePlaying={togglePlaying}
             handleTempoChange={changeBpm}
-            bpm={bpm}
-            gridSize={gridSize}
+            bpm={loop?.bpm}
+            gridSize={loop?.gridSize}
             handleGridSizeChange={changeGridSize}
-            precision={precision}
+            precision={loop?.precision}
             handlePrecisionChange={changePrecision}
-          />
+          />}
         </div>
 
           <div className='pads-container'>
-            { trackList.map((trackId, index) => {
+            { loop && loop?.trackList?.map((trackId, index) => {
               return <PadRow
               trackId={trackId}
               key={trackId}
               pos={pos}
-              pads={pads[index]}
+              pads={loop?.pads[index]}
               toggleActive={ toggleActive }
               handleClickDelete={ handleClickDelete }
               rowIndex={index}
@@ -306,8 +311,8 @@ function Sequencer () {
               isLooped={isLooped}
               sampleList={sampleList}
               bankList={bankList}
-              gridSize={gridSize}
-              precision={precision}
+              gridSize={loop?.gridSize}
+              precision={loop?.precision}
               />
             }) }
           </div>

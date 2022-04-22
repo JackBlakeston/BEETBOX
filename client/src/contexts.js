@@ -9,3 +9,8 @@ export const UserContext = createContext({
   user: null,
   setUser: () => {}
 });
+
+export const LoopContext = createContext({
+  loop: null,
+  setLoop: () => {}
+});

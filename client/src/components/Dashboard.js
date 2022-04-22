@@ -1,29 +1,69 @@
 import { signOut } from "firebase/auth";
-import { useContext } from "react";
+import { onValue, push, ref, set, update } from "firebase/database";
+import { useContext, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button, IconButton } from "@mui/material";
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 
 
-
-import { DarkModeContext, UserContext } from "../contexts";
-import { auth } from "../FirebaseService";
+import { DarkModeContext, LoopContext, UserContext } from "../contexts";
+import { auth, dbRef } from "../FirebaseService";
 
 
 
 function Dashboard () {
 
-  const navigate = useNavigate(); // TODO will need this for jumping out of this page after logging out
+  const navigate = useNavigate();
+
+  const loopList = useRef([]);
 
   const { user } = useContext(UserContext)
   const {useDarkMode, setUseDarkMode} = useContext(DarkModeContext);
+  const { loop, setLoop } = useContext(LoopContext);
 
+  // TODO if we move setUser to App I think we can just use this for navigating here
+  useEffect(() => {
+    if (!user) navigate('/');
+  }, [user, navigate]);
 
   function handleLogoutClick () {
     signOut(auth).then(() => {
       navigate('/');
     });
   }
+
+  function handleLoopSelect (event) {
+    // get all loop info from db
+    setLoop();
+    navigate('/sequencer');
+  }
+
+  function handleNewLoopClick () {
+    const newLoop = {
+      name: 'Untitled Beet',
+      bpm: 220,
+      gridSize: 16,
+      precision: 1,
+      pads: [],
+      trackList: [], // TODO we can probably get rid of this with a bit of refactoring in sequencer
+      trackCounter: 0,
+      tracks: {}
+    }
+    const loopRef = push(dbRef, newLoop);
+    // localStorage.set('loopRef', JSON.stringify(loopRef));
+
+    setLoop({...newLoop, ref: loopRef});
+    navigate(`/sequencer/${loopRef.key}`);
+  }
+
+  onValue(dbRef, snapshot => {
+    if (snapshot.exists()) {
+      const value = snapshot.val();
+      loopList.current = value;
+    } else {
+      loopList.current = [];
+    }
+  });
 
   return (
     <div>
@@ -65,6 +105,10 @@ function Dashboard () {
           CONTINUE
         </button>
       </Link>
+
+      <button onClick={handleNewLoopClick}>
+          NEW LOOP
+      </button>
     </div>
   )
 }
