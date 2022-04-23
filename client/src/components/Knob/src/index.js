@@ -1,8 +1,8 @@
 // @format
-import React from "react";
-import PropTypes from "prop-types";
+import React from 'react';
+import PropTypes from 'prop-types';
 
-import Arc from "./Arc";
+import Arc from './Arc';
 
 const viewBox = {
   height: 150,
@@ -13,7 +13,7 @@ const angleRange = 270;
 const angleOffset = 180;
 
 class Knob extends React.Component {
-  constructor(props) {
+  constructor (props) {
     super(props);
 
     this.state = {
@@ -36,17 +36,18 @@ class Knob extends React.Component {
     this.onWindowResize = this.onWindowResize.bind(this);
   }
 
-  handleDown({ pageY }) {
+  // eslint-disable-next-line no-unused-vars
+  handleDown ({ pageY }) {
     this.setState({
       drag: true
     });
   }
 
-  handleUp() {
+  handleUp () {
     this.setState({ drag: false, prevPageY: null });
   }
 
-  handleMove({ pageY }) {
+  handleMove ({ pageY }) {
     if (!this.state.drag) return;
 
     const { transform, onChange, mouseSpeed } = this.props;
@@ -62,7 +63,7 @@ class Knob extends React.Component {
     this.setState({ angle, prevPageY: pageY });
   }
 
-  calcAngle(angle, delta, angleRange) {
+  calcAngle (angle, delta, angleRange) {
     angle += delta;
     if (angle > angleRange) {
       angle -= angle - angleRange;
@@ -72,16 +73,16 @@ class Knob extends React.Component {
     return angle;
   }
 
-  componentDidMount() {
-    window.addEventListener("resize", this.onWindowResize);
-    window.addEventListener("mousemove", this.handleMove);
-    window.addEventListener("mouseup", this.handleUp);
+  componentDidMount () {
+    window.addEventListener('resize', this.onWindowResize);
+    window.addEventListener('mousemove', this.handleMove);
+    window.addEventListener('mouseup', this.handleUp);
     // NOTE: We call this initially, to set the width and height values.
     this.onWindowResize();
   }
 
-  calcSvgRatio() {
-    const { width } = 500/* this.refs.box.getBoundingClientRect(); */
+  calcSvgRatio () {
+    const { width } = 500;/* this.refs.box.getBoundingClientRect(); */
 
     // NOTE: As the svg preserves it's aspect ratio, we have to calculate only
     // one value that accounts for both width and height ratios.
@@ -90,18 +91,18 @@ class Knob extends React.Component {
     });
   }
 
-  async onWindowResize() {
+  async onWindowResize () {
     await this.calcSvgRatio();
     this.fitText();
   }
 
-  fitText() {
+  fitText () {
     const { svgRatio } = this.state;
     // const rect = this.refs.name.getBoundingClientRect();
     this.setState({ nameWidth: 500 / svgRatio });
   }
 
-  render() {
+  render () {
     const { bg, fg, transform, /* step, */ unit, name, style } = this.props;
     const { /* svgRatio, */ angle,/*  nameWidth  */} = this.state;
     const percentage = angle / angleRange;
@@ -113,7 +114,7 @@ class Knob extends React.Component {
     const font = {
       marginBottom: 5,
       size: (style && style.fontSize) || 35,
-      family: (style && style.fontFamily) || "Arial"
+      family: (style && style.fontFamily) || 'Arial'
     };
 
     return (
@@ -128,9 +129,9 @@ class Knob extends React.Component {
           style={{
             fill: style && style.color,
             fontFamily: font.family,
-            pointerEvents: "none",
-            cursor: "pointer",
-            userSelect: "none"
+            pointerEvents: 'none',
+            cursor: 'pointer',
+            userSelect: 'none'
           }}
           x="0"
           y={font.size}
@@ -161,10 +162,10 @@ class Knob extends React.Component {
           // ref="value"
           style={{
             fill: style && style.color,
-            fontFamily: (style && style.fontFamily) || "Arial",
-            pointerEvents: "none",
-            cursor: "pointer",
-            userSelect: "none"
+            fontFamily: (style && style.fontFamily) || 'Arial',
+            pointerEvents: 'none',
+            cursor: 'pointer',
+            userSelect: 'none'
           }}
           x={74}
           y={outerCircle.arcWidth + 2 * outerCircle.radius + font.size + 7}
@@ -193,10 +194,10 @@ Knob.defaultProps = {
   defaultPercentage: 0,
   transform: p => p,
   mouseSpeed: 1,
-  unit: "",
-  name: "",
-  bg: "black",
-  fg: "white"
+  unit: '',
+  name: '',
+  bg: 'black',
+  fg: 'white'
 };
 
 export default Knob;

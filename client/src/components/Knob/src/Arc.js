@@ -1,6 +1,6 @@
 // @format
 // Taken from: https://github.com/eskimoblood/rc-knob
-import React from "react";
+import React from 'react';
 
 const pointOnCircle = (center, radius, angle) => ({
   x: center + radius * Math.cos(angle),

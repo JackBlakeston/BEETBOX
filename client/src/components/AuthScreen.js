@@ -1,13 +1,13 @@
-import { createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword } from "firebase/auth";
-import { useContext, useEffect, useState } from "react";
+import { createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword } from 'firebase/auth';
+import { React, useContext, useEffect, useState } from 'react';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
-import { Button, IconButton, Paper, Tab, Tabs, TextField } from "@mui/material";
-import { Box } from "@mui/system";
+import { Button, IconButton, Paper, Tab, Tabs, TextField } from '@mui/material';
+import { Box } from '@mui/system';
 
 
-import { auth } from "../FirebaseService";
-import { DarkModeContext, UserContext } from "../contexts";
-import { useNavigate } from "react-router-dom";
+import { auth } from '../FirebaseService';
+import { DarkModeContext, UserContext } from '../contexts';
+import { useNavigate } from 'react-router-dom';
 
 function AuthScreen () {
 
@@ -26,7 +26,7 @@ function AuthScreen () {
   useEffect(() => {
     onAuthStateChanged(auth, (observedUser) => {
       if (observedUser) {
-        navigate(`/${observedUser.uid}`)
+        navigate(`/${observedUser.uid}`);
       }
     });
   }, [setUser, navigate]);
@@ -131,26 +131,26 @@ function AuthScreen () {
 
           { tabIndex === 1 &&
             <div className='auth-form-container'>
-            <form autoComplete='off' onSubmit={handleRegisterSubmit} className='auth-form'>
-              <TextField onChange={handleInputChange} value={registerEmail} name='registerEmail' label='Email' variant='outlined' />
-              {/* <TextField onChange={handleInputChange} value={registerUsername} name='registerUsername' label='Username' variant='outlined' /> */}
-              <TextField onChange={handleInputChange} value={registerPass} name='registerPass' label='Password' variant='outlined' type='password'/>
+              <form autoComplete='off' onSubmit={handleRegisterSubmit} className='auth-form'>
+                <TextField onChange={handleInputChange} value={registerEmail} name='registerEmail' label='Email' variant='outlined' />
+                {/* <TextField onChange={handleInputChange} value={registerUsername} name='registerUsername' label='Username' variant='outlined' /> */}
+                <TextField onChange={handleInputChange} value={registerPass} name='registerPass' label='Password' variant='outlined' type='password'/>
 
-              <Button
-                variant='contained'
-                type='submit'
-                disabled={registerEmail.length < 3 || registerPass.length < 1} // TODO Add more conditions OR check if firebase does
-              >
+                <Button
+                  variant='contained'
+                  type='submit'
+                  disabled={registerEmail.length < 3 || registerPass.length < 1} // TODO Add more conditions OR check if firebase does
+                >
                 REGISTER
-              </Button>
-            </form>
-          </div>
+                </Button>
+              </form>
+            </div>
           }
 
         </Paper>
       </div>
     </>
-  )
+  );
 }
 
 

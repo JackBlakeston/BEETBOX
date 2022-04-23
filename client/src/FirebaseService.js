@@ -1,23 +1,23 @@
 import { initializeApp } from 'firebase/app';
-import { getStorage, ref as storageRef, getDownloadURL, listAll } from "firebase/storage";
-import { getAuth } from "firebase/auth";
-import { getDatabase, ref as databaseRef } from "firebase/database";
+import { getStorage, ref as storageRef, getDownloadURL, listAll } from 'firebase/storage';
+import { getAuth } from 'firebase/auth';
+import { getDatabase, ref as databaseRef } from 'firebase/database';
 
 const firebaseConfig = {
-  apiKey: "AIzaSyAUTPulZ7brvcaL_VrU2BZ9B9zC4WihYvg",
-  authDomain: "jb-drum-sequencer.firebaseapp.com",
-  projectId: "jb-drum-sequencer",
-  storageBucket: "jb-drum-sequencer.appspot.com",
-  messagingSenderId: "1061179749725",
-  appId: "1:1061179749725:web:944192655c039a90a7e4b4",
-  databaseURL: "https://jb-drum-sequencer-default-rtdb.europe-west1.firebasedatabase.app",
+  apiKey: 'AIzaSyAUTPulZ7brvcaL_VrU2BZ9B9zC4WihYvg',
+  authDomain: 'jb-drum-sequencer.firebaseapp.com',
+  projectId: 'jb-drum-sequencer',
+  storageBucket: 'jb-drum-sequencer.appspot.com',
+  messagingSenderId: '1061179749725',
+  appId: '1:1061179749725:web:944192655c039a90a7e4b4',
+  databaseURL: 'https://jb-drum-sequencer-default-rtdb.europe-west1.firebasedatabase.app',
 };
 
 const firebaseApp = initializeApp(firebaseConfig);
 
 
 // AUDIO SERVICE //TODO move some of the stuff here into contexts
-const storage = getStorage(firebaseApp, "gs://jb-drum-sequencer.appspot.com/");
+const storage = getStorage(firebaseApp, 'gs://jb-drum-sequencer.appspot.com/');
 
 const samplesPath = 'Samples/';
 const samplesRef = storageRef(storage, samplesPath);
@@ -44,7 +44,7 @@ export async function getBankRefList () {
 }
 
 export async function getSamplesInBank (bankPath) {
-  const bankRef = storageRef(storage, bankPath)
+  const bankRef = storageRef(storage, bankPath);
   return (await listAll(bankRef)).items;
 }
 

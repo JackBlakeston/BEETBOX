@@ -1,15 +1,15 @@
-import { signOut } from "firebase/auth";
-import { child, get, push, remove } from "firebase/database";
-import { useContext, useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { Button, IconButton, Paper } from "@mui/material";
+import { signOut } from 'firebase/auth';
+import { child, get, push, remove } from 'firebase/database';
+import { React, useContext, useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { Button, IconButton, Paper } from '@mui/material';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 import DeleteIcon from '@mui/icons-material/Delete';
 
 
 
-import { DarkModeContext, LoopContext, UserContext } from "../contexts";
-import { auth, dbRef } from "../FirebaseService";
+import { DarkModeContext, LoopContext, UserContext } from '../contexts';
+import { auth, dbRef } from '../FirebaseService';
 
 async function getLoopList (ref) { // TODO export this to db service
   const snapshot = await get(ref);
@@ -60,7 +60,7 @@ function Dashboard () {
     getLoopByKey(loopKey, userRef).then((data) => {
       setLoop(data);
       navigate(`/${params.uid}/sequencer/${loopKey}`);
-    })
+    });
   }
 
   function handleNewLoopClick () {
@@ -72,7 +72,7 @@ function Dashboard () {
       pads: [],
       trackList: {},
       trackCounter: 0,
-    }
+    };
     const loopRef = push(userRef, newLoop);
 
     setLoop({...newLoop, ref: loopRef});
@@ -195,14 +195,14 @@ function Dashboard () {
                   </div>
                 </Paper>
               </li>
-            )
+            );
           })}
         </ul>
       </div>
 
 
     </div>
-  )
+  );
 }
 
 

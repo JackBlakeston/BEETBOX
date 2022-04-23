@@ -9,7 +9,7 @@ import '../App.css'; // TODO change name or refactor all styles
 import PadRow from './PadRow';
 import Controls from './Controls';
 import { dbRef, getBankRefList, getSampleList } from '../FirebaseService';
-import { DarkModeContext, LoopContext, UserContext } from "../contexts";
+import { DarkModeContext, LoopContext, UserContext } from '../contexts';
 import { child, get, remove, update } from 'firebase/database';
 
 
@@ -32,7 +32,7 @@ const modalStyle = {
   justifyContent: 'space-between',
   borderRadius: 5,
 
-}
+};
 
 async function getLoop (ref) {
   const snapshot = await get(ref);
@@ -87,7 +87,7 @@ function Sequencer () {
     });
   }, []);
 
-  function useInterval(callback, delay) {
+  function useInterval (callback, delay) {
     const intervalRef = React.useRef();
     const callbackRef = React.useRef(callback);
 
@@ -131,7 +131,7 @@ function Sequencer () {
     }
   }
 
-  const timerId = useInterval(tick, isPlaying ? calculateTempo(loop.bpm) * loop.precision : null)
+  const timerId = useInterval(tick, isPlaying ? calculateTempo(loop.bpm) * loop.precision : null);
   // ?? Any way to do this without useInterval hook?
   // If we use tone js we don't need intervals
 
@@ -197,7 +197,7 @@ function Sequencer () {
     } else if (factor < 1) {
       newPads = padsCopy.map(padRow => {
         const joinedPadArr = [];
-        for( let i = 0; i < padRow.length; i += (1 / factor) ) {
+        for ( let i = 0; i < padRow.length; i += (1 / factor) ) {
           joinedPadArr.push(padRow[i]);
         }
         return joinedPadArr;
@@ -369,14 +369,14 @@ function Sequencer () {
           >
             {loop?.name}
           </h4>
-        <IconButton
-          size="small"
-          onClick={handleModalOpen}
-        >
-          <DriveFileRenameOutlineIcon
-            style={{ fill: 'rgb(129 128 128)' }}
-          />
-        </IconButton>
+          <IconButton
+            size="small"
+            onClick={handleModalOpen}
+          >
+            <DriveFileRenameOutlineIcon
+              style={{ fill: 'rgb(129 128 128)' }}
+            />
+          </IconButton>
         </div>
 
       </div>
@@ -399,9 +399,9 @@ function Sequencer () {
           />}
         </div>
 
-          <div className='pads-container'>
-            { loop?.trackList && Object.keys(loop.trackList)?.map((trackId, index) => {
-              return <PadRow
+        <div className='pads-container'>
+          { loop?.trackList && Object.keys(loop.trackList)?.map((trackId, index) => {
+            return <PadRow
               trackRef={child(loopRef.current, `trackList/${trackId}`)}
               trackId={trackId}
               key={trackId}
@@ -416,9 +416,9 @@ function Sequencer () {
               bankList={bankList}
               gridSize={loop?.gridSize}
               precision={loop?.precision}
-              />
-            }) }
-          </div>
+            />;
+          }) }
+        </div>
 
         <Box ml={7.2} mt={2} className='new-track-container'>
           <Button
@@ -436,7 +436,7 @@ function Sequencer () {
             variant={useDarkMode ? 'contained' : 'outlined'}
             className='new-track-button'
             onClick={handleClickNewTrack}
-            >
+          >
               NEW TRACK
           </Button>
         </Box>

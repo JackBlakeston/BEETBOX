@@ -1,5 +1,5 @@
-import { useContext, useEffect, useRef, useState } from 'react';
-import Knob from "./Knob/src/index";
+import { React, useContext, useEffect, useRef, useState } from 'react';
+import Knob from './Knob/src/index';
 // import Knob from "react-simple-knob";
 import * as Tone from 'tone';
 
@@ -99,7 +99,7 @@ function PadRow ({pads, pos, toggleActive, isTriggering, rowIndex, isLooped, han
       sampleName: newName,
       sampleUrl: newUrl,
       samplePath: newRef.fullPath
-    }
+    };
 
     setTrack({...track, ...newProps});
     update(trackRef, newProps);
@@ -116,7 +116,7 @@ function PadRow ({pads, pos, toggleActive, isTriggering, rowIndex, isLooped, han
       samplePath: '',
       bankPath: newBankPath,
       bankName: newBankName,
-    }
+    };
 
     setTrack({...track, ...newProps});
     update(trackRef, newProps);
@@ -154,33 +154,33 @@ function PadRow ({pads, pos, toggleActive, isTriggering, rowIndex, isLooped, han
       <div
         className={'sound-selector-container '}
       >
-      {track && bankList &&
+        {track && bankList &&
         <Box sx={{ minWidth: 120 }} className='select-container'>
           <FormControl fullWidth >
-          <InputLabel shrink>Bank</InputLabel> {/* CHECK THIS!! */}
-          <Select notched className='select' displayEmpty value={track.bankPath} onChange={handleBankChange} labelId="demo-simple-select-label" id="demo-simple-select" label='Bank'>
-            <MenuItem style={{ display: "none" }} disabled value={track.bankPath}>{track.bankName || 'No bank'}</MenuItem>
-            { bankList.map(ref => {
-              return <MenuItem key={ref.name} value={ref.fullPath} >{ getSampleName(ref) }</MenuItem>
-            })}
-          </Select>
+            <InputLabel shrink>Bank</InputLabel> {/* CHECK THIS!! */}
+            <Select notched className='select' displayEmpty value={track.bankPath} onChange={handleBankChange} labelId="demo-simple-select-label" id="demo-simple-select" label='Bank'>
+              <MenuItem style={{ display: 'none' }} disabled value={track.bankPath}>{track.bankName || 'No bank'}</MenuItem>
+              { bankList.map(ref => {
+                return <MenuItem key={ref.name} value={ref.fullPath} >{ getSampleName(ref) }</MenuItem>;
+              })}
+            </Select>
           </FormControl>
         </Box>
-      }
+        }
 
-      {track && track.bankName !== 'No bank' &&
+        {track && track.bankName !== 'No bank' &&
         <Box sx={{ minWidth: 120 }} className='select-container'>
           <FormControl fullWidth >
-          <InputLabel shrink id="demo-simple-select-label">Sample</InputLabel>
-          <Select notched className='select' displayEmpty value={track.samplePath} onChange={handleSampleChange} labelId="demo-simple-select-label" id="demo-simple-select" label='Sample'>
-            <MenuItem style={{ display: "none" }} disabled value={track.samplePath}>{track.sampleName}</MenuItem>
-            { sampleList.map(ref => {
-              return <MenuItem key={ref.name} value={ref.fullPath} >{ getSampleName(ref) }</MenuItem>
-            })}
-          </Select>
+            <InputLabel shrink id="demo-simple-select-label">Sample</InputLabel>
+            <Select notched className='select' displayEmpty value={track.samplePath} onChange={handleSampleChange} labelId="demo-simple-select-label" id="demo-simple-select" label='Sample'>
+              <MenuItem style={{ display: 'none' }} disabled value={track.samplePath}>{track.sampleName}</MenuItem>
+              { sampleList.map(ref => {
+                return <MenuItem key={ref.name} value={ref.fullPath} >{ getSampleName(ref) }</MenuItem>;
+              })}
+            </Select>
           </FormControl>
         </Box>
-      }
+        }
       </div>
 
       <div
@@ -250,12 +250,12 @@ function PadRow ({pads, pos, toggleActive, isTriggering, rowIndex, isLooped, han
             toggleActive={() => toggleActive(rowIndex, index)}
             isDisabled={!track.samplePath}
             precision={precision}
-          />
+          />;
         })}
       </div>
     </div>
 
-  )
+  );
 }
 
 export default PadRow;
