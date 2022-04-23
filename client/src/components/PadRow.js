@@ -103,16 +103,6 @@ function PadRow ({pads, pos, toggleActive, isTriggering, rowIndex, isLooped, han
 
     setTrack({...track, ...newProps});
     update(trackRef, newProps);
-
-    // localStorage.setItem(`${trackId}`, JSON.stringify({
-    //   sampleName: newName,
-    //   sampleUrl: newUrl,
-    //   samplePath: newRef.fullPath,
-    //   bankPath: bankPath,
-    //   bankName: bankName,
-    //   trackVolume: trackVolume,
-    //   trackPanning: trackPanning
-    // }));
   }
 
   async function handleBankChange (event) {

@@ -3,6 +3,7 @@ import * as Tone from 'tone';
 import { IconButton, Box, Button } from '@mui/material';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 import { useNavigate, useParams } from 'react-router-dom';
+import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline';
 
 import '../App.css'; // TODO change name or refactor all styles
 import PadRow from './PadRow';
@@ -10,6 +11,7 @@ import Controls from './Controls';
 import { dbRef, getBankRefList, getSampleList } from '../FirebaseService';
 import { DarkModeContext, LoopContext, UserContext } from "../contexts";
 import { child, get, remove, update } from 'firebase/database';
+
 
 async function getLoop (ref) {
   const snapshot = await get(ref);
@@ -21,9 +23,18 @@ function Sequencer () {
   const navigate = useNavigate();
   let params = useParams();
 
-  const loopRef = useRef(child(dbRef, params.loopid));
+  const userRef = useRef(child(dbRef, params.uid));
+  const loopRef = useRef(child(userRef.current, params.loopid));
+
+
+  // Loop status
   const { loop, setLoop } = useContext(LoopContext);
 
+  // Dark mode
+  const {useDarkMode, setUseDarkMode} = useContext(DarkModeContext);
+
+  // User info
+  const { user } = useContext(UserContext);
 
   // Categories from DB
   const [sampleList, setSampleList] = useState([]); // TODO CHECK Do we need this here?
@@ -36,17 +47,12 @@ function Sequencer () {
   const [activeRows, setActiveRows] = useState([]); // Tells all tracks if they should play or not
   const [isLooped, setIsLooped] = useState(false); // Necessary for fixing visual delay
 
-  // Dark mode
-  const {useDarkMode, setUseDarkMode} = useContext(DarkModeContext);
-
-  // User info
-  const { user } = useContext(UserContext)
 
   useEffect(() => {
     getLoop(loopRef.current).then(data => {
       setLoop(data);
     });
-  }, [loopRef, setLoop]);
+  }, [setLoop]);
 
   useEffect(() => {
     getSampleList().then(list => {
@@ -56,7 +62,6 @@ function Sequencer () {
     getBankRefList().then(list => {
       setBanklist(list);
     });
-
   }, []);
 
   function useInterval(callback, delay) {
@@ -92,13 +97,15 @@ function Sequencer () {
 
   function togglePlaying () {
     Tone.start();
-    if (isPlaying) {
-      clearInterval(timerId);
-      setPos(0);
-      setActiveRows(Array(Object.keys(loop.trackList).length).fill(false));
-      setIsLooped(false);
+    if (loop?.trackList) {
+      if (isPlaying) {
+        clearInterval(timerId);
+        setPos(0);
+        setActiveRows(Array(Object.keys(loop.trackList).length).fill(false));
+        setIsLooped(false);
+      }
+      setIsPlaying(!isPlaying);
     }
-    setIsPlaying(!isPlaying);
   }
 
   const timerId = useInterval(tick, isPlaying ? calculateTempo(loop.bpm) * loop.precision : null)
@@ -240,7 +247,7 @@ function Sequencer () {
 
     setLoop({...loop, trackList: trackListCopy, pads: padsCopy});
 
-    // const padsRef = child(loopRef.current, `pads/${rowIndex}`)
+    // const padsRef = child(loopRef, `pads/${rowIndex}`)
     // remove(padsRef);
     update(loopRef.current, { pads: padsCopy });
 
@@ -248,11 +255,10 @@ function Sequencer () {
     remove(trackRef);
   }
 
-
   return (
     <>
       <Button
-        onClick={() => navigate('/')}
+        onClick={() => navigate(user ? `/${user.uid}` : '/')}
         variant='contained'
         size='small'
         sx={{
@@ -295,6 +301,14 @@ function Sequencer () {
           >
             {loop?.name}
           </h4>
+        <IconButton
+          size="small"
+          onClick={() => setUseDarkMode(!useDarkMode) }
+        >
+          <DriveFileRenameOutlineIcon
+
+          />
+        </IconButton>
         </div>
 
       </div>

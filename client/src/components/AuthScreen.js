@@ -1,14 +1,17 @@
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
-import { useContext, useState } from "react";
+import { createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword } from "firebase/auth";
+import { useContext, useEffect, useState } from "react";
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 import { Button, IconButton, Paper, Tab, Tabs, TextField } from "@mui/material";
 import { Box } from "@mui/system";
 
 
 import { auth } from "../FirebaseService";
-import { DarkModeContext } from "../contexts";
+import { DarkModeContext, UserContext } from "../contexts";
+import { useNavigate } from "react-router-dom";
 
 function AuthScreen () {
+
+  const navigate = useNavigate();
 
   const [tabIndex, setTabIndex] = useState(0);
 
@@ -17,7 +20,17 @@ function AuthScreen () {
   const [registerEmail, setRegisterEmail] = useState('');
   const [registerPass, setRegisterPass] = useState('');
 
+  const { setUser } = useContext(UserContext);
   const {useDarkMode, setUseDarkMode} = useContext(DarkModeContext);
+
+  useEffect(() => {
+    onAuthStateChanged(auth, (observedUser) => {
+      if (observedUser) {
+        navigate(`/${observedUser.uid}`)
+      }
+    });
+  }, [setUser, navigate]);
+
 
   function handleTabChange (event, newTabIndex) {
     setTabIndex(newTabIndex);

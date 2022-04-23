@@ -46,6 +46,21 @@ export function App () {
         default: useDarkMode ? '#2D2D2D' : '#F1F1F1'
       }
     },
+    components: {
+      // Name of the component
+      MuiOutlinedInput: {
+        styleOverrides: {
+          // The props to change the default for.
+          input: {
+            '&:-webkit-autofill': {
+              WebkitBoxShadow: '0 0 0 100px #261c28 inset',
+              WebkitTextFillColor: '#fff',
+
+            },
+          },
+        },
+      },
+    },
   });
 
   return (
@@ -57,9 +72,10 @@ export function App () {
           <CssBaseline />
           <BrowserRouter>
             <Routes>
-              <Route path="/" element={user ? <Dashboard/> : <AuthScreen/>} />
-              <Route path="/sequencer" element={<Sequencer/>} />
-              <Route path="/sequencer/:loopid" element={<Sequencer/>} />
+              <Route path="/" element={<AuthScreen/>} />
+              <Route path='/:uid' element={<Dashboard/>}/>
+              {/* <Route path="/sequencer" element={<Sequencer/>} /> */ }
+              <Route path="/:uid/sequencer/:loopid" element={<Sequencer/>} />
             </Routes>
           </BrowserRouter>
         </ThemeProvider>
