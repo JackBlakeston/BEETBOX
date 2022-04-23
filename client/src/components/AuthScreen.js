@@ -7,6 +7,7 @@ import { Box } from '@mui/system';
 import { auth } from '../firebase/firebaseService';
 import { DarkModeContext, UserContext } from '../contexts';
 import { useNavigate } from 'react-router-dom';
+import logo from '../assets/images/BEETBOX_LOGO.png';
 
 function AuthScreen () {
 
@@ -94,7 +95,14 @@ function AuthScreen () {
       </IconButton>
 
       <div className='auth-container'>
-        <h1>BEETBOX</h1>
+        <img
+          src={logo}
+          alt=''
+          height={250}
+          style={{
+            marginBottom: 20,
+          }}
+        />
         <Paper
           sx={{
             height: 400,

@@ -174,7 +174,7 @@ function Dashboard () {
                     position: 'relative',
                     '&:hover': {
                       color: 'white',
-                      backgroundColor: 'rgb(143 36 170);',
+                      backgroundColor: 'rgb(216 26 96)',
                     }
                   }}
                 >

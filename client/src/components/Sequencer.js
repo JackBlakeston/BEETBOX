@@ -12,28 +12,6 @@ import { dbRef, getBankRefList, getSampleList } from '../firebase/firebaseServic
 import { DarkModeContext, LoopContext, UserContext } from '../contexts';
 import { child, get, remove, update } from 'firebase/database';
 
-
-const modalStyle = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: 500,
-  height: 200,
-  bgcolor: '#212121',
-  border: '2px solid #000',
-  boxShadow: 24,
-  pt: 2,
-  px: 4,
-  pb: 3,
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
-  justifyContent: 'space-between',
-  borderRadius: 5,
-
-};
-
 async function getLoop (ref) {
   const snapshot = await get(ref);
   return snapshot.val();
@@ -294,6 +272,26 @@ function Sequencer () {
     setIsModalOpen(true);
   }
 
+  const modalStyle = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 500,
+    height: 200,
+    bgcolor: useDarkMode ? '#212121' : 'background.paper',
+    border: '2px solid #d81b60',
+    boxShadow: 24,
+    pt: 2,
+    px: 4,
+    pb: 3,
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    borderRadius: 5,
+  };
+
   return (
     <div className='sequencer'>
 
@@ -362,7 +360,9 @@ function Sequencer () {
           backgroundColor: useDarkMode ? 'rgb(35, 35, 35)' : 'rgb(220 220 220)',
         }}
       >
-        <h1 className='title' >BEETBOX</h1>
+        <h1 className='title'>
+          BEETBOX
+        </h1>
         <div className='loop-name-container'>
           <h4
             style={{
@@ -426,14 +426,14 @@ function Sequencer () {
         <Box ml={7.2} mt={2} className='new-track-container'>
           <Button
             sx={{
-              border:'1.7px solid #8e25aa',
+              border:'1.7px solid #d81a60',
               fontSize: '20px',
               fontWeight: 'bold',
-              backgroundColor: useDarkMode && 'rgb(99 25 118 / 14%)',
+              backgroundColor: useDarkMode && 'rgb(179 20 78 / 14%)',
               color: useDarkMode && 'white',
               ':hover': {
-                border:'1.7px solid #8e25aa',
-                backgroundColor: useDarkMode ? 'rgb(99 25 118 / 40%)' : 'rgb(142 36 170 / 7%)'
+                border:'1.7px solid #d81a60',
+                backgroundColor: useDarkMode ? 'rgb(179 20 78 / 40%)' : 'rgb(231 60 123 / 20%)'
               }
             }}
             variant={useDarkMode ? 'contained' : 'outlined'}

@@ -30,6 +30,7 @@
 
 /* DASHBOARD */
 .title {
+  color: #d81a60;
   margin: unset;
   position: absolute;
   top: 6px;
@@ -232,10 +233,10 @@
 }
 
 .pad.active {
-  background: rgba(142,37,170, 1);
+  background: #d81a60;
 }
 .pad.active:hover {
-  background: rgb(122, 28, 149);
+  background: rgb(179, 20, 78);
 }
 
 .pad.playing {

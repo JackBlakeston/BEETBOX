@@ -178,7 +178,7 @@ function PadRow ({pads, pos, toggleActive, isTriggering, rowIndex, isLooped, han
             onChange={handleVolumeChange}
             value={track.trackVolume}
             bg={useDarkMode ? 'rgb(67 67 67)' : 'rgb(205 205 205)'}
-            fg='rgba(142,37,170, 1)'
+            fg='#d81a60'
             mouseSpeed={7}
             transform={p => parseInt(p * 50, 10) - 50}
             style={{

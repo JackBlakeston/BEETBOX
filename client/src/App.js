@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { purple } from '@mui/material/colors';
+import { pink } from '@mui/material/colors';
 import { CssBaseline } from '@mui/material';
 
 import AuthScreen from './components/AuthScreen';
@@ -37,10 +37,10 @@ export function App () {
     palette: {
       mode: useDarkMode ? 'dark' : 'light',
       primary: {
-        main: purple[600]
+        main: pink[600]
       },
       secondary: {
-        main: purple[600]
+        main: pink[600]
       },
       background: {
         default: useDarkMode ? '#2D2D2D' : '#F1F1F1'
@@ -51,7 +51,7 @@ export function App () {
         styleOverrides: {
           input: {
             '&:-webkit-autofill': {
-              WebkitBoxShadow: useDarkMode ? '0 0 0 100px #261c28 inset' : '0 0 0 100px rgb(252 238 255) inset',
+              WebkitBoxShadow: useDarkMode ? '0 0 0 100px rgb(76 5 38) inset;' : '0 0 0 100px rgb(250 220 233) inset',
               WebkitTextFillColor: useDarkMode && '#fff',
             },
           },
