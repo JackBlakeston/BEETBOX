@@ -20,22 +20,7 @@ import { get, update } from 'firebase/database';
 
 function PadRow ({pads, pos, toggleActive, isTriggering, rowIndex, isLooped, handleClickDelete, bankList, gridSize, precision, trackRef}) {
 
-  // TODO delete placeholder from storage
-  // const placeholderUrl = 'https://firebasestorage.googleapis.com/v0/b/jb-drum-sequencer.appspot.com/o/Samples%2FPlaceholder.wav?alt=media&token=07570a97-669a-4968-96e5-53f37a6210db';
-
-  // const previousConfig = JSON.parse(localStorage.getItem(`${trackId}`));
-
-  // const [bankName, setBankName] = useState(previousConfig ? previousConfig.bankName : 'No bank');
-  // const [bankPath, setBankPath] = useState(previousConfig ? previousConfig.bankPath : '');
-
   const [sampleList, setSampleList] = useState([]);
-
-  // const [url, setUrl] = useState(previousConfig ? previousConfig.sampleUrl : '');
-  // const [samplePath, setSamplePath] = useState(previousConfig ? previousConfig.samplePath : '')
-  // const [sampleName, setSampleName] = useState(previousConfig ? previousConfig.sampleName : 'No sample');
-
-  // const [trackPanning, setTrackPanning] = useState(previousConfig ? previousConfig.trackPanning : 0);
-  // const [trackVolume, setTrackVolume] = useState(previousConfig ? previousConfig.trackVolume : -6);
 
   const [track, setTrack] = useState();
 
@@ -157,7 +142,7 @@ function PadRow ({pads, pos, toggleActive, isTriggering, rowIndex, isLooped, han
         {track && bankList &&
         <Box sx={{ minWidth: 120 }} className='select-container'>
           <FormControl fullWidth >
-            <InputLabel shrink>Bank</InputLabel> {/* CHECK THIS!! */}
+            <InputLabel shrink>Bank</InputLabel>
             <Select notched className='select' displayEmpty value={track.bankPath} onChange={handleBankChange} labelId="demo-simple-select-label" id="demo-simple-select" label='Bank'>
               <MenuItem style={{ display: 'none' }} disabled value={track.bankPath}>{track.bankName || 'No bank'}</MenuItem>
               { bankList.map(ref => {
@@ -171,8 +156,8 @@ function PadRow ({pads, pos, toggleActive, isTriggering, rowIndex, isLooped, han
         {track && track.bankName !== 'No bank' &&
         <Box sx={{ minWidth: 120 }} className='select-container'>
           <FormControl fullWidth >
-            <InputLabel shrink id="demo-simple-select-label">Sample</InputLabel>
-            <Select notched className='select' displayEmpty value={track.samplePath} onChange={handleSampleChange} labelId="demo-simple-select-label" id="demo-simple-select" label='Sample'>
+            <InputLabel shrink >Sample</InputLabel>
+            <Select disabled={!track.bankPath} notched className='select' displayEmpty value={track.samplePath} onChange={handleSampleChange} labelId="demo-simple-select-label" id="demo-simple-select" label='Sample'>
               <MenuItem style={{ display: 'none' }} disabled value={track.samplePath}>{track.sampleName}</MenuItem>
               { sampleList.map(ref => {
                 return <MenuItem key={ref.name} value={ref.fullPath} >{ getSampleName(ref) }</MenuItem>;

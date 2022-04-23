@@ -95,31 +95,16 @@ function Dashboard () {
     <div>
 
       <Button
-        variant='contained'
-        onClick={handleNewLoopClick}
-        sx={{
-          position: 'fixed',
-          top: 150,
-          left: 120,
-          height: 80,
-          width: 200,
-          fontSize: 20,
-          fontWeight: 'bold'
-        }}
-      >
-          NEW BEET
-      </Button>
-
-      <Button
         onClick={handleLogoutClick}
         variant='contained'
         size='small'
         sx={{
           backgroundColor: useDarkMode ? 'rgb(60 60 60)' : 'rgb(101 101 101)',
-          position: 'absolute',
+          position: 'fixed',
           top: 15,
           right: 120,
           width: 99,
+          zIndex: 3
         }}
       >
         LOG OUT
@@ -130,26 +115,51 @@ function Dashboard () {
         size="small"
         onClick={() => setUseDarkMode(!useDarkMode) }
         sx={{
-          position: 'absolute',
+          position: 'fixed',
           top: 13,
-          right: 40
+          right: 40,
+          zIndex: 3
         }}
       >
         <DarkModeIcon/>
       </IconButton>
 
       <div
-        className='title-container'
         style={{
           backgroundColor: useDarkMode ? 'rgb(35, 35, 35)' : 'rgb(220 220 220)',
+          zIndex: 1,
+          position: 'sticky',
+          top: 0,
+          minHeight: 100
         }}
       >
         <h1 className='title' >BEETBOX</h1>
+        <div
+          style={{
+            display: 'flex',
+            height: 100,
+            alignItems: 'center',
+            justifyContent: 'center'
+          }}
+        >
+          <Button
+            variant='contained'
+            onClick={handleNewLoopClick}
+            sx={{
+              height: 40,
+              width: 300,
+              fontSize: 20,
+              fontWeight: 'bold',
+            }}
+          >
+          NEW BEET
+          </Button>
+        </div>
       </div>
 
       <div className='loop-list-container'>
         <ul className='loop-list'>
-          {loopList && Object.keys(loopList).map(loopKey => {
+          {loopList ? Object.keys(loopList).map(loopKey => {
             return (
               <li key={loopKey}>
                 <Paper
@@ -196,7 +206,10 @@ function Dashboard () {
                 </Paper>
               </li>
             );
-          })}
+          }) : <div className='no-loops-message-container'>
+            <h1>You have no beets yet</h1>
+            <h1>Make a new beet and bless the world with your rythm!</h1>
+          </div>}
         </ul>
       </div>
 

@@ -29,10 +29,6 @@
 }
 
 /* DASHBOARD */
-.title-container {
-  min-height: 60px;
-}
-
 .title {
   margin: unset;
   position: absolute;
@@ -46,6 +42,8 @@
   flex-direction: column;
   align-items: center;
   gap: 40px;
+  overflow-y: overlay;
+  margin-top: 60px;
 }
 
 .loop-info-container {
@@ -71,6 +69,12 @@
   transition: 0.2s ease;
   pointer-events: auto;
 }
+
+.no-loops-message-container {
+  text-align: center;
+  font-size: 14px;
+}
+
 
 /* SEQUENCER */
 
@@ -103,7 +107,6 @@
   position: sticky;
   top: 0px;
   width: 100vw;
-
   display: flex;
   align-items: center;
   justify-content: space-between;
