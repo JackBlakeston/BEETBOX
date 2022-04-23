@@ -18,8 +18,9 @@ const modalStyle = {
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: 400,
-  bgcolor: 'background.paper',
+  width: 500,
+  height: 200,
+  bgcolor: '#212121',
   border: '2px solid #000',
   boxShadow: 24,
   pt: 2,
@@ -27,7 +28,10 @@ const modalStyle = {
   pb: 3,
   display: 'flex',
   flexDirection: 'column',
-  alignItems: 'center'
+  alignItems: 'center',
+  justifyContent: 'space-between',
+  borderRadius: 5,
+
 }
 
 async function getLoop (ref) {
@@ -297,13 +301,42 @@ function Sequencer () {
           onClose={handleModalClose}
         >
           <Box sx={modalStyle}>
-            <h3>Beet name</h3>
+            <h3
+              style={{
+                fontSize: 25,
+                margin: '10px 0 0 0',
+              }}
+            >
+              Beet name
+            </h3>
             <form autoComplete='off' onSubmit={() => setIsModalOpen(false)}>
-              <TextField onChange={handleNameChange} value={loop?.name}></TextField>
+              <TextField
+                onChange={handleNameChange}
+                value={loop?.name}
+                inputProps={{
+                  style: {
+                    fontSize: 24
+                  }
+                }}
+              />
             </form>
           </Box>
         </Modal>
       </div>
+
+      <IconButton
+        aria-label="dark-mode"
+        onClick={() => setUseDarkMode(!useDarkMode) }
+        sx={{
+          position: 'absolute',
+          top: 10,
+          right: 37
+        }}
+      >
+        <DarkModeIcon
+
+        />
+      </IconButton>
 
       <Button
         onClick={() => navigate(user ? `/${user.uid}` : '/')}
@@ -319,18 +352,6 @@ function Sequencer () {
       >
         {user ? 'DASHBOARD' : 'LOG IN'}
       </Button>
-
-      <IconButton
-        aria-label="dark-mode"
-        onClick={() => setUseDarkMode(!useDarkMode) }
-        sx={{
-          position: 'absolute',
-          top: 14,
-          right: 40
-        }}
-      >
-        <DarkModeIcon/>
-      </IconButton>
 
 
       <div className='navbar'

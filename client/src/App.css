@@ -56,11 +56,15 @@
   align-items: center;
 }
 
-.loop-list-item:hover {
-  background-color: rgb(99, 25, 118);
+.loop-details-container {
+  width: 80%;
+  display: flex;
+  justify-content: space-between;
 }
+
 .loop-list-item:hover > .loop-delete-button {
   opacity: 1;
+  fill: white;
 }
 
 .loop-delete-button {

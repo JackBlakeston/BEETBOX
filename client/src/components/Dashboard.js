@@ -95,6 +95,22 @@ function Dashboard () {
     <div>
 
       <Button
+        variant='contained'
+        onClick={handleNewLoopClick}
+        sx={{
+          position: 'fixed',
+          top: 150,
+          left: 120,
+          height: 80,
+          width: 200,
+          fontSize: 20,
+          fontWeight: 'bold'
+        }}
+      >
+          NEW BEET
+      </Button>
+
+      <Button
         onClick={handleLogoutClick}
         variant='contained'
         size='small'
@@ -115,7 +131,7 @@ function Dashboard () {
         onClick={() => setUseDarkMode(!useDarkMode) }
         sx={{
           position: 'absolute',
-          top: 14,
+          top: 13,
           right: 40
         }}
       >
@@ -145,7 +161,11 @@ function Dashboard () {
                     width: 700,
                     transition: '0.6s ease',
                     cursor: 'pointer',
-                    position: 'relative'
+                    position: 'relative',
+                    '&:hover': {
+                      color: 'white',
+                      backgroundColor: useDarkMode ? 'rgb(99, 25, 118)' : 'rgb(99, 25, 118)',
+                    }
                   }}
                 >
                   <IconButton
@@ -159,24 +179,25 @@ function Dashboard () {
                       right: 15,
                       opacity: 0,
                       transition: '0.6s ease',
+                      fill: 'white'
                     }}
                   >
-                    <DeleteIcon fontSize="inherit" />
+                    <DeleteIcon fontSize="inherit" style={{ color: 'white' }} />
                   </IconButton>
 
                   <div className='loop-info-container'>
                     <h2>{loopList[loopKey].name}</h2>
-                    <p>Bpm: {loopList[loopKey].bpm}</p>
+                    <div className='loop-details-container'>
+                      <p>Bpm: {loopList[loopKey].bpm}</p>
+                      <p>Duration: {Math.trunc(100 * loopList[loopKey].gridSize / loopList[loopKey].bpm)}s
+                      </p>
+                    </div>
                   </div>
                 </Paper>
               </li>
             )
           })}
         </ul>
-
-        <Button variant='contained' onClick={handleNewLoopClick}>
-            NEW LOOP
-        </Button>
       </div>
 
 

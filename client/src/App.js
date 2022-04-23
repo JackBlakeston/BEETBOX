@@ -47,15 +47,12 @@ export function App () {
       }
     },
     components: {
-      // Name of the component
       MuiOutlinedInput: {
         styleOverrides: {
-          // The props to change the default for.
           input: {
             '&:-webkit-autofill': {
-              WebkitBoxShadow: '0 0 0 100px #261c28 inset',
-              WebkitTextFillColor: '#fff',
-
+              WebkitBoxShadow: useDarkMode ? '0 0 0 100px #261c28 inset' : '0 0 0 100px rgb(252 238 255) inset',
+              WebkitTextFillColor: useDarkMode && '#fff',
             },
           },
         },

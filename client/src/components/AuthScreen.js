@@ -87,7 +87,7 @@ function AuthScreen () {
         onClick={() => setUseDarkMode(!useDarkMode) }
         sx={{
           position: 'absolute',
-          top: 14,
+          top: 13,
           right: 40
         }}
       >
