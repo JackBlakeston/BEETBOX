@@ -9,7 +9,7 @@ import Dashboard from './components/Dashboard';
 import Sequencer from './components/Sequencer';
 import { DarkModeContext, LoopContext, UserContext } from './contexts';
 import { onAuthStateChanged } from 'firebase/auth';
-import { auth } from './FirebaseService';
+import { auth } from './firebase/firebaseService';
 
 export function App () {
 

@@ -9,7 +9,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 
 
 import { DarkModeContext, LoopContext, UserContext } from '../contexts';
-import { auth, dbRef } from '../FirebaseService';
+import { auth, dbRef } from '../firebase/firebaseService';
 
 async function getLoopList (ref) { // TODO export this to db service
   const snapshot = await get(ref);

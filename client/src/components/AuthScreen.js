@@ -4,8 +4,7 @@ import DarkModeIcon from '@mui/icons-material/DarkMode';
 import { Button, IconButton, Paper, Tab, Tabs, TextField } from '@mui/material';
 import { Box } from '@mui/system';
 
-
-import { auth } from '../FirebaseService';
+import { auth } from '../firebase/firebaseService';
 import { DarkModeContext, UserContext } from '../contexts';
 import { useNavigate } from 'react-router-dom';
 

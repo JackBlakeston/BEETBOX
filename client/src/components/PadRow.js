@@ -12,7 +12,7 @@ import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Slider } from '@mui/material';
 
-import { getSampleName, getSampleUrl, getRefByPath, getSamplesInBank } from '../FirebaseService';
+import { getSampleName, getSampleUrl, getRefByPath, getSamplesInBank } from '../firebase/firebaseService';
 import Pad from './Pad';
 import { DarkModeContext } from '../contexts';
 import { get, update } from 'firebase/database';

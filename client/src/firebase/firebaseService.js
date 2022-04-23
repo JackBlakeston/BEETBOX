@@ -2,16 +2,9 @@ import { initializeApp } from 'firebase/app';
 import { getStorage, ref as storageRef, getDownloadURL, listAll } from 'firebase/storage';
 import { getAuth } from 'firebase/auth';
 import { getDatabase, ref as databaseRef } from 'firebase/database';
+import { firebaseConfig } from './config';
 
-const firebaseConfig = {
-  apiKey: 'AIzaSyAUTPulZ7brvcaL_VrU2BZ9B9zC4WihYvg',
-  authDomain: 'jb-drum-sequencer.firebaseapp.com',
-  projectId: 'jb-drum-sequencer',
-  storageBucket: 'jb-drum-sequencer.appspot.com',
-  messagingSenderId: '1061179749725',
-  appId: '1:1061179749725:web:944192655c039a90a7e4b4',
-  databaseURL: 'https://jb-drum-sequencer-default-rtdb.europe-west1.firebasedatabase.app',
-};
+
 
 const firebaseApp = initializeApp(firebaseConfig);
 
@@ -63,7 +56,6 @@ export async function getSampleUrl (sampleRef) {
 export function getSampleName (sampleRef) {
   return sampleRef.name.replace('.wav', '');
 }
-
 
 // AUTH SERVICE
 export const auth = getAuth(firebaseApp);
