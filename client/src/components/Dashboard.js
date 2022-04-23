@@ -159,12 +159,12 @@ function Dashboard () {
                   sx={{
                     height: 170,
                     width: 700,
-                    transition: '0.6s ease',
+                    transition: '0.4s ease',
                     cursor: 'pointer',
                     position: 'relative',
                     '&:hover': {
                       color: 'white',
-                      backgroundColor: useDarkMode ? 'rgb(99, 25, 118)' : 'rgb(99, 25, 118)',
+                      backgroundColor: 'rgb(143 36 170);',
                     }
                   }}
                 >

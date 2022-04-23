@@ -74,6 +74,16 @@
 
 /* SEQUENCER */
 
+.sequencer {
+  /* Makes text unselectable */
+  -webkit-touch-callout: none;
+    -webkit-user-select: none;
+     -khtml-user-select: none;
+       -moz-user-select: none;
+        -ms-user-select: none;
+            user-select: none;
+}
+
 /* Name display */
 .loop-name-container {
   display: flex;
@@ -194,14 +204,6 @@
   align-items: center;
   font-size: 12px;
   gap: 10px;
-
-  /* TODO Put this for the whole sequencer component rather than just this part */
-  -webkit-touch-callout: none;
-    -webkit-user-select: none;
-      -khtml-user-select: none;
-        -moz-user-select: none;
-        -ms-user-select: none;
-            user-select: none;
 }
 
 .row {
@@ -247,7 +249,7 @@
 
 /* NEW TRACK */
 .new-track-container {
-  /* position: sticky; */ /* TODO */
+  padding-bottom: 30px;
   bottom: 0px;
   margin-top: 30px;
   display: flex;

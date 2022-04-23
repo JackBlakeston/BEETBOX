@@ -236,8 +236,10 @@ function Sequencer () {
       updatedTrackList = {};
     }
 
+    const newTrackId = `Track${(loop.trackCounter + 1).toString().padStart(4, '0')}`;
+
     const newTrack = {
-      id: `Track${ loop.trackCounter + 1 }`,
+      id: newTrackId,
       sampleName: 'No sample',
       sampleUrl: '',
       samplePath: '',
@@ -246,7 +248,7 @@ function Sequencer () {
       trackVolume: -6,
       trackPanning: 0,
     };
-    updatedTrackList[`Track${ loop.trackCounter + 1 }`] = newTrack;
+    updatedTrackList[newTrackId] = newTrack;
 
     let padsCopy;
     if (loop.pads) {
@@ -293,7 +295,7 @@ function Sequencer () {
   }
 
   return (
-    <>
+    <div className='sequencer'>
 
       <div className='modal-container'>
         <Modal
@@ -311,6 +313,9 @@ function Sequencer () {
             </h3>
             <form autoComplete='off' onSubmit={() => setIsModalOpen(false)}>
               <TextField
+                onFocus={event => {
+                  event.target.select();
+                }}
                 onChange={handleNameChange}
                 value={loop?.name}
                 inputProps={{
@@ -333,9 +338,7 @@ function Sequencer () {
           right: 37
         }}
       >
-        <DarkModeIcon
-
-        />
+        <DarkModeIcon />
       </IconButton>
 
       <Button
@@ -381,7 +384,7 @@ function Sequencer () {
 
       </div>
 
-      <div className='Sequencer'>
+      <div>
         <div
           style={{
             backgroundColor: useDarkMode ? 'rgb(40, 40, 40)' : 'rgb(230 230 230)'
@@ -442,7 +445,7 @@ function Sequencer () {
         </Box>
 
       </div>
-    </>
+    </div>
   );
 }
 
