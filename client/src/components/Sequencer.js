@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import * as Tone from 'tone';
-import { IconButton, Box, Button } from '@mui/material';
+import { IconButton, Box, Button, TextField, Modal } from '@mui/material';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 import { useNavigate, useParams } from 'react-router-dom';
 import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline';
@@ -12,6 +12,23 @@ import { dbRef, getBankRefList, getSampleList } from '../FirebaseService';
 import { DarkModeContext, LoopContext, UserContext } from "../contexts";
 import { child, get, remove, update } from 'firebase/database';
 
+
+const modalStyle = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+  boxShadow: 24,
+  pt: 2,
+  px: 4,
+  pb: 3,
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center'
+}
 
 async function getLoop (ref) {
   const snapshot = await get(ref);
@@ -47,6 +64,8 @@ function Sequencer () {
   const [activeRows, setActiveRows] = useState([]); // Tells all tracks if they should play or not
   const [isLooped, setIsLooped] = useState(false); // Necessary for fixing visual delay
 
+  // Modal status
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     getLoop(loopRef.current).then(data => {
@@ -255,8 +274,37 @@ function Sequencer () {
     remove(trackRef);
   }
 
+  function handleNameChange (event) {
+    const newName = event.target.value;
+    setLoop({...loop, name: newName});
+    update(loopRef.current, { name: newName });
+  }
+
+  function handleModalClose () {
+    setIsModalOpen(false);
+  }
+
+  function handleModalOpen () {
+    setIsModalOpen(true);
+  }
+
   return (
     <>
+
+      <div className='modal-container'>
+        <Modal
+          open={isModalOpen}
+          onClose={handleModalClose}
+        >
+          <Box sx={modalStyle}>
+            <h3>Beet name</h3>
+            <form autoComplete='off' onSubmit={() => setIsModalOpen(false)}>
+              <TextField onChange={handleNameChange} value={loop?.name}></TextField>
+            </form>
+          </Box>
+        </Modal>
+      </div>
+
       <Button
         onClick={() => navigate(user ? `/${user.uid}` : '/')}
         variant='contained'
@@ -266,7 +314,7 @@ function Sequencer () {
           position: 'absolute',
           top: 15,
           right: 120,
-          width: 99
+          width: 200
         }}
       >
         {user ? 'DASHBOARD' : 'LOG IN'}
@@ -274,7 +322,6 @@ function Sequencer () {
 
       <IconButton
         aria-label="dark-mode"
-        size="small"
         onClick={() => setUseDarkMode(!useDarkMode) }
         sx={{
           position: 'absolute',
@@ -303,10 +350,10 @@ function Sequencer () {
           </h4>
         <IconButton
           size="small"
-          onClick={() => setUseDarkMode(!useDarkMode) }
+          onClick={handleModalOpen}
         >
           <DriveFileRenameOutlineIcon
-
+            style={{ fill: 'rgb(129 128 128)' }}
           />
         </IconButton>
         </div>
@@ -368,7 +415,8 @@ function Sequencer () {
             variant={useDarkMode ? 'contained' : 'outlined'}
             className='new-track-button'
             onClick={handleClickNewTrack}
-            >NEW TRACK
+            >
+              NEW TRACK
           </Button>
         </Box>
 
