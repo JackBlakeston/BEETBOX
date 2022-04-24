@@ -1,11 +1,14 @@
 import { Button, Input, Slider } from '@mui/material';
 import { Box } from '@mui/system';
+import StopIcon from '@mui/icons-material/Stop';
+import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import React from 'react';
 import Fraction from 'fraction.js';
 
-
 function Controls (props) {
+
   let buttonText = props.playing ? 'Stop' : 'Play';
+
   const sizeMarks = [2, 3, 4, 5].map(mark => {
     return { value: mark };
   });
@@ -17,12 +20,18 @@ function Controls (props) {
   return (
     <div className="controls">
       <Button
-        sx={{ fontSize:'18px' }}
+        sx={{
+          fontSize:'18px',
+          paddingLeft: 3,
+        }}
         variant='contained'
         className='play-button'
         onClick={props.togglePlaying}
       >
-        {buttonText}
+        <div className='play-button-inner-container'>
+          {buttonText}
+          {props.playing ? <StopIcon className='play-button-icon'/> : <PlayArrowIcon className='play-button-icon'/>}
+        </div>
       </Button>
 
       <div className='slider-container' id='bpm-controls'>

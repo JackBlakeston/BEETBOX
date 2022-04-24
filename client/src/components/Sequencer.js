@@ -367,7 +367,7 @@ function Sequencer () {
                 backgroundColor: useDarkMode ? '#d81a609c' : '#d81a6073',
               },
               '&:hover > svg': {
-                fill: '#393939'
+                fill: useDarkMode ? '#b1a9a9' : '#393939'
               }
             }}
           >

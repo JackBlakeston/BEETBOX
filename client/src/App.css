@@ -127,9 +127,11 @@
   padding: 15px 80px 15px 50px;
 }
 
-.play-button {
-  height: 40px;
-  width: 100px;
+
+.play-button-inner-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 .slider-container {

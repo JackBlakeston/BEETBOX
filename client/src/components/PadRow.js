@@ -134,9 +134,6 @@ function PadRow ({pads, pos, toggleActive, isTriggering, rowIndex, isLooped, han
             '&:hover': {
               backgroundColor: useDarkMode ? '#d81a609c' : '#d81a6073',
             },
-            '&:hover > svg': {
-              fill: '#393939'
-            }
           }}
         >
           <DeleteIcon fontSize="inherit" />
