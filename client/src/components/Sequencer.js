@@ -7,7 +7,7 @@ import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutli
 
 import '../App.css'; // TODO change name or refactor all styles
 import PadRow from './PadRow';
-import Controls from './Controls';
+import Controls from './Controls/Controls';
 import { dbRef, getBankRefList, getSampleList } from '../firebase/firebaseService';
 import { DarkModeContext, LoopContext, UserContext } from '../contexts';
 import { child, get, remove, update } from 'firebase/database';
