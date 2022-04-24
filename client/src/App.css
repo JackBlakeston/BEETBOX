@@ -49,6 +49,11 @@
   margin: unset;
 }
 
+.logo-icon {
+  margin-bottom: 10px;
+  height: 28px;
+}
+
 
 /* Loop list */
 .loop-list {
@@ -231,10 +236,11 @@
   float: left;
   margin: 2.5px;
   cursor: pointer;
-  background:rgba(129,128,128,1);
+  background:rgb(129 128 128 / 48%);
   border-radius: 10px;
   border: solid 2px black;
   transition: 0.1s ease;
+
 }
 .pad:hover {
   background:rgb(111, 111, 111);
@@ -256,7 +262,6 @@
 
 .pad.disabled {
   cursor: default;
-  background:rgb(67, 67, 67);
 }
 
 /* NEW TRACK */

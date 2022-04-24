@@ -1,4 +1,4 @@
-import { Button, Slider } from '@mui/material';
+import { Button, Input, Slider } from '@mui/material';
 import { Box } from '@mui/system';
 import React from 'react';
 import Fraction from 'fraction.js';
@@ -6,11 +6,11 @@ import Fraction from 'fraction.js';
 
 function Controls (props) {
   let buttonText = props.playing ? 'Stop' : 'Play';
-  const sizeMarks = [4, 8, 16, 32].map(mark => {
+  const sizeMarks = [2, 3, 4, 5].map(mark => {
     return { value: mark };
   });
 
-  const precisionMarks = [0.25, 0.5, 1].map(mark => {
+  const precisionMarks = [0, 1, 2].map(mark => {
     return { value: mark };
   });
 
@@ -34,11 +34,28 @@ function Controls (props) {
             step={1}
             value={props.bpm}
             onChange={props.handleTempoChange}
+            sx={{
+              '& .MuiSlider-thumb': {
+                height: 20,
+                width: 4,
+                borderRadius: 0,
+              }
+            }}
           />
         </Box>
-        <output>
-          {props.bpm}
-        </output>
+        <Input
+          value={props.bpm}
+          size="small"
+          onChange={props.handleTempoChange}
+          inputProps={{
+            min: 1,
+            max: 420,
+            style: {
+              width: 29,
+              textAlign: 'center',
+            }
+          }}
+        />
       </div>
 
       <div className='slider-container' id='grid-size-controls'>
@@ -47,12 +64,17 @@ function Controls (props) {
           <Slider
             marks={sizeMarks}
             step={null}
-            min={4}
-            max={32}
-            value={props.gridSize}
+            min={2}
+            max={5}
+            value={Math.log2(props.gridSize)}
             onChange={props.handleGridSizeChange}
-            // TODO make scale linear
-            // TODO remove markers that appeared for no reason
+            sx={{
+              '& .MuiSlider-thumb': {
+                height: 20,
+                width: 4,
+                borderRadius: 0,
+              }
+            }}
           />
         </Box>
         <output>
@@ -66,11 +88,18 @@ function Controls (props) {
           <Slider
             marks={precisionMarks}
             step={null}
-            min={1/4}
-            max={1}
-            value={props.precision}
+            min={0}
+            max={2}
+            value={Math.log2(1 / props.precision)}
             onChange={props.handlePrecisionChange}
             track={false}
+            sx={{
+              '& .MuiSlider-thumb': {
+                height: 20,
+                width: 4,
+                borderRadius: 0,
+              }
+            }}
           />
         </Box>
         <output>

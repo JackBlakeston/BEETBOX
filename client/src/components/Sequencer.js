@@ -153,7 +153,7 @@ function Sequencer () {
   }
 
   function changeGridSize (event) {
-    const newSize = Number(event.target.value);
+    const newSize = Number(2 ** event.target.value);
     if (isPlaying && newSize < loop.gridSize && pos > newSize) togglePlaying();
 
     setLoop({...loop, gridSize: newSize});
@@ -161,7 +161,7 @@ function Sequencer () {
   }
 
   function changePrecision (event) {
-    const newPrecision = Number(event.target.value);
+    const newPrecision = Number(1 / 2 ** event.target.value);
     if (isPlaying) togglePlaying();
     const padsCopy = [...loop.pads];
     const factor = loop.precision / newPrecision;
@@ -252,8 +252,6 @@ function Sequencer () {
 
     setLoop({...loop, trackList: trackListCopy, pads: padsCopy});
 
-    // const padsRef = child(loopRef, `pads/${rowIndex}`)
-    // remove(padsRef);
     update(loopRef.current, { pads: padsCopy });
 
     const trackRef = child(loopRef.current, `trackList/${trackId}`);
@@ -347,7 +345,7 @@ function Sequencer () {
           <img
             src={logoIcon}
             alt=''
-            height={28}
+            className='logo-icon'
           />
           <h1 className='title' >BEETBOX</h1>
         </div>

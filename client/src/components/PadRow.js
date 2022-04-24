@@ -1,6 +1,5 @@
 import { React, useContext, useEffect, useRef, useState } from 'react';
 import Knob from './Knob/src/index';
-// import Knob from "react-simple-knob";
 import * as Tone from 'tone';
 
 import Box from '@mui/material/Box';
@@ -184,7 +183,8 @@ function PadRow ({pads, pos, toggleActive, isTriggering, rowIndex, isLooped, han
             style={{
               height: '60px',
               color: useDarkMode ? 'rgb(159 159 159)' : 'rgb(129 128 128)',
-              fontFamily: 'Roboto'
+              fontFamily: 'Roboto',
+              cursor: 'grab'
             }}
           />
         }

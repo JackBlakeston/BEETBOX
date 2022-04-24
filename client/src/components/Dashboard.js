@@ -144,6 +144,7 @@ function Dashboard () {
             src={logoIcon}
             alt=''
             height={28}
+            className='logo-icon'
           />
           <h1 className='title' >BEETBOX</h1>
         </div>
