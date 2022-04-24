@@ -11,6 +11,8 @@ import Controls from './Controls';
 import { dbRef, getBankRefList, getSampleList } from '../firebase/firebaseService';
 import { DarkModeContext, LoopContext, UserContext } from '../contexts';
 import { child, get, remove, update } from 'firebase/database';
+import logoIcon from '../assets/images/radish.png';
+
 
 async function getLoop (ref) {
   const snapshot = await get(ref);
@@ -279,7 +281,7 @@ function Sequencer () {
     transform: 'translate(-50%, -50%)',
     width: 500,
     height: 200,
-    bgcolor: useDarkMode ? '#212121' : 'background.paper',
+    bgcolor: useDarkMode ? '#212121' : '#dcdcdc',
     border: '2px solid #d81b60',
     boxShadow: 24,
     pt: 2,
@@ -327,42 +329,29 @@ function Sequencer () {
         </Modal>
       </div>
 
-      <IconButton
-        aria-label="dark-mode"
-        onClick={() => setUseDarkMode(!useDarkMode) }
-        sx={{
-          position: 'absolute',
-          top: 10,
-          right: 37
-        }}
-      >
-        <DarkModeIcon />
-      </IconButton>
-
-      <Button
-        onClick={() => navigate(user ? `/${user.uid}` : '/')}
-        variant='contained'
-        size='small'
-        sx={{
-          backgroundColor: useDarkMode ? 'rgb(60 60 60)' : 'rgb(101 101 101)',
-          position: 'absolute',
-          top: 15,
-          right: 120,
-          width: 200
-        }}
-      >
-        {user ? 'DASHBOARD' : 'LOG IN'}
-      </Button>
-
-
-      <div className='navbar'
+      <div
         style={{
           backgroundColor: useDarkMode ? 'rgb(35, 35, 35)' : 'rgb(220 220 220)',
+          zIndex: 5,
+          position: 'sticky',
+          top: 0,
+          minHeight: 60
         }}
       >
-        <h1 className='title'>
-          BEETBOX
-        </h1>
+
+        <div
+          className='title-container'
+          style={{ padding: '0 0 0px 10px' }}
+          onClick={() => navigate(user ? `/${user.uid}` : '/')}
+        >
+          <img
+            src={logoIcon}
+            alt=''
+            height={28}
+          />
+          <h1 className='title' >BEETBOX</h1>
+        </div>
+
         <div className='loop-name-container'>
           <h4
             style={{
@@ -381,6 +370,33 @@ function Sequencer () {
             />
           </IconButton>
         </div>
+
+        <IconButton
+          aria-label="dark-mode"
+          onClick={() => setUseDarkMode(!useDarkMode) }
+          sx={{
+            position: 'absolute',
+            top: 10,
+            right: 37
+          }}
+        >
+          <DarkModeIcon />
+        </IconButton>
+
+        <Button
+          onClick={() => navigate(user ? `/${user.uid}` : '/')}
+          variant='contained'
+          size='small'
+          sx={{
+            backgroundColor: useDarkMode ? 'rgb(60 60 60)' : 'rgb(101 101 101)',
+            position: 'absolute',
+            top: 15,
+            right: 120,
+            width: 200
+          }}
+        >
+          {user ? 'DASHBOARD' : 'LOG IN'}
+        </Button>
 
       </div>
 

@@ -5,6 +5,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { Button, IconButton, Paper } from '@mui/material';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 import DeleteIcon from '@mui/icons-material/Delete';
+import logoIcon from '../assets/images/radish.png';
 
 
 
@@ -133,7 +134,20 @@ function Dashboard () {
           minHeight: 100
         }}
       >
-        <h1 className='title' >BEETBOX</h1>
+
+        <div
+          className='title-container'
+          style={{ padding: '0 0 40px 10px' }}
+          onClick={() => navigate(user ? `/${user.uid}` : '/')}
+        >
+          <img
+            src={logoIcon}
+            alt=''
+            height={28}
+          />
+          <h1 className='title' >BEETBOX</h1>
+        </div>
+
         <div
           style={{
             display: 'flex',
