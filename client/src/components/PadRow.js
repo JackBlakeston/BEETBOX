@@ -124,12 +124,20 @@ function PadRow ({pads, pos, toggleActive, isTriggering, rowIndex, isLooped, han
     <div className='row-container '>
 
       <div
-        className={'delete-icon '}
+        className={'delete-icon-container '}
       >
         <IconButton
           aria-label="delete"
           size="small"
           onClick={() => handleClickDelete(track.id, rowIndex)}
+          sx={{
+            '&:hover': {
+              backgroundColor: useDarkMode ? '#d81a609c' : '#d81a6073',
+            },
+            '&:hover > svg': {
+              fill: '#393939'
+            }
+          }}
         >
           <DeleteIcon fontSize="inherit" />
         </IconButton>

@@ -362,9 +362,17 @@ function Sequencer () {
           <IconButton
             size="small"
             onClick={handleModalOpen}
+            sx={{
+              '&:hover': {
+                backgroundColor: useDarkMode ? '#d81a609c' : '#d81a6073',
+              },
+              '&:hover > svg': {
+                fill: '#393939'
+              }
+            }}
           >
             <DriveFileRenameOutlineIcon
-              style={{ fill: 'rgb(129 128 128)' }}
+              sx={{ fill: 'rgb(129 128 128)' }}
             />
           </IconButton>
         </div>
@@ -375,7 +383,7 @@ function Sequencer () {
           sx={{
             position: 'absolute',
             top: 10,
-            right: 37
+            right: 37,
           }}
         >
           <DarkModeIcon />

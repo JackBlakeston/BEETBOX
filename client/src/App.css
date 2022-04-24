@@ -187,7 +187,7 @@
   gap: 15px;
 }
 
-.delete-icon {
+.delete-icon-container {
   display: flex;
   align-items: center;
 }
