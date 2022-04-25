@@ -2,17 +2,9 @@ import React, { useContext } from 'react';
 import { Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { push } from 'firebase/database';
-import { LoopContext } from '../contexts';
-
-const newLoop = { // ?? Maybe take this out to another file??
-  name: 'Untitled Beet',
-  bpm: 220,
-  gridSize: 16,
-  precision: 1,
-  pads: [],
-  trackList: {},
-  trackCounter: 0,
-};
+import { LoopContext } from '../../../contexts';
+import classes from './newLoopButton.module.css';
+import { newLoop, buttonText, newLoopButtonSx } from './constants';
 
 const NewLoopButton = ({ userRef }) => {
 
@@ -28,30 +20,15 @@ const NewLoopButton = ({ userRef }) => {
   }
 
 
-  const buttonContainerStyle = {
-    display: 'flex',
-    height: 100,
-    alignItems: 'center',
-    justifyContent: 'center',
-  };
-
-  const buttonStyle = {
-    height: 40,
-    width: 700,
-    fontSize: 20,
-    fontWeight: 'bold',
-    textAlign: 'center'
-  };
-
-
   return (
-    <div style={buttonContainerStyle}>
+    <div className={classes.mainContainer}>
       <Button
         variant='contained'
         onClick={handleNewLoopClick}
-        sx={buttonStyle}
+        sx={newLoopButtonSx}
+        className={classes.newLoopButton}
       >
-        FRESH BEET
+        { buttonText }
       </Button>
     </div>
   );

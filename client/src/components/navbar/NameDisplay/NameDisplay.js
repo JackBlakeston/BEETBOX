@@ -1,10 +1,10 @@
 import classNames from 'classnames';
 import React, { useContext, useState } from 'react';
 
-import { DarkModeContext, LoopContext } from '../../contexts';
+import { DarkModeContext, LoopContext } from '../../../contexts';
 
-import NameModal from '../RenameModal/RenameModal';
-import RenameButton from '../RenameButton/RenameButton';
+import NameModal from './RenameModal/RenameModal';
+import RenameButton from './RenameButton/RenameButton';
 import classes from './nameDisplay.module.css';
 
 export default function NameBox () {

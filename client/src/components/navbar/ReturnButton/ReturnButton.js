@@ -1,9 +1,13 @@
 import { Button } from '@mui/material';
 import React, { useContext } from 'react';
-import { DarkModeContext, UserContext } from '../contexts';
-import { auth } from '../firebase/firebaseService';
 import { signOut } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
+import classNames from 'classnames';
+
+import { DarkModeContext, UserContext } from '../../../contexts';
+import { auth } from '../../../firebase/firebaseService';
+import classes from './returnButton.module.css';
+import { returnButtonSx, root } from './constants';
 
 const ReturnButton = ({ isInSequencer }) => {
 
@@ -14,30 +18,30 @@ const ReturnButton = ({ isInSequencer }) => {
 
   function handleLogoutClick () {
     signOut(auth).then(() => {
-      navigate('/');
+      navigate(root);
     });
   }
 
   function handleDashboardClick () {
-    navigate(user ? `/${user.uid}` : '/');
+    navigate(user ? `/${user.uid}` : root);
   }
 
-  const buttonStyle = {
-    backgroundColor: useDarkMode ? 'rgb(60 60 60)' : 'rgb(101 101 101)',
-    position: 'absolute',
-    top: 15,
-    right: 120,
-    width: isInSequencer ? 125 : 100,
-  };
+  const returnButtonClassNames = classNames({
+    [classes.returnButton]: true,
+    [classes.returnButtonDark]: useDarkMode,
+  });
+
+  const buttonText = isInSequencer ? (user ? 'DASHBOARD' : 'LOG IN') : 'LOG OUT';
 
   return (
     <Button
       onClick={ isInSequencer ? handleDashboardClick : handleLogoutClick }
       variant='contained'
       size='small'
-      sx={buttonStyle}
+      sx={returnButtonSx}
+      className={returnButtonClassNames}
     >
-      {isInSequencer ? (user ? 'DASHBOARD' : 'LOG IN') : 'LOG OUT'}
+      { buttonText }
     </Button>
   );
 };

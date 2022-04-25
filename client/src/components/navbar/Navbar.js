@@ -1,12 +1,12 @@
 import React, { useContext } from 'react';
 import classNames from 'classnames';
 
-import NameDisplay from '../NameDisplay/NameDisplay';
+import NameDisplay from './NameDisplay/NameDisplay';
 import { DarkModeContext } from '../../contexts';
-import DarkModeButton from '../DarkModeButton';
-import ReturnButton from '../ReturnButton';
-import NavbarLogo from '../NavbarLogo/NavbarLogo';
-import NewLoopButton from '../NewLoopButton';
+import DarkModeButton from '../DarkModeButton/DarkModeButton';
+import ReturnButton from './ReturnButton/ReturnButton';
+import NavbarLogo from './NavbarLogo/NavbarLogo';
+import NewLoopButton from './NewLoopButton/NewLoopButton';
 import classes from './navbar.module.css';
 
 const Navbar = ({ isInSequencer, userRef }) => {

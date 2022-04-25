@@ -1,9 +1,9 @@
 import classNames from 'classnames';
 import React, { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import logoIcon from '../../assets/images/radish.png';
+import logoIcon from '../../../assets/images/radish.png';
 
-import { UserContext } from '../../contexts';
+import { UserContext } from '../../../contexts';
 import styles from './navbarLogo.module.css';
 
 const title = 'beetbox';

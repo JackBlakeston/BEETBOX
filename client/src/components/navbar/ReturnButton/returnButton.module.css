@@ -1,0 +1,10 @@
+.returnButton {
+  top: 15px;
+  right: 120px;
+  width: 100;
+  padding: 3px 20px;
+}
+
+.returnButtonDark {
+  background-color: rgb(60 60 60);
+}

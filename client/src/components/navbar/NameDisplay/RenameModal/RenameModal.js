@@ -3,7 +3,7 @@ import { Modal, TextField } from '@mui/material';
 import { Box } from '@mui/system';
 import { update } from 'firebase/database';
 
-import { DarkModeContext, LoopContext } from '../../contexts';
+import { DarkModeContext, LoopContext } from '../../../../contexts';
 import classes from './renameModal.module.css';
 import { textFieldProps, inputLabel, modalPadding, enterKey } from './constants';
 
