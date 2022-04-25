@@ -16,8 +16,7 @@ import Pad from './Pad';
 import { DarkModeContext, LoopContext, PlaybackContext } from '../contexts';
 import { get, update } from 'firebase/database';
 
-
-function PadRow ({ toggleActive, rowIndex, handleClickDelete, bankList, trackRef }) {
+const PadRow = ({ toggleActive, rowIndex, handleClickDelete, bankList, trackRef }) => {
 
   const [sampleList, setSampleList] = useState([]);
 
@@ -253,6 +252,6 @@ function PadRow ({ toggleActive, rowIndex, handleClickDelete, bankList, trackRef
     </div>
 
   );
-}
+};
 
 export default PadRow;

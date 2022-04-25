@@ -3,8 +3,7 @@ import { Box, Input, Slider } from '@mui/material';
 import { update } from 'firebase/database';
 import { LoopContext } from '../../../contexts';
 
-
-export default function BpmSlider () {
+const BpmSlider = () => {
 
   const { loop, setLoop } = useContext(LoopContext);
 
@@ -16,7 +15,6 @@ export default function BpmSlider () {
   }
 
   return (
-
     <div className='slider-container' id='bpm-controls'>
       <label>BPM</label>
       <Box className='slider-box' width={200}>
@@ -49,6 +47,7 @@ export default function BpmSlider () {
         }}
       />
     </div>
-
   );
-}
+};
+
+export default BpmSlider;

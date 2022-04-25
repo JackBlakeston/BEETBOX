@@ -7,16 +7,16 @@ import DarkModeButton from '../DarkModeButton';
 import ReturnButton from '../ReturnButton';
 import NavbarLogo from '../NavbarLogo/NavbarLogo';
 import NewLoopButton from '../NewLoopButton';
-import styles from './navbar.module.css';
+import classes from './navbar.module.css';
 
 const Navbar = ({ isInSequencer, userRef }) => {
   const { useDarkMode } = useContext(DarkModeContext);
 
-  const mainContainerClassNames = classNames(
-    { [styles.mainContainer]: true },
-    { [styles.mainContainerDark]: useDarkMode },
-    { [styles.mainContainerSmall]: isInSequencer }
-  );
+  const mainContainerClassNames = classNames({
+    [classes.mainContainer]: true,
+    [classes.mainContainerDark]: useDarkMode,
+    [classes.mainContainerSmall]: isInSequencer,
+  });
 
   return (
     <div className={mainContainerClassNames}>

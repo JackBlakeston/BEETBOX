@@ -4,9 +4,7 @@ import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutli
 
 import { DarkModeContext } from '../../contexts';
 
-
-
-export default function RenameButton ({ handleModalOpen }) {
+const RenameButton = ({ handleModalOpen }) => {
 
   const { useDarkMode } = useContext(DarkModeContext);
 
@@ -34,4 +32,6 @@ export default function RenameButton ({ handleModalOpen }) {
       />
     </IconButton>
   );
-}
+};
+
+export default RenameButton;

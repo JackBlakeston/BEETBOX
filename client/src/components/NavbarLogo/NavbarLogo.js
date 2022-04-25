@@ -8,7 +8,7 @@ import styles from './navbarLogo.module.css';
 
 const title = 'beetbox';
 
-export default function NavbarLogo ({ isInSequencer }) {
+const NavbarLogo = ({ isInSequencer }) => {
 
   const navigate = useNavigate();
 
@@ -32,4 +32,6 @@ export default function NavbarLogo ({ isInSequencer }) {
       <h1>{ title }</h1>
     </div>
   );
-}
+};
+
+export default NavbarLogo;

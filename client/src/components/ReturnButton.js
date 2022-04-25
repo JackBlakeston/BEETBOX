@@ -5,7 +5,7 @@ import { auth } from '../firebase/firebaseService';
 import { signOut } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 
-export default function ({ isInSequencer }) {
+const ReturnButton = ({ isInSequencer }) => {
 
   const navigate = useNavigate();
 
@@ -40,4 +40,6 @@ export default function ({ isInSequencer }) {
       {isInSequencer ? (user ? 'DASHBOARD' : 'LOG IN') : 'LOG OUT'}
     </Button>
   );
-}
+};
+
+export default ReturnButton;

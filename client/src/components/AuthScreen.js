@@ -9,7 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import logo from '../assets/images/BEETBOX_LOGO.png';
 import DarkModeButton from './DarkModeButton';
 
-function AuthScreen () {
+const AuthScreen = () => {
 
   const navigate = useNavigate();
 
@@ -146,7 +146,6 @@ function AuthScreen () {
       </div>
     </>
   );
-}
-
+};
 
 export default AuthScreen;

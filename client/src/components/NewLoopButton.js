@@ -14,7 +14,7 @@ const newLoop = { // ?? Maybe take this out to another file??
   trackCounter: 0,
 };
 
-export default function ({ userRef }) {
+const NewLoopButton = ({ userRef }) => {
 
   const navigate = useNavigate();
 
@@ -55,4 +55,6 @@ export default function ({ userRef }) {
       </Button>
     </div>
   );
-}
+};
+
+export default NewLoopButton;

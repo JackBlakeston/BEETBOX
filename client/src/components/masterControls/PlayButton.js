@@ -4,11 +4,9 @@ import StopIcon from '@mui/icons-material/Stop';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import { PlaybackContext } from '../../contexts';
 
-
-export default function PlayButton () {
+const PlayButton = () => {
 
   const { isPlaying, togglePlaying } = useContext(PlaybackContext);
-
 
   let buttonText = isPlaying ? 'Stop' : 'Play';
 
@@ -28,4 +26,6 @@ export default function PlayButton () {
       </div>
     </Button>
   );
-}
+};
+
+export default PlayButton;

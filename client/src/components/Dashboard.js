@@ -21,7 +21,7 @@ async function getLoopByKey (loopKey, userRef) {
   return snapshot.val();
 }
 
-function Dashboard () {
+const Dashboard = () => {
 
   const navigate = useNavigate();
   const params = useParams();
@@ -134,8 +134,6 @@ function Dashboard () {
 
     </div>
   );
-}
-
-
+};
 
 export default Dashboard;

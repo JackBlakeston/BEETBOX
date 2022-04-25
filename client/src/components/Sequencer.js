@@ -19,7 +19,7 @@ async function getLoop (ref) {
   return snapshot.val();
 }
 
-function Sequencer () {
+const Sequencer = () => {
 
   let params = useParams();
 
@@ -152,11 +152,8 @@ function Sequencer () {
   return (
     <>
       <PlaybackContext.Provider value={playbackValues} >
-
         <div className='sequencer' >
-
           <Navbar isInSequencer={true}/>
-
           <div>
             <div
               style={{
@@ -210,6 +207,6 @@ function Sequencer () {
       </PlaybackContext.Provider>
     </>
   );
-}
+};
 
 export default Sequencer;

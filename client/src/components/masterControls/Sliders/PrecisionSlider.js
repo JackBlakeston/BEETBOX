@@ -9,7 +9,7 @@ const precisionMarks = [0, 1, 2].map(mark => {
   return { value: mark };
 });
 
-export default function PrecisionSlider () {
+const PrecisionSlider = () => {
 
   const { loop, setLoop } = useContext(LoopContext);
   const { isPlaying, togglePlaying } = useContext(PlaybackContext);
@@ -70,4 +70,6 @@ export default function PrecisionSlider () {
       </output>
     </div>
   );
-}
+};
+
+export default PrecisionSlider;

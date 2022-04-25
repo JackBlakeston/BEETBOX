@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { DarkModeContext } from '../contexts';
 
-function Pad (props) {
+const Pad = (props) => {
 
   const { useDarkMode } = useContext(DarkModeContext);
 
@@ -23,6 +23,6 @@ function Pad (props) {
       </div>
     </div>
   );
-}
+};
 
 export default Pad;

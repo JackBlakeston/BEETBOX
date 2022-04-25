@@ -1,0 +1,19 @@
+.nameContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 60px;
+  gap: 5px;
+}
+
+.loopName {
+  padding: 2px 30px 2px 30px;
+  border-radius: 7px;
+  color: rgb(70, 70, 70);
+  background-color:rgb(190 190 190);
+}
+
+.loopNameDark {
+  color: rgb(180 180 180);
+  background-color:rgb(57 57 57);
+}

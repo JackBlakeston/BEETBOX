@@ -4,11 +4,18 @@ import { Box } from '@mui/system';
 import { update } from 'firebase/database';
 import { LoopContext, PlaybackContext } from '../../../contexts';
 
-const sizeMarks = [2, 3, 4, 5].map(mark => {
+const sizeMarkLabels = {
+  four: 2,
+  eight: 3,
+  sixteen: 4,
+  thirtyTwo: 5
+};
+
+const sizeMarks = Object.values(sizeMarkLabels).map(mark => {
   return { value: mark };
 });
 
-export default function SizeSlider () {
+const SizeSlider = () => {
 
   const { loop, setLoop } = useContext(LoopContext);
   const { isPlaying, togglePlaying, pos } = useContext(PlaybackContext);
@@ -46,4 +53,6 @@ export default function SizeSlider () {
       </output>
     </div>
   );
-}
+};
+
+export default SizeSlider;

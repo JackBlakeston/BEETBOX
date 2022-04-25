@@ -4,8 +4,7 @@ import DarkModeIcon from '@mui/icons-material/DarkMode';
 
 import { DarkModeContext } from '../contexts';
 
-
-export default function DarkModeButton () {
+const DarkModeButton = () => {
 
   const { useDarkMode, setUseDarkMode } = useContext(DarkModeContext);
 
@@ -23,4 +22,6 @@ export default function DarkModeButton () {
       <DarkModeIcon />
     </IconButton>
   );
-}
+};
+
+export default DarkModeButton;
