@@ -4,7 +4,7 @@ import { update } from 'firebase/database';
 import { LoopContext } from '../../../contexts';
 
 
-export function BpmSlider () {
+export default function BpmSlider () {
 
   const { loop, setLoop } = useContext(LoopContext);
 

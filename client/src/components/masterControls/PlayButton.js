@@ -5,7 +5,7 @@ import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import { PlaybackContext } from '../../contexts';
 
 
-export function PlayButton () {
+export default function PlayButton () {
 
   const { isPlaying, togglePlaying } = useContext(PlaybackContext);
 

@@ -8,7 +8,7 @@ const sizeMarks = [2, 3, 4, 5].map(mark => {
   return { value: mark };
 });
 
-export function SizeSlider () {
+export default function SizeSlider () {
 
   const { loop, setLoop } = useContext(LoopContext);
   const { isPlaying, togglePlaying, pos } = useContext(PlaybackContext);

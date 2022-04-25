@@ -5,13 +5,13 @@ import { useParams } from 'react-router-dom';
 
 import '../App.css'; // TODO change name or refactor all styles
 import PadRow from './PadRow';
-import Controls from './masterControls/Controls';
+import MasterControls from './MasterControls/MasterControls';
 import { dbRef, getBankRefList } from '../firebase/firebaseService';
 import { DarkModeContext, LoopContext, PlaybackContext } from '../contexts';
 import { child, get, remove, update } from 'firebase/database';
 import calculateTempo from '../utils/calculateTempo';
 import useInterval from '../utils/useInterval';
-import Navbar from './navbar/Navbar';
+import Navbar from './Navbar/Navbar';
 
 
 async function getLoop (ref) {
@@ -163,7 +163,7 @@ function Sequencer () {
                 backgroundColor: useDarkMode ? 'rgb(40, 40, 40)' : 'rgb(230 230 230)'
               }}
             >
-              { loop && <Controls/>}
+              { loop && <MasterControls/>}
             </div>
 
             <div className='pads-container' >
