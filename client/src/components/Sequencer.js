@@ -107,44 +107,6 @@ function Sequencer () {
     setActiveRows(activeRowsAux);
   }
 
-  function changeGridSize (event) {
-    const newSize = Number(2 ** event.target.value);
-    if (isPlaying && newSize < loop.gridSize && pos > newSize) togglePlaying();
-
-    setLoop({...loop, gridSize: newSize});
-    update(loopRef.current, { gridSize: newSize });
-  }
-
-  function changePrecision (event) {
-    const newPrecision = Number(1 / 2 ** event.target.value);
-    if (isPlaying) togglePlaying();
-    const padsCopy = [...loop.pads];
-    const factor = loop.precision / newPrecision;
-    let newPads;
-
-    if (factor > 1) {
-      newPads = padsCopy.map(padRow => padRow.map(pad => {
-        const splitPadArr = Array(factor - 1).fill(0);
-        splitPadArr.unshift(pad);
-        return splitPadArr;
-      }).flat());
-
-    } else if (factor < 1) {
-      newPads = padsCopy.map(padRow => {
-        const joinedPadArr = [];
-        for ( let i = 0; i < padRow.length; i += (1 / factor) ) {
-          joinedPadArr.push(padRow[i]);
-        }
-        return joinedPadArr;
-      });
-    } else {
-      return;
-    }
-
-    setLoop({...loop, pads: newPads, precision: newPrecision});
-    update(loopRef.current, { pads: newPads, precision: newPrecision });
-  }
-
   function toggleActive (rowIndex, id) {
     let padsCopy = [...loop.pads];
     let padState = padsCopy[rowIndex][id];
@@ -368,13 +330,9 @@ function Sequencer () {
           }}
         >
           { loop && <Controls
-            playing={isPlaying}
+            isPlaying={isPlaying}
             togglePlaying={togglePlaying}
-            bpm={loop?.bpm}
-            gridSize={loop?.gridSize}
-            handleGridSizeChange={changeGridSize}
-            precision={loop?.precision}
-            handlePrecisionChange={changePrecision}
+            pos={pos}
           />}
         </div>
 

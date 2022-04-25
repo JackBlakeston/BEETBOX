@@ -1,12 +1,24 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Slider } from '@mui/material';
 import { Box } from '@mui/system';
+import { update } from 'firebase/database';
+import { LoopContext } from '../../../contexts';
 
 const sizeMarks = [2, 3, 4, 5].map(mark => {
   return { value: mark };
 });
 
-export function SizeSlider ({ gridSize, handleGridSizeChange }) {
+export function SizeSlider ({ isPlaying, pos, togglePlaying }) {
+
+  const { loop, setLoop } = useContext(LoopContext);
+
+  function handleGridSizeChange (event) {
+    const newSize = Number(2 ** event.target.value);
+    if (isPlaying && newSize < loop.gridSize && pos > newSize) togglePlaying();
+
+    setLoop({...loop, gridSize: newSize});
+    update(loop.ref, { gridSize: newSize });
+  }
 
   return (
     <div className='slider-container' id='grid-size-controls'>
@@ -17,7 +29,7 @@ export function SizeSlider ({ gridSize, handleGridSizeChange }) {
           step={null}
           min={2}
           max={5}
-          value={Math.log2(gridSize)}
+          value={Math.log2(loop.gridSize)}
           onChange={handleGridSizeChange}
           sx={{
             '& .MuiSlider-thumb': {
@@ -29,7 +41,7 @@ export function SizeSlider ({ gridSize, handleGridSizeChange }) {
         />
       </Box>
       <output>
-        {gridSize}
+        {loop.gridSize}
       </output>
     </div>
   );

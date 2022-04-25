@@ -4,7 +4,7 @@ import { update } from 'firebase/database';
 import { LoopContext } from '../../../contexts';
 
 
-export function BpmSlider ({ bpm }) {
+export function BpmSlider () {
 
   const { loop, setLoop } = useContext(LoopContext);
 
@@ -24,7 +24,7 @@ export function BpmSlider ({ bpm }) {
           min={1}
           max={420}
           step={1}
-          value={bpm}
+          value={loop.bpm}
           onChange={handleTempoChange}
           sx={{
             '& .MuiSlider-thumb': {
@@ -36,7 +36,7 @@ export function BpmSlider ({ bpm }) {
         />
       </Box>
       <Input
-        value={bpm}
+        value={loop.bpm}
         size="small"
         onChange={handleTempoChange}
         inputProps={{

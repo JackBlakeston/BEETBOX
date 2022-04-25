@@ -1,14 +1,47 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Box, Slider } from '@mui/material';
 import Fraction from 'fraction.js';
+import { LoopContext } from '../../../contexts';
+import { update } from 'firebase/database';
 
 
 const precisionMarks = [0, 1, 2].map(mark => {
   return { value: mark };
 });
 
-export function PrecisionSlider ({ precision, handlePrecisionChange }) {
+export function PrecisionSlider ({ isPlaying }) {
 
+  const { loop, setLoop } = useContext(LoopContext);
+
+  function handlePrecisionChange (event) {
+    const newPrecision = Number(1 / 2 ** event.target.value);
+    if (isPlaying) togglePlaying();
+    const padsCopy = [...loop.pads];
+    const factor = loop.precision / newPrecision;
+    let newPads;
+
+    if (factor > 1) {
+      newPads = padsCopy.map(padRow => padRow.map(pad => {
+        const splitPadArr = Array(factor - 1).fill(0);
+        splitPadArr.unshift(pad);
+        return splitPadArr;
+      }).flat());
+
+    } else if (factor < 1) {
+      newPads = padsCopy.map(padRow => {
+        const joinedPadArr = [];
+        for ( let i = 0; i < padRow.length; i += (1 / factor) ) {
+          joinedPadArr.push(padRow[i]);
+        }
+        return joinedPadArr;
+      });
+    } else {
+      return;
+    }
+
+    setLoop({...loop, pads: newPads, precision: newPrecision});
+    update(loop.ref, { pads: newPads, precision: newPrecision });
+  }
 
   return (
     <div className='slider-container' id='precision-controls'>
@@ -19,7 +52,7 @@ export function PrecisionSlider ({ precision, handlePrecisionChange }) {
           step={null}
           min={0}
           max={2}
-          value={Math.log2(1 / precision)}
+          value={Math.log2(1 / loop.precision)}
           onChange={handlePrecisionChange}
           track={false}
           sx={{
@@ -32,7 +65,7 @@ export function PrecisionSlider ({ precision, handlePrecisionChange }) {
         />
       </Box>
       <output>
-        {new Fraction(precision).toFraction()}
+        {new Fraction(loop.precision).toFraction()}
       </output>
     </div>
   );

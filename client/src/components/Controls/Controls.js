@@ -5,33 +5,25 @@ import { PlayButton } from './PlayButton';
 import { SizeSlider } from './Sliders/SizeSlider';
 import { PrecisionSlider } from './Sliders/PrecisionSlider';
 
-function Controls ({
-  playing, togglePlaying,
-  bpm, handleTempoChange,
-  gridSize, handleGridSizeChange,
-  precision, handlePrecisionChange
-}) {
+function Controls ({ isPlaying, togglePlaying, pos }) {
 
   return (
     <div className="controls">
       <PlayButton
-        playing={playing}
+        playing={isPlaying}
         togglePlaying={togglePlaying}
       />
 
-      <BpmSlider
-        bpm={bpm}
-        handleTempoChange={handleTempoChange}
-      />
+      <BpmSlider/>
 
       <SizeSlider
-        gridSize={gridSize}
-        handleGridSizeChange={handleGridSizeChange}
+        isPlaying={isPlaying}
+        togglePlaying={togglePlaying}
+        pos={pos}
       />
 
       <PrecisionSlider
-        precision={precision}
-        handlePrecisionChange={handlePrecisionChange}
+        isPlaying={isPlaying}
       />
 
     </div>
