@@ -1,8 +1,19 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Box, Input, Slider } from '@mui/material';
+import { update } from 'firebase/database';
+import { LoopContext } from '../../../contexts';
 
 
-export function BpmSlider ({ bpm, handleTempoChange }) {
+export function BpmSlider ({ bpm }) {
+
+  const { loop, setLoop } = useContext(LoopContext);
+
+  function handleTempoChange (event) {
+    const newBpm = Number(event.target.value);
+
+    setLoop({...loop, bpm: newBpm});
+    update(loop.ref, { bpm: newBpm });
+  }
 
   return (
 

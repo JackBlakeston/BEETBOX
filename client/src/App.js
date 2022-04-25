@@ -7,7 +7,7 @@ import { CssBaseline } from '@mui/material';
 import AuthScreen from './components/AuthScreen';
 import Dashboard from './components/Dashboard';
 import Sequencer from './components/Sequencer';
-import { DarkModeContext, LoopContext, UserContext } from './contexts';
+import { DarkModeContext, DbRefsContext, LoopContext, UserContext } from './contexts';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from './firebase/firebaseService';
 
@@ -21,6 +21,9 @@ export function App () {
 
   const [loop, setLoop] = useState(null);
   const loopValues = { loop, setLoop };
+
+  const [dbRefs, setDbRefs] = useState(null);
+  const dbRefsValues = { dbRefs, setDbRefs };
 
   useEffect(() => {
     onAuthStateChanged(auth, (observedUser) => {
@@ -62,23 +65,25 @@ export function App () {
 
   return (
     <>
-      <UserContext.Provider value={userValues}>
-        <DarkModeContext.Provider value={darkModeValues}>
-          <LoopContext.Provider value={loopValues}>
-            <ThemeProvider theme={theme}>
-              <CssBaseline />
-              <BrowserRouter>
-                <Routes>
-                  <Route path="/" element={<AuthScreen/>} />
-                  <Route path='/:uid' element={<Dashboard/>}/>
-                  {/* <Route path="/sequencer" element={<Sequencer/>} /> */ }
-                  <Route path="/:uid/sequencer/:loopid" element={<Sequencer/>} />
-                </Routes>
-              </BrowserRouter>
-            </ThemeProvider>
-          </LoopContext.Provider>
-        </DarkModeContext.Provider>
-      </UserContext.Provider>
+      <DbRefsContext.Provider value={dbRefsValues}>
+        <UserContext.Provider value={userValues}>
+          <DarkModeContext.Provider value={darkModeValues}>
+            <LoopContext.Provider value={loopValues}>
+              <ThemeProvider theme={theme}>
+                <CssBaseline />
+                <BrowserRouter>
+                  <Routes>
+                    <Route path="/" element={<AuthScreen/>} />
+                    <Route path='/:uid' element={<Dashboard/>}/>
+                    {/* <Route path="/sequencer" element={<Sequencer/>} /> */ }
+                    <Route path="/:uid/sequencer/:loopid" element={<Sequencer/>} />
+                  </Routes>
+                </BrowserRouter>
+              </ThemeProvider>
+            </LoopContext.Provider>
+          </DarkModeContext.Provider>
+        </UserContext.Provider>
+      </DbRefsContext.Provider>
     </>
   );
 }

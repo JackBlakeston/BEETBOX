@@ -8,10 +8,11 @@ import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutli
 import '../App.css'; // TODO change name or refactor all styles
 import PadRow from './PadRow';
 import Controls from './Controls/Controls';
-import { dbRef, getBankRefList, getSampleList } from '../firebase/firebaseService';
+import { dbRef, getBankRefList } from '../firebase/firebaseService';
 import { DarkModeContext, LoopContext, UserContext } from '../contexts';
 import { child, get, remove, update } from 'firebase/database';
 import logoIcon from '../assets/images/radish.png';
+import calculateTempo from '../utils/calculateTempo';
 
 
 async function getLoop (ref) {
@@ -38,7 +39,6 @@ function Sequencer () {
   const { user } = useContext(UserContext);
 
   // Categories from DB
-  const [sampleList, setSampleList] = useState([]); // TODO CHECK Do we need this here?
   const [bankList, setBanklist] = useState([]); // TODO CHECK Do we need this here? Probably better in App and passed as context
 
   // Audio playback control
@@ -53,15 +53,11 @@ function Sequencer () {
 
   useEffect(() => {
     getLoop(loopRef.current).then(data => {
-      setLoop(data);
+      setLoop({...data, ref: loopRef.current});
     });
   }, [setLoop]);
 
   useEffect(() => {
-    getSampleList().then(list => {
-      setSampleList(list);
-    });
-
     getBankRefList().then(list => {
       setBanklist(list);
     });
@@ -139,17 +135,6 @@ function Sequencer () {
       });
     });
     setActiveRows(activeRowsAux);
-  }
-
-  function calculateTempo (bpm) {
-    return 60000 / bpm;
-  }
-
-  function changeBpm (event) {
-    const newBpm = Number(event.target.value);
-
-    setLoop({...loop, bpm: newBpm});
-    update(loopRef.current, { bpm: newBpm });
   }
 
   function changeGridSize (event) {
@@ -415,7 +400,6 @@ function Sequencer () {
           { loop && <Controls
             playing={isPlaying}
             togglePlaying={togglePlaying}
-            handleTempoChange={changeBpm}
             bpm={loop?.bpm}
             gridSize={loop?.gridSize}
             handleGridSizeChange={changeGridSize}
@@ -437,7 +421,6 @@ function Sequencer () {
               rowIndex={index}
               isTriggering={activeRows[index]}
               isLooped={isLooped}
-              sampleList={sampleList}
               bankList={bankList}
               gridSize={loop?.gridSize}
               precision={loop?.precision}

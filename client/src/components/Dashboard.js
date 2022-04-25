@@ -74,10 +74,10 @@ function Dashboard () {
       trackList: {},
       trackCounter: 0,
     };
-    const loopRef = push(userRef, newLoop);
+    const newLoopRef = push(userRef, newLoop);
 
-    setLoop({...newLoop, ref: loopRef});
-    navigate(`sequencer/${loopRef.key}`);
+    setLoop({...newLoop, ref: newLoopRef});
+    navigate(`sequencer/${newLoopRef.key}`);
   }
 
   function handleClickDelete (e, loopKey) {
