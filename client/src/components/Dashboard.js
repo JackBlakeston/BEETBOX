@@ -26,7 +26,7 @@ function Dashboard () {
   const navigate = useNavigate();
   const params = useParams();
 
-  const [loopList, setLoopList] = useState({});
+  const [loopList, setLoopList] = useState(null);
 
   const { user } = useContext(UserContext);
   const { setLoop } = useContext(LoopContext);
@@ -76,7 +76,7 @@ function Dashboard () {
 
       <div className='loop-list-container'>
         <ul className='loop-list'>
-          {Object.keys(loopList)?.length > 0 ? Object.keys(loopList).map(loopKey => {
+          {loopList && (Object.keys(loopList)?.length > 0 ? Object.keys(loopList).map(loopKey => {
             return (
               <li key={loopKey}>
                 <Paper
@@ -127,7 +127,7 @@ function Dashboard () {
             : <div className='no-loops-message-container'>
               <h1>You have no beets yet</h1>
               <h1>Drop a fresh beet and bless the world with your rythm!</h1>
-            </div>}
+            </div>)}
         </ul>
       </div>
 
