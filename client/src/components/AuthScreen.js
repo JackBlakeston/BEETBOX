@@ -1,13 +1,13 @@
 import { createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword } from 'firebase/auth';
 import { React, useContext, useEffect, useState } from 'react';
-import DarkModeIcon from '@mui/icons-material/DarkMode';
-import { Button, IconButton, Paper, Tab, Tabs, TextField } from '@mui/material';
+import { Button, Paper, Tab, Tabs, TextField } from '@mui/material';
 import { Box } from '@mui/system';
 
 import { auth } from '../firebase/firebaseService';
-import { DarkModeContext, UserContext } from '../contexts';
+import { UserContext } from '../contexts';
 import { useNavigate } from 'react-router-dom';
 import logo from '../assets/images/BEETBOX_LOGO.png';
+import DarkModeButton from './navbar/DarkModeButton';
 
 function AuthScreen () {
 
@@ -21,7 +21,6 @@ function AuthScreen () {
   const [registerPass, setRegisterPass] = useState('');
 
   const { setUser } = useContext(UserContext);
-  const {useDarkMode, setUseDarkMode} = useContext(DarkModeContext);
 
   useEffect(() => {
     onAuthStateChanged(auth, (observedUser) => {
@@ -81,18 +80,7 @@ function AuthScreen () {
 
   return (
     <>
-      <IconButton
-        aria-label="dark-mode"
-        size="small"
-        onClick={() => setUseDarkMode(!useDarkMode) }
-        sx={{
-          position: 'absolute',
-          top: 13,
-          right: 40
-        }}
-      >
-        <DarkModeIcon/>
-      </IconButton>
+      <DarkModeButton/>
 
       <div className='auth-container'>
         <img

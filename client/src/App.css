@@ -31,30 +31,6 @@
 /* DASHBOARD */
 
 
-/* Navbar */
-.title-container {
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 100%;
-  width: 185px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  cursor: pointer;
-}
-
-.title {
-  color: #d81a60;
-  margin: unset;
-}
-
-.logo-icon {
-  margin-bottom: 10px;
-  height: 28px;
-}
-
-
 /* Loop list */
 .loop-list {
   list-style: none;
@@ -64,6 +40,7 @@
   gap: 40px;
   overflow-y: overlay;
   margin-top: 60px;
+  padding-left: unset;
 }
 
 .loop-info-container {
@@ -93,28 +70,11 @@
 .no-loops-message-container {
   text-align: center;
   font-size: 14px;
+  width: 400px;
 }
 
 
 /* SEQUENCER */
-
-/* .sequencer {
-
-} */
-
-/* Name display */
-.loop-name-container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 60px;
-  gap: 5px;
-}
-.loop-name-container h4 {
-  padding: 2px 30px 2px 30px;
-  border-radius: 7px;
-  background-color: unset;
-}
 
 /* Controls */
 .controls {

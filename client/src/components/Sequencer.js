@@ -1,19 +1,17 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import * as Tone from 'tone';
-import { IconButton, Box, Button, TextField, Modal } from '@mui/material';
-import DarkModeIcon from '@mui/icons-material/DarkMode';
-import { useNavigate, useParams } from 'react-router-dom';
-import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline';
+import { Box, Button } from '@mui/material';
+import { useParams } from 'react-router-dom';
 
 import '../App.css'; // TODO change name or refactor all styles
 import PadRow from './PadRow';
 import Controls from './masterControls/Controls';
 import { dbRef, getBankRefList } from '../firebase/firebaseService';
-import { DarkModeContext, LoopContext, PlaybackContext, UserContext } from '../contexts';
+import { DarkModeContext, LoopContext, PlaybackContext } from '../contexts';
 import { child, get, remove, update } from 'firebase/database';
-import logoIcon from '../assets/images/radish.png';
 import calculateTempo from '../utils/calculateTempo';
 import useInterval from '../utils/useInterval';
+import Navbar from './navbar/Navbar';
 
 
 async function getLoop (ref) {
@@ -23,7 +21,6 @@ async function getLoop (ref) {
 
 function Sequencer () {
 
-  const navigate = useNavigate();
   let params = useParams();
 
   const userRef = useRef(child(dbRef, params.uid));
@@ -34,10 +31,9 @@ function Sequencer () {
   const { loop, setLoop } = useContext(LoopContext);
 
   // Dark mode
-  const {useDarkMode, setUseDarkMode} = useContext(DarkModeContext);
+  const { useDarkMode } = useContext(DarkModeContext);
 
   // User info
-  const { user } = useContext(UserContext);
 
   // Categories from DB
   const [bankList, setBanklist] = useState([]); // TODO CHECK Do we need this here? Probably better in App and passed as context
@@ -46,10 +42,6 @@ function Sequencer () {
   const [pos, setPos] = useState(-1);
   const [isPlaying, setIsPlaying] = useState(false);
   const playbackValues = { pos, setPos, isPlaying, togglePlaying };
-
-
-  // Modal status
-  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     getLoop(loopRef.current).then(data => {
@@ -93,7 +85,7 @@ function Sequencer () {
     let padsCopy = [...loop.pads];
     let padState = padsCopy[rowIndex][id];
     if (padState === 1) {
-      padsCopy[rowIndex][id] = 0; // ???? DO WE NEED TO CHANGE THIS FOR PADSCOPY??
+      padsCopy[rowIndex][id] = 0;
     } else {
       padsCopy[rowIndex][id] = 1;
     }
@@ -157,158 +149,13 @@ function Sequencer () {
     remove(trackRef);
   }
 
-  function handleNameChange (event) {
-    const newName = event.target.value;
-    setLoop({...loop, name: newName});
-    update(loopRef.current, { name: newName });
-  }
-
-  function handleModalClose () {
-    setIsModalOpen(false);
-  }
-
-  function handleModalOpen () {
-    setIsModalOpen(true);
-  }
-
-  const modalStyle = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: 500,
-    height: 200,
-    bgcolor: useDarkMode ? '#212121' : '#dcdcdc',
-    border: '2px solid #d81b60',
-    boxShadow: 24,
-    pt: 2,
-    px: 4,
-    pb: 3,
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    borderRadius: 5,
-  };
-
   return (
     <>
       <PlaybackContext.Provider value={playbackValues} >
 
         <div className='sequencer' >
 
-
-
-          <div className='name-modal-container'>
-            <Modal
-              open={isModalOpen}
-              onClose={handleModalClose}
-            >
-              <Box sx={modalStyle}>
-                <h3
-                  style={{
-                    fontSize: 25,
-                    margin: '10px 0 0 0',
-                  }}
-                >
-              Beet name
-                </h3>
-                <form autoComplete='off' onSubmit={() => setIsModalOpen(false)}>
-                  <TextField
-                    onFocus={event => {
-                      event.target.select();
-                    }}
-                    onChange={handleNameChange}
-                    value={loop?.name}
-                    inputProps={{
-                      style: {
-                        fontSize: 24
-                      }
-                    }}
-                  />
-                </form>
-              </Box>
-            </Modal>
-          </div>
-
-          <div
-            style={{
-              backgroundColor: useDarkMode ? 'rgb(35, 35, 35)' : 'rgb(220 220 220)',
-              zIndex: 5,
-              position: 'sticky',
-              top: 0,
-              minHeight: 60
-            }}
-          >
-
-            <div
-              className='title-container'
-              style={{ padding: '0 0 0px 10px' }}
-              onClick={() => navigate(user ? `/${user.uid}` : '/')}
-            >
-              <img
-                src={logoIcon}
-                alt=''
-                className='logo-icon'
-              />
-              <h1 className='title' >BEETBOX</h1>
-            </div>
-
-            <div className='loop-name-container'>
-              <h4
-                style={{
-                  color: useDarkMode ? 'rgb(180 180 180)' : 'rgb(70, 70, 70)',
-                  backgroundColor: useDarkMode ? 'rgb(57 57 57)' : 'rgb(190 190 190)'
-                }}
-              >
-                {loop?.name}
-              </h4>
-              <IconButton
-                size="small"
-                onClick={handleModalOpen}
-                sx={{
-                  '&:hover': {
-                    backgroundColor: useDarkMode ? '#d81a609c' : '#d81a6073',
-                  },
-                  '&:hover > svg': {
-                    fill: useDarkMode ? '#b1a9a9' : '#393939'
-                  }
-                }}
-              >
-                <DriveFileRenameOutlineIcon
-                  sx={{ fill: 'rgb(129 128 128)' }}
-                />
-              </IconButton>
-            </div>
-
-            <IconButton
-              aria-label="dark-mode"
-              onClick={() => setUseDarkMode(!useDarkMode) }
-              sx={{
-                position: 'absolute',
-                top: 10,
-                right: 37,
-              }}
-            >
-              <DarkModeIcon />
-            </IconButton>
-
-            <Button
-              onClick={() => navigate(user ? `/${user.uid}` : '/')}
-              variant='contained'
-              size='small'
-              sx={{
-                backgroundColor: useDarkMode ? 'rgb(60 60 60)' : 'rgb(101 101 101)',
-                position: 'absolute',
-                top: 15,
-                right: 120,
-                width: 200
-              }}
-            >
-              {user ? 'DASHBOARD' : 'LOG IN'}
-            </Button>
-
-          </div>
+          <Navbar isInSequencer={true}/>
 
           <div>
             <div
