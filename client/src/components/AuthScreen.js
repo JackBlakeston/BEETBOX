@@ -7,7 +7,7 @@ import { auth } from '../firebase/firebaseService';
 import { UserContext } from '../contexts';
 import { useNavigate } from 'react-router-dom';
 import logo from '../assets/images/BEETBOX_LOGO.png';
-import DarkModeButton from './Navbar/DarkModeButton';
+import DarkModeButton from './DarkModeButton';
 
 function AuthScreen () {
 

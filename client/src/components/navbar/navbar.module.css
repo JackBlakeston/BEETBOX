@@ -1,0 +1,15 @@
+.mainContainer {
+  z-index: 5;
+  position: sticky;
+  top: 0;
+  background-color: rgb(220 220 220);
+  min-height: 100;
+}
+
+.mainContainerDark {
+  background-color: rgb(35, 35, 35);
+}
+
+.mainContainerSmall {
+  min-height: 60;
+}

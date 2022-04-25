@@ -1,40 +1,34 @@
 import React, { useContext } from 'react';
+import classNames from 'classnames';
 
-import NameBox from './nameDIsplay/NameDisplay';
+import NameDisplay from '../NameDisplay/NameDisplay';
 import { DarkModeContext } from '../../contexts';
-import DarkModeButton from './DarkModeButton';
-import ReturnButton from './ReturnButton';
-import NavbarLogo from './NavbarLogo';
-import NewLoopButton from './NewLoopButton';
+import DarkModeButton from '../DarkModeButton';
+import ReturnButton from '../ReturnButton';
+import NavbarLogo from '../NavbarLogo/NavbarLogo';
+import NewLoopButton from '../NewLoopButton';
+import styles from './navbar.module.css';
 
-export default function Navbar ({ isInSequencer, userRef }) {
-
+const Navbar = ({ isInSequencer, userRef }) => {
   const { useDarkMode } = useContext(DarkModeContext);
 
-  const navbarStyle = {
-    backgroundColor: useDarkMode ? 'rgb(35, 35, 35)' : 'rgb(220 220 220)',
-    zIndex: 5,
-    position: 'sticky',
-    top: 0,
-    minHeight: isInSequencer ? 60 : 100
-  };
+  const mainContainerClassNames = classNames(
+    { [styles.mainContainer]: true },
+    { [styles.mainContainerDark]: useDarkMode },
+    { [styles.mainContainerSmall]: isInSequencer }
+  );
 
   return (
-    <div
-      style={navbarStyle}
-    >
-
+    <div className={mainContainerClassNames}>
       <NavbarLogo isInSequencer={isInSequencer}/>
-
       {isInSequencer ?
-        <NameBox/> :
+        <NameDisplay/> :
         <NewLoopButton userRef={userRef} />
       }
-
       <DarkModeButton/>
-
       <ReturnButton isInSequencer={isInSequencer}/>
-
     </div>
   );
-}
+};
+
+export default Navbar;

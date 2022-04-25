@@ -1,0 +1,25 @@
+.mainContainer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 185px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  padding: 0 0 40px 10px;
+}
+.mainContainer img {
+  margin-bottom: 10px;
+  height: 28px;
+}
+.mainContainer h1 {
+  color: #d81a60;
+  margin: unset;
+  text-transform: uppercase;
+}
+
+.mainContainerSmall {
+  padding: 0 0 0px 10px;
+}

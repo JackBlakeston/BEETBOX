@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { IconButton } from '@mui/material';
 import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline';
 
-import { DarkModeContext } from '../../../contexts';
+import { DarkModeContext } from '../../contexts';
 
 
 

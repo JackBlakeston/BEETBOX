@@ -3,7 +3,7 @@ import { Modal, TextField } from '@mui/material';
 import { Box } from '@mui/system';
 import { update } from 'firebase/database';
 
-import { DarkModeContext, LoopContext } from '../../../contexts';
+import { DarkModeContext, LoopContext } from '../../contexts';
 
 const modalLabelStyle = { // ?? Is it better to put these outside of function when possible??
   fontSize: 25,

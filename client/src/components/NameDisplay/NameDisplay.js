@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
 
-import { DarkModeContext, LoopContext } from '../../../contexts';
+import { DarkModeContext, LoopContext } from '../../contexts';
 
 import NameModal from './NameModal';
 import RenameButton from './RenameButton';

@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { push } from 'firebase/database';
-import { LoopContext } from '../../contexts';
+import { LoopContext } from '../contexts';
 
 const newLoop = { // ?? Maybe take this out to another file??
   name: 'Untitled Beet',

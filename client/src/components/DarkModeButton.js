@@ -2,7 +2,7 @@ import { IconButton } from '@mui/material';
 import React, { useContext } from 'react';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 
-import { DarkModeContext } from '../../contexts';
+import { DarkModeContext } from '../contexts';
 
 
 export default function DarkModeButton () {

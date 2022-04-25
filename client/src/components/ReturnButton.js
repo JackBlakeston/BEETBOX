@@ -1,7 +1,7 @@
 import { Button } from '@mui/material';
 import React, { useContext } from 'react';
-import { DarkModeContext, UserContext } from '../../contexts';
-import { auth } from '../../firebase/firebaseService';
+import { DarkModeContext, UserContext } from '../contexts';
+import { auth } from '../firebase/firebaseService';
 import { signOut } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 
