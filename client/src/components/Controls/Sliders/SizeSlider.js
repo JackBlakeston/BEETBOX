@@ -2,15 +2,16 @@ import React, { useContext } from 'react';
 import { Slider } from '@mui/material';
 import { Box } from '@mui/system';
 import { update } from 'firebase/database';
-import { LoopContext } from '../../../contexts';
+import { LoopContext, PlaybackContext } from '../../../contexts';
 
 const sizeMarks = [2, 3, 4, 5].map(mark => {
   return { value: mark };
 });
 
-export function SizeSlider ({ isPlaying, pos, togglePlaying }) {
+export function SizeSlider () {
 
   const { loop, setLoop } = useContext(LoopContext);
+  const { isPlaying, togglePlaying, pos } = useContext(PlaybackContext);
 
   function handleGridSizeChange (event) {
     const newSize = Number(2 ** event.target.value);

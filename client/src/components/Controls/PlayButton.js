@@ -1,12 +1,16 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Button } from '@mui/material';
 import StopIcon from '@mui/icons-material/Stop';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import { PlaybackContext } from '../../contexts';
 
 
-export function PlayButton ({ playing, togglePlaying }) {
+export function PlayButton () {
 
-  let buttonText = playing ? 'Stop' : 'Play';
+  const { isPlaying, togglePlaying } = useContext(PlaybackContext);
+
+
+  let buttonText = isPlaying ? 'Stop' : 'Play';
 
   return (
     <Button
@@ -20,7 +24,7 @@ export function PlayButton ({ playing, togglePlaying }) {
     >
       <div className='play-button-inner-container'>
         {buttonText}
-        {playing ? <StopIcon className='play-button-icon'/> : <PlayArrowIcon className='play-button-icon'/>}
+        {isPlaying ? <StopIcon className='play-button-icon'/> : <PlayArrowIcon className='play-button-icon'/>}
       </div>
     </Button>
   );

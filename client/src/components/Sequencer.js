@@ -9,7 +9,7 @@ import '../App.css'; // TODO change name or refactor all styles
 import PadRow from './PadRow';
 import Controls from './Controls/Controls';
 import { dbRef, getBankRefList } from '../firebase/firebaseService';
-import { DarkModeContext, LoopContext, UserContext } from '../contexts';
+import { DarkModeContext, LoopContext, PlaybackContext, UserContext } from '../contexts';
 import { child, get, remove, update } from 'firebase/database';
 import logoIcon from '../assets/images/radish.png';
 import calculateTempo from '../utils/calculateTempo';
@@ -42,12 +42,11 @@ function Sequencer () {
   // Categories from DB
   const [bankList, setBanklist] = useState([]); // TODO CHECK Do we need this here? Probably better in App and passed as context
 
-  // Audio playback control
-  const [pos, setPos] = useState(0);
+  // Audio playback
+  const [pos, setPos] = useState(-1);
   const [isPlaying, setIsPlaying] = useState(false);
+  const playbackValues = { pos, setPos, isPlaying, togglePlaying };
 
-  const [activeRows, setActiveRows] = useState([]); // Tells all tracks if they should play or not
-  const [isLooped, setIsLooped] = useState(false); // Necessary for fixing visual delay
 
   // Modal status
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -69,9 +68,7 @@ function Sequencer () {
     if (loop?.trackList) {
       if (isPlaying) {
         clearInterval(timerId);
-        setPos(0);
-        setActiveRows(Array(Object.keys(loop.trackList).length).fill(false));
-        setIsLooped(false);
+        setPos(-1);
       }
       setIsPlaying(!isPlaying);
     }
@@ -87,33 +84,18 @@ function Sequencer () {
 
     if (currentPos > (loop.gridSize / loop.precision) - 1) {
       currentPos = 0;
-      setIsLooped(true);
     }
 
     setPos(currentPos);
-    checkPad();
-  }
-
-  function checkPad () {
-    const activeRowsAux = Array(Object.keys(loop.trackList).length).fill(false);
-
-    loop.pads.forEach((row, rowIndex) => {
-      row.forEach((pad, index) => {
-        if (index === pos && pad === 1) {
-          activeRowsAux[rowIndex] = true;
-        }
-      });
-    });
-    setActiveRows(activeRowsAux);
   }
 
   function toggleActive (rowIndex, id) {
     let padsCopy = [...loop.pads];
     let padState = padsCopy[rowIndex][id];
     if (padState === 1) {
-      loop.pads[rowIndex][id] = 0; // ???? DO WE NEED TO CHANGE THIS FOR PADSCOPY??
+      padsCopy[rowIndex][id] = 0; // ???? DO WE NEED TO CHANGE THIS FOR PADSCOPY??
     } else {
-      loop.pads[rowIndex][id] = 1;
+      padsCopy[rowIndex][id] = 1;
     }
 
     setLoop({...loop, pads: padsCopy});
@@ -210,175 +192,176 @@ function Sequencer () {
   };
 
   return (
-    <div className='sequencer'>
+    <>
+      <PlaybackContext.Provider value={playbackValues} >
 
-      <div className='modal-container'>
-        <Modal
-          open={isModalOpen}
-          onClose={handleModalClose}
-        >
-          <Box sx={modalStyle}>
-            <h3
-              style={{
-                fontSize: 25,
-                margin: '10px 0 0 0',
-              }}
+        <div className='sequencer' >
+
+
+
+          <div className='name-modal-container'>
+            <Modal
+              open={isModalOpen}
+              onClose={handleModalClose}
             >
+              <Box sx={modalStyle}>
+                <h3
+                  style={{
+                    fontSize: 25,
+                    margin: '10px 0 0 0',
+                  }}
+                >
               Beet name
-            </h3>
-            <form autoComplete='off' onSubmit={() => setIsModalOpen(false)}>
-              <TextField
-                onFocus={event => {
-                  event.target.select();
+                </h3>
+                <form autoComplete='off' onSubmit={() => setIsModalOpen(false)}>
+                  <TextField
+                    onFocus={event => {
+                      event.target.select();
+                    }}
+                    onChange={handleNameChange}
+                    value={loop?.name}
+                    inputProps={{
+                      style: {
+                        fontSize: 24
+                      }
+                    }}
+                  />
+                </form>
+              </Box>
+            </Modal>
+          </div>
+
+          <div
+            style={{
+              backgroundColor: useDarkMode ? 'rgb(35, 35, 35)' : 'rgb(220 220 220)',
+              zIndex: 5,
+              position: 'sticky',
+              top: 0,
+              minHeight: 60
+            }}
+          >
+
+            <div
+              className='title-container'
+              style={{ padding: '0 0 0px 10px' }}
+              onClick={() => navigate(user ? `/${user.uid}` : '/')}
+            >
+              <img
+                src={logoIcon}
+                alt=''
+                className='logo-icon'
+              />
+              <h1 className='title' >BEETBOX</h1>
+            </div>
+
+            <div className='loop-name-container'>
+              <h4
+                style={{
+                  color: useDarkMode ? 'rgb(180 180 180)' : 'rgb(70, 70, 70)',
+                  backgroundColor: useDarkMode ? 'rgb(57 57 57)' : 'rgb(190 190 190)'
                 }}
-                onChange={handleNameChange}
-                value={loop?.name}
-                inputProps={{
-                  style: {
-                    fontSize: 24
+              >
+                {loop?.name}
+              </h4>
+              <IconButton
+                size="small"
+                onClick={handleModalOpen}
+                sx={{
+                  '&:hover': {
+                    backgroundColor: useDarkMode ? '#d81a609c' : '#d81a6073',
+                  },
+                  '&:hover > svg': {
+                    fill: useDarkMode ? '#b1a9a9' : '#393939'
                   }
                 }}
-              />
-            </form>
-          </Box>
-        </Modal>
-      </div>
+              >
+                <DriveFileRenameOutlineIcon
+                  sx={{ fill: 'rgb(129 128 128)' }}
+                />
+              </IconButton>
+            </div>
 
-      <div
-        style={{
-          backgroundColor: useDarkMode ? 'rgb(35, 35, 35)' : 'rgb(220 220 220)',
-          zIndex: 5,
-          position: 'sticky',
-          top: 0,
-          minHeight: 60
-        }}
-      >
+            <IconButton
+              aria-label="dark-mode"
+              onClick={() => setUseDarkMode(!useDarkMode) }
+              sx={{
+                position: 'absolute',
+                top: 10,
+                right: 37,
+              }}
+            >
+              <DarkModeIcon />
+            </IconButton>
 
-        <div
-          className='title-container'
-          style={{ padding: '0 0 0px 10px' }}
-          onClick={() => navigate(user ? `/${user.uid}` : '/')}
-        >
-          <img
-            src={logoIcon}
-            alt=''
-            className='logo-icon'
-          />
-          <h1 className='title' >BEETBOX</h1>
-        </div>
+            <Button
+              onClick={() => navigate(user ? `/${user.uid}` : '/')}
+              variant='contained'
+              size='small'
+              sx={{
+                backgroundColor: useDarkMode ? 'rgb(60 60 60)' : 'rgb(101 101 101)',
+                position: 'absolute',
+                top: 15,
+                right: 120,
+                width: 200
+              }}
+            >
+              {user ? 'DASHBOARD' : 'LOG IN'}
+            </Button>
 
-        <div className='loop-name-container'>
-          <h4
-            style={{
-              color: useDarkMode ? 'rgb(180 180 180)' : 'rgb(70, 70, 70)',
-              backgroundColor: useDarkMode ? 'rgb(57 57 57)' : 'rgb(190 190 190)'
-            }}
-          >
-            {loop?.name}
-          </h4>
-          <IconButton
-            size="small"
-            onClick={handleModalOpen}
-            sx={{
-              '&:hover': {
-                backgroundColor: useDarkMode ? '#d81a609c' : '#d81a6073',
-              },
-              '&:hover > svg': {
-                fill: useDarkMode ? '#b1a9a9' : '#393939'
-              }
-            }}
-          >
-            <DriveFileRenameOutlineIcon
-              sx={{ fill: 'rgb(129 128 128)' }}
-            />
-          </IconButton>
-        </div>
+          </div>
 
-        <IconButton
-          aria-label="dark-mode"
-          onClick={() => setUseDarkMode(!useDarkMode) }
-          sx={{
-            position: 'absolute',
-            top: 10,
-            right: 37,
-          }}
-        >
-          <DarkModeIcon />
-        </IconButton>
+          <div>
+            <div
+              style={{
+                backgroundColor: useDarkMode ? 'rgb(40, 40, 40)' : 'rgb(230 230 230)'
+              }}
+            >
+              { loop && <Controls/>}
+            </div>
 
-        <Button
-          onClick={() => navigate(user ? `/${user.uid}` : '/')}
-          variant='contained'
-          size='small'
-          sx={{
-            backgroundColor: useDarkMode ? 'rgb(60 60 60)' : 'rgb(101 101 101)',
-            position: 'absolute',
-            top: 15,
-            right: 120,
-            width: 200
-          }}
-        >
-          {user ? 'DASHBOARD' : 'LOG IN'}
-        </Button>
+            <div className='pads-container' >
+              { loop?.trackList && Object.keys(loop.trackList)?.map((trackId, index) => {
+                return <PadRow
+                  trackRef={child(loopRef.current, `trackList/${trackId}`)}
+                  trackId={trackId}
+                  key={trackId}
+                  pos={pos}
+                  pads={loop?.pads[index]}
+                  toggleActive={ toggleActive }
+                  handleClickDelete={ handleClickDelete }
+                  rowIndex={index}
+                  bankList={bankList}
+                  gridSize={loop?.gridSize}
+                  precision={loop?.precision}
+                />;
+              }) }
+            </div>
 
-      </div>
-
-      <div>
-        <div
-          style={{
-            backgroundColor: useDarkMode ? 'rgb(40, 40, 40)' : 'rgb(230 230 230)'
-          }}
-        >
-          { loop && <Controls
-            isPlaying={isPlaying}
-            togglePlaying={togglePlaying}
-            pos={pos}
-          />}
-        </div>
-
-        <div className='pads-container'>
-          { loop?.trackList && Object.keys(loop.trackList)?.map((trackId, index) => {
-            return <PadRow
-              trackRef={child(loopRef.current, `trackList/${trackId}`)}
-              trackId={trackId}
-              key={trackId}
-              pos={pos}
-              pads={loop?.pads[index]}
-              toggleActive={ toggleActive }
-              handleClickDelete={ handleClickDelete }
-              rowIndex={index}
-              isTriggering={activeRows[index]}
-              isLooped={isLooped}
-              bankList={bankList}
-              gridSize={loop?.gridSize}
-              precision={loop?.precision}
-            />;
-          }) }
-        </div>
-
-        <Box ml={7.2} mt={2} className='new-track-container'>
-          <Button
-            sx={{
-              border:'1.7px solid #d81a60',
-              fontSize: '20px',
-              fontWeight: 'bold',
-              backgroundColor: useDarkMode && 'rgb(179 20 78 / 14%)',
-              color: useDarkMode && 'white',
-              ':hover': {
-                border:'1.7px solid #d81a60',
-                backgroundColor: useDarkMode ? 'rgb(179 20 78 / 40%)' : 'rgb(231 60 123 / 20%)'
-              }
-            }}
-            variant={useDarkMode ? 'contained' : 'outlined'}
-            className='new-track-button'
-            onClick={handleClickNewTrack}
-          >
+            <Box ml={7.2} mt={2} className='new-track-container'>
+              <Button
+                sx={{
+                  border:'1.7px solid #d81a60',
+                  fontSize: '20px',
+                  fontWeight: 'bold',
+                  backgroundColor: useDarkMode && 'rgb(179 20 78 / 14%)',
+                  color: useDarkMode && 'white',
+                  ':hover': {
+                    border:'1.7px solid #d81a60',
+                    backgroundColor: useDarkMode ? 'rgb(179 20 78 / 40%)' : 'rgb(231 60 123 / 20%)'
+                  }
+                }}
+                variant={useDarkMode ? 'contained' : 'outlined'}
+                className='new-track-button'
+                onClick={handleClickNewTrack}
+              >
               NEW TRACK
-          </Button>
-        </Box>
+              </Button>
+            </Box>
 
-      </div>
-    </div>
+          </div>
+        </div>
+      </PlaybackContext.Provider>
+    </>
   );
 }
 

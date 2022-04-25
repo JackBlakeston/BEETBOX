@@ -19,3 +19,10 @@ export const DbRefsContext = createContext({
   dbRefs: null,
   setDbRefs: () => {}
 });
+
+export const PlaybackContext = createContext({
+  pos: null,
+  setPos: () => {},
+  isPlaying: null,
+  togglePlaying: () => {}
+});

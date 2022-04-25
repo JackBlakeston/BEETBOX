@@ -13,11 +13,11 @@ import { Slider } from '@mui/material';
 
 import { getSampleName, getSampleUrl, getRefByPath, getSamplesInBank } from '../firebase/firebaseService';
 import Pad from './Pad';
-import { DarkModeContext } from '../contexts';
+import { DarkModeContext, LoopContext, PlaybackContext } from '../contexts';
 import { get, update } from 'firebase/database';
 
 
-function PadRow ({pads, pos, toggleActive, isTriggering, rowIndex, isLooped, handleClickDelete, bankList, gridSize, precision, trackRef}) {
+function PadRow ({ toggleActive, rowIndex, handleClickDelete, bankList, trackRef }) {
 
   const [sampleList, setSampleList] = useState([]);
 
@@ -25,8 +25,13 @@ function PadRow ({pads, pos, toggleActive, isTriggering, rowIndex, isLooped, han
 
   const {useDarkMode} = useContext(DarkModeContext);
 
-  const player = useRef(null);
+  const { loop } = useContext(LoopContext);
+  const { pos } = useContext(PlaybackContext);
+
+  const tonePlayer = useRef(null);
   const panner = useRef(new Tone.Panner(track?.trackPanning / 100 || 0).toDestination());
+
+  const { pads, gridSize, precision } = loop;
 
   useEffect(() => {
     async function getTrack (ref) { // TODO export this one and identical one from parent component
@@ -39,12 +44,12 @@ function PadRow ({pads, pos, toggleActive, isTriggering, rowIndex, isLooped, han
   }, [trackRef]);
 
   useEffect(() => {
-    if (!player.current && track?.sampleUrl) {
-      player.current = new Tone.Player(track?.sampleUrl, () => {
-        player.current.connect(panner.current);
+    if (!tonePlayer.current && track?.sampleUrl) {
+      tonePlayer.current = new Tone.Player(track?.sampleUrl, () => {
+        tonePlayer.current.connect(panner.current);
       }); // No need to do .toDestination() on player when we are using a panner
     } else if (track?.sampleUrl) {
-      player?.current?.load(track.sampleUrl);
+      tonePlayer?.current?.load(track.sampleUrl);
     }
   }, [track?.sampleUrl]);
 
@@ -55,7 +60,7 @@ function PadRow ({pads, pos, toggleActive, isTriggering, rowIndex, isLooped, han
   }, [track?.trackPanning]);
 
   useEffect(() => {
-    if (player.current && track?.trackVolume) player.current.volume.value = track.trackVolume;
+    if (tonePlayer.current && track?.trackVolume) tonePlayer.current.volume.value = track.trackVolume;
   }, [track?.trackVolume]);
 
   useEffect(() => {
@@ -67,10 +72,12 @@ function PadRow ({pads, pos, toggleActive, isTriggering, rowIndex, isLooped, han
   }, [track?.bankPath]);
 
   useEffect(() => {
-    if (isTriggering) {
-      player.current?.start();
+
+    if ( pads[rowIndex][pos] === 1 ) {
+      // Plays the current sample
+      tonePlayer.current?.start();
     }
-  }, [pos, isTriggering, player]);
+  }, [pos, tonePlayer]);
 
   async function handleSampleChange (event) {
     const newPath = event.target.value;
@@ -230,13 +237,13 @@ function PadRow ({pads, pos, toggleActive, isTriggering, rowIndex, isLooped, han
       </div>
 
       <div className='row'>
-        {track && pads && pads.slice(0, gridSize / precision).map((pad, index) => {
+        {track && pads[rowIndex].slice(0, gridSize / precision).map((pad, index) => {
           return <Pad
             key={index}
             rowIndex={rowIndex}
             id={index}
             state={pad}
-            pos={ pos === 0 && isLooped ? (gridSize / precision) - 1 : pos - 1 } // Fixes visual delay
+            pos={ pos }
             toggleActive={() => toggleActive(rowIndex, index)}
             isDisabled={!track.samplePath}
             precision={precision}

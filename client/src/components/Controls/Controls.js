@@ -5,26 +5,18 @@ import { PlayButton } from './PlayButton';
 import { SizeSlider } from './Sliders/SizeSlider';
 import { PrecisionSlider } from './Sliders/PrecisionSlider';
 
-function Controls ({ isPlaying, togglePlaying, pos }) {
+function Controls () {
 
   return (
     <div className="controls">
-      <PlayButton
-        playing={isPlaying}
-        togglePlaying={togglePlaying}
-      />
+
+      <PlayButton/>
 
       <BpmSlider/>
 
-      <SizeSlider
-        isPlaying={isPlaying}
-        togglePlaying={togglePlaying}
-        pos={pos}
-      />
+      <SizeSlider/>
 
-      <PrecisionSlider
-        isPlaying={isPlaying}
-      />
+      <PrecisionSlider/>
 
     </div>
   );

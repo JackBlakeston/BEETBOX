@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { Box, Slider } from '@mui/material';
 import Fraction from 'fraction.js';
-import { LoopContext } from '../../../contexts';
+import { LoopContext, PlaybackContext } from '../../../contexts';
 import { update } from 'firebase/database';
 
 
@@ -9,9 +9,10 @@ const precisionMarks = [0, 1, 2].map(mark => {
   return { value: mark };
 });
 
-export function PrecisionSlider ({ isPlaying }) {
+export function PrecisionSlider () {
 
   const { loop, setLoop } = useContext(LoopContext);
+  const { isPlaying, togglePlaying } = useContext(PlaybackContext);
 
   function handlePrecisionChange (event) {
     const newPrecision = Number(1 / 2 ** event.target.value);
