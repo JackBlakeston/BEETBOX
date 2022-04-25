@@ -1,5 +1,5 @@
 import { React, useContext, useEffect, useRef, useState } from 'react';
-import Knob from './knob/src/index';
+import Knob from './Knob/src/index';
 import * as Tone from 'tone';
 
 import Box from '@mui/material/Box';
