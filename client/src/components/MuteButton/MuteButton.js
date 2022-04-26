@@ -6,8 +6,6 @@ import { update } from 'firebase/database';
 
 const MuteButton = ({ track, setTrack }) => {
 
-  console.log(track.isMuted);
-
   function handleMuteClick () {
     const trackCopy = Object.assign({}, track);
     const newIsMuted = trackCopy.isMuted;

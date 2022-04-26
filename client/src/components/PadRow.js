@@ -74,7 +74,6 @@ const PadRow = ({ toggleActive, rowIndex, handleClickDelete, bankList, trackRef 
 
   useEffect(() => {
     if ( pads[rowIndex][pos] === 1 && !track.isMuted ) {
-      console.log('ismuted?', track.isMuted);
       if (!loop.soloedTracks || loop.soloedTracks.length === 0) {
         // Plays the current sample
         tonePlayer.current?.start();
