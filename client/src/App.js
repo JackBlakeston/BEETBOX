@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { pink } from '@mui/material/colors';
+import { pink, yellow } from '@mui/material/colors';
 import { CssBaseline } from '@mui/material';
 
 import AuthScreen from './components/AuthScreen';
@@ -43,7 +43,7 @@ export function App () {
         main: pink[600]
       },
       secondary: {
-        main: pink[600]
+        main: yellow[500]
       },
       background: {
         default: useDarkMode ? '#2D2D2D' : '#F1F1F1'

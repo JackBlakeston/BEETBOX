@@ -15,6 +15,8 @@ import { getSampleName, getSampleUrl, getRefByPath, getSamplesInBank } from '../
 import Pad from './Pad';
 import { DarkModeContext, LoopContext, PlaybackContext } from '../contexts';
 import { get, update } from 'firebase/database';
+import SoloButton from './SoloButton/SoloButton';
+import MuteButton from './MuteButton/MuteButton';
 
 const PadRow = ({ toggleActive, rowIndex, handleClickDelete, bankList, trackRef }) => {
 
@@ -38,7 +40,7 @@ const PadRow = ({ toggleActive, rowIndex, handleClickDelete, bankList, trackRef 
       return snapshot.val();
     }
     getTrack(trackRef).then(data => {
-      setTrack(data);
+      setTrack({...data, ref: trackRef});
     });
   }, [trackRef]);
 
@@ -71,10 +73,14 @@ const PadRow = ({ toggleActive, rowIndex, handleClickDelete, bankList, trackRef 
   }, [track?.bankPath]);
 
   useEffect(() => {
-
-    if ( pads[rowIndex][pos] === 1 ) {
-      // Plays the current sample
-      tonePlayer.current?.start();
+    if ( pads[rowIndex][pos] === 1 && !track.isMuted ) {
+      console.log('ismuted?', track.isMuted);
+      if (!loop.soloedTracks || loop.soloedTracks.length === 0) {
+        // Plays the current sample
+        tonePlayer.current?.start();
+      } else if (loop.soloedTracks?.includes(track.id)) {
+        tonePlayer.current?.start();
+      }
     }
   }, [pos, tonePlayer]);
 
@@ -124,7 +130,6 @@ const PadRow = ({ toggleActive, rowIndex, handleClickDelete, bankList, trackRef 
     setTrack({...track, trackPanning: newPanning});
     update(trackRef, {trackPanning: newPanning});
   }
-
 
   return (
     <div className='row-container '>
@@ -232,6 +237,13 @@ const PadRow = ({ toggleActive, rowIndex, handleClickDelete, bankList, trackRef 
             />
             <label>R</label>
           </Box>
+        }
+
+        {track && track.sampleName !== 'No sample' &&
+          <div className='mute-solo-container'>
+            <SoloButton track={track}/>
+            <MuteButton track={track} setTrack={setTrack}/>
+          </div>
         }
       </div>
 

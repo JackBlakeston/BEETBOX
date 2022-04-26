@@ -118,6 +118,8 @@ const Sequencer = () => {
       bankName: '',
       trackVolume: -6,
       trackPanning: 0,
+      isMuted: false,
+      // isSoloed: false,
     };
     updatedTrackList[newTrackId] = newTrack;
 

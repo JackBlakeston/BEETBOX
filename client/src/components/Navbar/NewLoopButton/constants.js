@@ -6,6 +6,7 @@ export const newLoop = {
   pads: [],
   trackList: {},
   trackCounter: 0,
+  soloedTracks: [],
 };
 
 export const buttonText = 'Fresh Beet';
