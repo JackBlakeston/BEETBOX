@@ -37,6 +37,18 @@ export function App () {
 
   // ?? Is possible to move to other file - don't know how
   const theme = createTheme({
+    root: {
+      '&::-webkit-scrollbar': {
+        width: 7,
+      },
+      '&::-webkit-scrollbar-track': {
+        boxShadow: 'inset 0 0 6px rgba(0, 0, 0, 0.3)',
+      },
+      '&::-webkit-scrollbar-thumb': {
+        backgroundColor: 'black',
+        outline: '1px solid slategrey',
+      },
+    },
     palette: {
       mode: useDarkMode ? 'dark' : 'light',
       primary: {

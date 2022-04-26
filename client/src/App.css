@@ -124,7 +124,7 @@
   margin-right: 20px;
 }
 
-.pads-container::-webkit-scrollbar {
+/* .pads-container::-webkit-scrollbar {
   width: 10px;
   height: 10px;
 }
@@ -135,7 +135,7 @@
 .pads-container::-webkit-scrollbar-thumb {
   background-color: rgba(0, 0, 0, 0.4);
   border-radius: 10px;
-}
+} */
 
 .pads-container:hover {
   overflow-x: overlay;
@@ -175,6 +175,10 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+
+.volume-knob:active {
+  cursor: grabbing;
 }
 
 .pan-slider-box {
@@ -245,4 +249,17 @@
 
 .new-track-button {
   width: 1237px;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background-color: transparent;
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.4);
+  border-radius: 10px;
 }

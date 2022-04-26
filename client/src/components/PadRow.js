@@ -48,6 +48,7 @@ const PadRow = ({ toggleActive, rowIndex, handleClickDelete, bankList, trackRef 
     if (!tonePlayer.current && track?.sampleUrl) {
       tonePlayer.current = new Tone.Player(track?.sampleUrl, () => {
         tonePlayer.current.connect(panner.current);
+        tonePlayer.current.volume.value = track.trackVolume;
       }); // No need to do .toDestination() on player when we are using a panner
     } else if (track?.sampleUrl) {
       tonePlayer?.current?.load(track.sampleUrl);
@@ -157,7 +158,14 @@ const PadRow = ({ toggleActive, rowIndex, handleClickDelete, bankList, trackRef 
         <Box sx={{ minWidth: 120 }} className='select-container'>
           <FormControl fullWidth >
             <InputLabel shrink>Bank</InputLabel>
-            <Select notched className='select' displayEmpty value={track.bankPath} onChange={handleBankChange} labelId="demo-simple-select-label" id="demo-simple-select" label='Bank'>
+            <Select
+              notched
+              className='select'
+              displayEmpty
+              value={track.bankPath}
+              onChange={handleBankChange}
+              label='Bank'
+            >
               <MenuItem style={{ display: 'none' }} disabled value={track.bankPath}>{track.bankName || 'No bank'}</MenuItem>
               { bankList.map(ref => {
                 return <MenuItem key={ref.name} value={ref.fullPath} >{ getSampleName(ref) }</MenuItem>;
@@ -171,7 +179,7 @@ const PadRow = ({ toggleActive, rowIndex, handleClickDelete, bankList, trackRef 
         <Box sx={{ minWidth: 120 }} className='select-container'>
           <FormControl fullWidth >
             <InputLabel shrink >Sample</InputLabel>
-            <Select disabled={!track.bankPath} notched className='select' displayEmpty value={track.samplePath} onChange={handleSampleChange} labelId="demo-simple-select-label" id="demo-simple-select" label='Sample'>
+            <Select disabled={!track.bankPath} notched className='select' displayEmpty value={track.samplePath} onChange={handleSampleChange} label='Sample'>
               <MenuItem style={{ display: 'none' }} disabled value={track.samplePath}>{track.sampleName}</MenuItem>
               { sampleList.map(ref => {
                 return <MenuItem key={ref.name} value={ref.fullPath} >{ getSampleName(ref) }</MenuItem>;
@@ -199,7 +207,7 @@ const PadRow = ({ toggleActive, rowIndex, handleClickDelete, bankList, trackRef 
               height: '60px',
               color: useDarkMode ? 'rgb(159 159 159)' : 'rgb(129 128 128)',
               fontFamily: 'Roboto',
-              cursor: 'grab'
+              cursor: 'grab',
             }}
           />
         }
