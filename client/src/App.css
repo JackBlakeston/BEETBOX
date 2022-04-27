@@ -238,18 +238,7 @@
   cursor: default;
 }
 
-/* NEW TRACK */
-.new-track-container {
-  padding-bottom: 30px;
-  bottom: 0px;
-  margin-top: 30px;
-  display: flex;
-  justify-content: center;
-}
 
-.new-track-button {
-  width: 1237px;
-}
 
 ::-webkit-scrollbar {
   width: 10px;

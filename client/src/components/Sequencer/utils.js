@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function useInterval (callback, delay) {
+export function useInterval (callback, delay) {
   const intervalRef = React.useRef();
   const callbackRef = React.useRef(callback);
 
@@ -30,3 +30,12 @@ export default function useInterval (callback, delay) {
   // Returns a ref to the interval ID in case you want to clear it manually:
   return intervalRef;
 }
+
+export function calculateTempo (bpm) {
+  return 60000 / bpm;
+}
+
+export function addPadding (number) {
+  return number;
+}
+

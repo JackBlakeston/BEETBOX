@@ -1,0 +1,11 @@
+.mainContainer {
+  padding-bottom: 30px;
+  bottom: 0px;
+  margin-top: 30px;
+  display: flex;
+  justify-content: center;
+}
+
+.newTrackButton {
+  width: 1237px;
+}

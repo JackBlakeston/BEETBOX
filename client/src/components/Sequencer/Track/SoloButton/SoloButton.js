@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import ToggleButton from '@mui/material/ToggleButton';
 import {checkIfSoloed} from './utils';
-import { LoopContext } from '../../contexts';
+import { LoopContext } from '../../../../contexts';
 import { update } from 'firebase/database';
 
 import classes from './soloButton.module.css';

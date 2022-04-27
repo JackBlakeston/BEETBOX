@@ -1,5 +1,4 @@
 import { React, useContext, useEffect, useRef, useState } from 'react';
-import Knob from './Knob/src/index';
 import * as Tone from 'tone';
 
 import Box from '@mui/material/Box';
@@ -10,21 +9,22 @@ import Select from '@mui/material/Select';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Slider } from '@mui/material';
-
-import { getSampleName, getSampleUrl, getRefByPath, getSamplesInBank } from '../firebase/firebaseService';
-import Pad from './Pad';
-import { DarkModeContext, LoopContext, PlaybackContext } from '../contexts';
 import { get, update } from 'firebase/database';
+
+import { getSampleName, getSampleUrl, getRefByPath, getSamplesInBank } from '../../../firebase/firebaseService';
+import Pad from './Pad/Pad';
+import Knob from './Knob/src/index';
+import { DarkModeContext, LoopContext, PlaybackContext } from '../../../contexts';
 import SoloButton from './SoloButton/SoloButton';
 import MuteButton from './MuteButton/MuteButton';
 
-const PadRow = ({ toggleActive, rowIndex, handleClickDelete, bankList, trackRef }) => {
+const Track = ({ toggleActive, rowIndex, handleClickDelete, bankList, trackRef }) => {
 
   const [sampleList, setSampleList] = useState([]);
 
   const [track, setTrack] = useState();
 
-  const {useDarkMode} = useContext(DarkModeContext);
+  const { useDarkMode } = useContext(DarkModeContext);
 
   const { loop } = useContext(LoopContext);
   const { pos } = useContext(PlaybackContext);
@@ -273,4 +273,4 @@ const PadRow = ({ toggleActive, rowIndex, handleClickDelete, bankList, trackRef 
   );
 };
 
-export default PadRow;
+export default Track;

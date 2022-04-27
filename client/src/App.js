@@ -6,7 +6,7 @@ import { CssBaseline } from '@mui/material';
 
 import AuthScreen from './components/AuthScreen';
 import Dashboard from './components/Dashboard';
-import Sequencer from './components/Sequencer';
+import Sequencer from './components/Sequencer/Sequencer';
 import { DarkModeContext, DbRefsContext, LoopContext, UserContext } from './contexts';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from './firebase/firebaseService';
