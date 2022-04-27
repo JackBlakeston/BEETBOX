@@ -2,18 +2,10 @@ import React, { useContext } from 'react';
 import { Slider } from '@mui/material';
 import { Box } from '@mui/system';
 import { update } from 'firebase/database';
-import { LoopContext, PlaybackContext } from '../../../contexts';
 
-const sizeMarkLabels = {
-  four: 2,
-  eight: 3,
-  sixteen: 4,
-  thirtyTwo: 5
-};
-
-const sizeMarks = Object.values(sizeMarkLabels).map(mark => {
-  return { value: mark };
-});
+import { LoopContext, PlaybackContext } from '../../../../contexts';
+import { sliderLabelHeader, sliderLabelText, sizeMarks, sliderSx } from './constants';
+import classes from './sizeSlider.module.css';
 
 const SizeSlider = () => {
 
@@ -29,9 +21,9 @@ const SizeSlider = () => {
   }
 
   return (
-    <div className='slider-container' id='grid-size-controls'>
-      <label><p>Grid Size</p><p>(Beats)</p></label>
-      <Box className='slider-box' width={200}>
+    <div className={classes.mainContainer}>
+      <label><p>{sliderLabelHeader}</p><p>{sliderLabelText}</p></label>
+      <Box className={classes.sliderBox} width={200}>
         <Slider
           marks={sizeMarks}
           step={null}
@@ -39,13 +31,7 @@ const SizeSlider = () => {
           max={5}
           value={Math.log2(loop.gridSize)}
           onChange={handleGridSizeChange}
-          sx={{
-            '& .MuiSlider-thumb': {
-              height: 20,
-              width: 4,
-              borderRadius: 0,
-            }
-          }}
+          sx={sliderSx}
         />
       </Box>
       <output>

@@ -6,12 +6,14 @@ import classes from './newTrackButton.module.css';
 import { DarkModeContext, LoopContext } from '../../../contexts';
 import { buttonStyle, buttonText, darkBg, lightBg, rowMaxLength } from './constants';
 import { getButtonVariant, getNewTrack } from './utils';
+import { getLoop } from '../../../firebase/firebaseService';
+import { update } from 'firebase/database';
 
 
 const NewTrackButton = () => {
 
   const { useDarkMode } = useContext(DarkModeContext);
-  const { loop, loopRef } = useContext(LoopContext);
+  const { loop, setLoop } = useContext(LoopContext);
 
   const buttonSx = {
     ...buttonStyle,
@@ -46,7 +48,7 @@ const NewTrackButton = () => {
     }
     padsCopy.push(Array(rowMaxLength / loop.precision).fill(0));
     setLoop({...loop, trackList: newTrackList, trackCounter: loop.trackCounter + 1, pads: padsCopy});
-    update(loopRef.current, { trackList: newTrackList, trackCounter: loop.trackCounter + 1, pads: padsCopy });
+    update(loop.ref, { trackList: newTrackList, trackCounter: loop.trackCounter + 1, pads: padsCopy });
   }
 
   return (
@@ -54,7 +56,7 @@ const NewTrackButton = () => {
       <Button
         sx={buttonSx}
         variant={getButtonVariant(useDarkMode)}
-        className={classes.NewTrackButton}
+        className={classes.newTrackButton}
         onClick={handleClickNewTrack}
       >
         { buttonText }

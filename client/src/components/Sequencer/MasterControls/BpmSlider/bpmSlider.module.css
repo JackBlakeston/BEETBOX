@@ -1,0 +1,10 @@
+.mainContainer {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  min-width: 288px;
+}
+
+.sliderBox {
+  margin-top: 7px;
+}

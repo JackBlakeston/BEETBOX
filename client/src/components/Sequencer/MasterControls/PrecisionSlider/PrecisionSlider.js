@@ -1,13 +1,10 @@
 import React, { useContext } from 'react';
 import { Box, Slider } from '@mui/material';
-import Fraction from 'fraction.js';
-import { LoopContext, PlaybackContext } from '../../../contexts';
+import { LoopContext, PlaybackContext } from '../../../../contexts';
 import { update } from 'firebase/database';
-
-
-const precisionMarks = [0, 1, 2].map(mark => {
-  return { value: mark };
-});
+import classes from './precisionSlider.module.css';
+import { precisionMarks, sliderLabel, sliderSx } from './constants';
+import { convertToFraction, getConvertedValue } from './utils';
 
 const PrecisionSlider = () => {
 
@@ -45,28 +42,22 @@ const PrecisionSlider = () => {
   }
 
   return (
-    <div className='slider-container' id='precision-controls'>
-      <label>Grid Precision</label>
-      <Box className='slider-box' width={200}>
+    <div className={classes.mainContainer}>
+      <label>{sliderLabel}</label>
+      <Box className={classes.sliderBox} width={200}>
         <Slider
           marks={precisionMarks}
           step={null}
           min={0}
           max={2}
-          value={Math.log2(1 / loop.precision)}
+          value={getConvertedValue(loop.precision)}
           onChange={handlePrecisionChange}
           track={false}
-          sx={{
-            '& .MuiSlider-thumb': {
-              height: 20,
-              width: 4,
-              borderRadius: 0,
-            }
-          }}
+          sx={sliderSx}
         />
       </Box>
       <output>
-        {new Fraction(loop.precision).toFraction()}
+        {convertToFraction(loop.precision)}
       </output>
     </div>
   );

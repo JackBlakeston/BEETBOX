@@ -1,22 +1,16 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import * as Tone from 'tone';
 import { useParams } from 'react-router-dom';
-import { child, get, remove, update } from 'firebase/database';
+import { child, remove, update } from 'firebase/database';
 
 import Track from './Track/Track';
-import MasterControls from '../MasterControls/MasterControls';
-import { dbRef, getBankRefList } from '../../firebase/firebaseService';
-import { DarkModeContext, LoopContext, PlaybackContext } from '../../contexts';
+import MasterControls from './MasterControls/MasterControls';
+import { dbRef, getBankRefList, getLoop } from '../../firebase/firebaseService';
+import { LoopContext, PlaybackContext } from '../../contexts';
 import { useInterval, calculateTempo } from './utils';
 import Navbar from '../Navbar/Navbar';
 import NewTrackButton from './NewTrackButton/NewTrackButton';
 import classes from './sequencer.module.css';
-
-
-async function getLoop (ref) {
-  const snapshot = await get(ref);
-  return snapshot.val();
-}
 
 const Sequencer = () => {
 
@@ -26,8 +20,6 @@ const Sequencer = () => {
   const loopRef = useRef(child(userRef.current, params.loopid));
 
   const { loop, setLoop } = useContext(LoopContext);
-
-  const { useDarkMode } = useContext(DarkModeContext);
 
   // TODO CHECK Do we need this here? Probably better in App and passed as context
   // TODO or maybe each track gets its own banklist, dunno
@@ -94,13 +86,7 @@ const Sequencer = () => {
       <PlaybackContext.Provider value={playbackValues} >
         <Navbar isInSequencer={true}/>
         <div>
-          <div
-            style={{
-              backgroundColor: useDarkMode ? 'rgb(40, 40, 40)' : 'rgb(230 230 230)'
-            }}
-          >
-            { loop && <MasterControls/>}
-          </div>
+          { loop && <MasterControls/>}
 
           <div className={classes.padsContainer} >
             { loop?.trackList && Object.keys(loop.trackList)?.map((trackId, index) => {

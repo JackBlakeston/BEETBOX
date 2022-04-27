@@ -17,6 +17,7 @@ import Knob from './Knob/src/index';
 import { DarkModeContext, LoopContext, PlaybackContext } from '../../../contexts';
 import SoloButton from './SoloButton/SoloButton';
 import MuteButton from './MuteButton/MuteButton';
+import classes from './track.module.css';
 
 const Track = ({ toggleActive, rowIndex, handleClickDelete, bankList, trackRef }) => {
 
@@ -132,10 +133,10 @@ const Track = ({ toggleActive, rowIndex, handleClickDelete, bankList, trackRef }
   }
 
   return (
-    <div className='row-container '>
+    <div className={classes.mainContainer}>
 
       <div
-        className={'delete-icon-container '}
+        className={classes.deleteIconContainer}
       >
         <IconButton
           aria-label="delete"
@@ -152,15 +153,15 @@ const Track = ({ toggleActive, rowIndex, handleClickDelete, bankList, trackRef }
       </div>
 
       <div
-        className={'sound-selector-container '}
+        className={classes.soundSelectorContainer}
       >
         {track && bankList &&
-        <Box sx={{ minWidth: 120 }} className='select-container'>
+        <Box sx={{ minWidth: 120 }} className={classes.selectContainer}>
           <FormControl fullWidth >
             <InputLabel shrink>Bank</InputLabel>
             <Select
               notched
-              className='select'
+              className={classes.select}
               displayEmpty
               value={track.bankPath}
               onChange={handleBankChange}
@@ -176,10 +177,18 @@ const Track = ({ toggleActive, rowIndex, handleClickDelete, bankList, trackRef }
         }
 
         {track && track.bankName !== 'No bank' &&
-        <Box sx={{ minWidth: 120 }} className='select-container'>
+        <Box sx={{ minWidth: 120 }} className={classes.selectContainer}>
           <FormControl fullWidth >
             <InputLabel shrink >Sample</InputLabel>
-            <Select disabled={!track.bankPath} notched className='select' displayEmpty value={track.samplePath} onChange={handleSampleChange} label='Sample'>
+            <Select
+              disabled={!track.bankPath}
+              notched
+              className={classes.select}
+              displayEmpty
+              value={track.samplePath}
+              onChange={handleSampleChange}
+              label='Sample'
+            >
               <MenuItem style={{ display: 'none' }} disabled value={track.samplePath}>{track.sampleName}</MenuItem>
               { sampleList.map(ref => {
                 return <MenuItem key={ref.name} value={ref.fullPath} >{ getSampleName(ref) }</MenuItem>;
@@ -190,9 +199,7 @@ const Track = ({ toggleActive, rowIndex, handleClickDelete, bankList, trackRef }
         }
       </div>
 
-      <div
-        className={'track-control-container '}
-      >
+      <div className={classes.trackControlContainer} >
         {track && track.sampleName !== 'No sample' &&
           <Knob
             unit="dB"
@@ -215,7 +222,7 @@ const Track = ({ toggleActive, rowIndex, handleClickDelete, bankList, trackRef }
 
         {track && track.sampleName !== 'No sample' &&
           <Box
-            className='pan-slider-box'
+            className={classes.panSliderBox}
             width={70}
             sx={{
               color: useDarkMode ? 'rgb(159 159 159)' : 'rgb(95 95 95)',
@@ -247,14 +254,14 @@ const Track = ({ toggleActive, rowIndex, handleClickDelete, bankList, trackRef }
         }
 
         {track && track.sampleName !== 'No sample' &&
-          <div className='mute-solo-container'>
+          <div className={classes.muteSoloContainer}>
             <SoloButton track={track}/>
             <MuteButton track={track} setTrack={setTrack}/>
           </div>
         }
       </div>
 
-      <div className='row'>
+      <div className={classes.row}>
         {track && pads[rowIndex].slice(0, gridSize / precision).map((pad, index) => {
           return <Pad
             key={index}

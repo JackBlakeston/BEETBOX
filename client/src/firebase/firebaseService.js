@@ -1,13 +1,15 @@
 import { initializeApp } from 'firebase/app';
 import { getStorage, ref as storageRef, getDownloadURL, listAll } from 'firebase/storage';
 import { getAuth } from 'firebase/auth';
-import { getDatabase, ref as databaseRef } from 'firebase/database';
+import { getDatabase, ref, get } from 'firebase/database';
 import { firebaseConfig } from './config';
+
 
 
 
 const firebaseApp = initializeApp(firebaseConfig);
 
+// TODO separate into 3 files, one for each service
 
 // AUDIO SERVICE //TODO move some of the stuff here into contexts
 const storage = getStorage(firebaseApp, 'gs://jb-drum-sequencer.appspot.com/');
@@ -46,4 +48,9 @@ export const auth = getAuth(firebaseApp);
 
 // DATABASE SERVICE
 export const db = getDatabase(firebaseApp);
-export const dbRef = databaseRef(db);
+export const dbRef = ref(db);
+
+export async function getLoop (ref) {
+  const snapshot = await get(ref);
+  return snapshot.val();
+}

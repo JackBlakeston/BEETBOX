@@ -3,3 +3,6 @@
   padding: 10px 0 15px 5px;
   margin-right: 20px;
 }
+.padsContainer:hover {
+  overflow-x: overlay;
+}

@@ -1,0 +1,37 @@
+.mainContainer {
+  height: 60px;
+  float: left;
+  margin: 2.5px;
+  cursor: pointer;
+  background:rgb(129 128 128 / 48%);
+  border-radius: 10px;
+  border: solid 2px black;
+  transition: 0.1s ease;
+
+}
+.mainContainer:hover {
+  background:rgb(111, 111, 111);
+}
+
+.mainContainer.active {
+  background: #d81a60;
+}
+.mainContainer.active:hover {
+  background: rgb(179, 20, 78);
+}
+
+.mainContainer.playing {
+  background:#618456;
+}
+.mainContainer.active.playing {
+  background:#22710d;
+}
+
+.mainContainer.disabled {
+  cursor: default;
+  background-color: rgb(104 92 96);
+}
+
+.mainContainer.disabledDark {
+  background-color: rgb(37 37 37);
+}

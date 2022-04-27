@@ -1,6 +1,10 @@
 import { update } from 'firebase/database';
 import React, { useContext } from 'react';
+import classNames from 'classnames';
+
 import { DarkModeContext, LoopContext } from '../../../../contexts';
+import classes from './pad.module.css';
+import { calculatePadWidth } from './utils';
 
 const Pad = ({state, isDisabled, pos, id, rowIndex, precision}) => {
 
@@ -9,6 +13,7 @@ const Pad = ({state, isDisabled, pos, id, rowIndex, precision}) => {
   const { loop, setLoop } = useContext(LoopContext);
 
   function toggleActive () {
+    if (isDisabled) return;
     let padsCopy = [...loop.pads];
     let padState = padsCopy[rowIndex][id];
 
@@ -22,22 +27,22 @@ const Pad = ({state, isDisabled, pos, id, rowIndex, precision}) => {
     update(loop.ref, { pads: padsCopy });
   }
 
+  const mainContainerClassNames = classNames({
+    [classes.mainContainer]: true,
+    [classes.active]: state && !isDisabled,
+    [classes.playing]: pos === id && !isDisabled,
+    [classes.disabled]: isDisabled,
+    [classes.disabledDark]: isDisabled && useDarkMode
+  });
 
   return (
-    <div
-      className={'pad-container'}
-    >
+    <div >
       <div
-        className={'pad ' +
-          (state && !isDisabled ? 'active ' : '') +
-          (pos === id && !isDisabled ? 'playing ' : '') +
-          (isDisabled ? 'disabled ' : '')
-        }
+        className={mainContainerClassNames}
         style={{
-          width: `${60 * precision}px`,
-          backgroundColor: isDisabled && (useDarkMode ? 'rgb(37 37 37)' : 'rgb(104 92 96)'),
+          width: calculatePadWidth(precision),
         }}
-        onClick={() => !isDisabled && toggleActive()}>
+        onClick={toggleActive}>
       </div>
     </div>
   );

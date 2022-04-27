@@ -1,0 +1,14 @@
+.controls {
+  position: sticky;
+  top: 0px;
+  width: 100vw;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 15px 80px 15px 50px;
+  background-color: rgb(230 230 230);
+}
+
+.controlsDark {
+  background-color: rgb(40, 40, 40);
+}

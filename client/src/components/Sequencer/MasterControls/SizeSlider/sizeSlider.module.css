@@ -1,0 +1,14 @@
+.mainContainer {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  min-width: 308px;
+  text-align: center;
+}
+.mainContainer p {
+  margin: unset;
+}
+
+.sliderBox {
+  margin-top: 7px;
+}

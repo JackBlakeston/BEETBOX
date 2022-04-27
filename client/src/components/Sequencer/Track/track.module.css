@@ -1,0 +1,57 @@
+/* Tracks */
+.mainContainer {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.deleteIconContainer {
+  display: flex;
+  align-items: center;
+}
+
+.soundSelectorContainer {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  min-width: 320px;
+}
+
+.selectContainer {
+  width: 150px;
+  text-align: right;
+}
+
+.select {
+  height: 45px;
+}
+
+.trackControlContainer {
+  min-width: 194px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.panSliderBox {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  gap: 10px;
+  margin: 0 20px 0 12px;
+}
+
+.muteSoloContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+}
+
+.row {
+  clear: both;
+  display: flex;
+  padding-right: 10px;
+}
+
