@@ -7,7 +7,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { LoopContext, UserContext } from '../../contexts';
 import { dbRef } from '../../firebase/firebaseService';
 import Navbar from '../Navbar/Navbar';
-import classes from 'dashboard.module.css';
+import classes from './dashboard.module.css';
 
 async function getLoopList (ref) { // TODO export this to db service
   const snapshot = await get(ref);
