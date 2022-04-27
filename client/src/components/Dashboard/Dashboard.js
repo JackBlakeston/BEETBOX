@@ -4,11 +4,10 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { IconButton, Paper } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 
-
-
-import { LoopContext, UserContext } from '../contexts';
-import { dbRef } from '../firebase/firebaseService';
-import Navbar from './Navbar/Navbar';
+import { LoopContext, UserContext } from '../../contexts';
+import { dbRef } from '../../firebase/firebaseService';
+import Navbar from '../Navbar/Navbar';
+import classes from 'dashboard.module.css';
 
 async function getLoopList (ref) { // TODO export this to db service
   const snapshot = await get(ref);
@@ -74,14 +73,14 @@ const Dashboard = () => {
     <div>
       <Navbar userRef={userRef}/>
 
-      <div className='loop-list-container'>
-        <ul className='loop-list'>
+      <div className={classes.loopListContainer}>
+        <ul className={classes.loopList}>
           {loopList && (Object.keys(loopList)?.length > 0 ? Object.keys(loopList).map(loopKey => {
             return (
               <li key={loopKey}>
                 <Paper
                   onClick={() => handleLoopCardClick(loopKey)}
-                  className='loop-list-item'
+                  className={classes.loopListItem}
                   elevation={1}
                   sx={{
                     height: 170,
@@ -96,7 +95,7 @@ const Dashboard = () => {
                   }}
                 >
                   <IconButton
-                    className='loop-delete-button'
+                    className={classes.loopDeleteButton}
                     aria-label="delete"
                     size="small"
                     onClick={(e) => handleClickDelete(e, loopKey)}
@@ -112,9 +111,9 @@ const Dashboard = () => {
                     <DeleteIcon fontSize="inherit" style={{ color: 'white' }} />
                   </IconButton>
 
-                  <div className='loop-info-container'>
+                  <div className={classes.loopInfoContainer}>
                     <h2>{loopList[loopKey].name}</h2>
-                    <div className='loop-details-container'>
+                    <div className={classes.loopDetailsContainer}>
                       <p>Bpm: {loopList[loopKey].bpm}</p>
                       <p>Duration: {Math.trunc(100 * loopList[loopKey].gridSize / loopList[loopKey].bpm)}s
                       </p>
@@ -124,7 +123,7 @@ const Dashboard = () => {
               </li>
             );
           })
-            : <div className='no-loops-message-container'>
+            : <div className={classes.noLoopsMessageContainer}>
               <h1>You have no beets yet</h1>
               <h1>Drop a fresh beet and bless the world with your rythm!</h1>
             </div>)}

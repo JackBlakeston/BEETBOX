@@ -1,0 +1,40 @@
+.loopList {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 40px;
+  overflow-y: overlay;
+  margin-top: 60px;
+  padding-left: unset;
+}
+
+.loopInfoContainer {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+.loopDetailsContainer {
+  width: 80%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.loopListItem:hover > .loopDeleteButton {
+  opacity: 1;
+  fill: white;
+}
+
+.loopDeleteButton {
+  transition: 0.2s ease;
+  pointer-events: auto;
+}
+
+.noLoopsMessageContainer {
+  text-align: center;
+  font-size: 14px;
+  width: 400px;
+}

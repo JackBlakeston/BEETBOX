@@ -3,11 +3,12 @@ import { React, useContext, useEffect, useState } from 'react';
 import { Button, Paper, Tab, Tabs, TextField } from '@mui/material';
 import { Box } from '@mui/system';
 
-import { auth } from '../firebase/firebaseService';
-import { UserContext } from '../contexts';
+import { auth } from '../../firebase/firebaseService';
+import { UserContext } from '../../contexts';
 import { useNavigate } from 'react-router-dom';
-import logo from '../assets/images/BEETBOX_LOGO.png';
-import DarkModeButton from './DarkModeButton/DarkModeButton';
+import logo from '../../assets/images/BEETBOX_LOGO.png';
+import DarkModeButton from '../DarkModeButton/DarkModeButton';
+import classes from './authScreen.module.css';
 
 const AuthScreen = () => {
 
@@ -37,13 +38,11 @@ const AuthScreen = () => {
 
   function handleLoginSubmit (event) {
     event.preventDefault();
-    // TODO Check validity ?? Does firebase do this maybe¿?¿
-
-    // LOGIN with firebase
     signInWithEmailAndPassword(auth, loginEmail, loginPass)
       .catch((error) => {
         console.error('LOGIN FAILED: ' + error);
       });
+    // TODO Actually display an error to user
   }
 
   function handleRegisterSubmit (event) {
@@ -82,7 +81,7 @@ const AuthScreen = () => {
     <>
       <DarkModeButton/>
 
-      <div className='auth-container'>
+      <div className={classes.authContainer}>
         <img
           src={logo}
           alt=''
@@ -108,10 +107,23 @@ const AuthScreen = () => {
           </Box>
 
           { tabIndex === 0 &&
-            <div className='auth-form-container'>
-              <form autoComplete='off' onSubmit={handleLoginSubmit} className='auth-form'>
-                <TextField onChange={handleInputChange} value={loginEmail} name='loginEmail' label='Email' variant='outlined' />
-                <TextField onChange={handleInputChange} value={loginPass} name='loginPass' label='Password' variant='outlined' type='password'/>
+            <div className={classes.authFormContainer}>
+              <form autoComplete='off' onSubmit={handleLoginSubmit} className={classes.authForm}>
+                <TextField
+                  onChange={handleInputChange}
+                  value={loginEmail}
+                  name='loginEmail'
+                  label='Email'
+                  variant='outlined'
+                />
+                <TextField
+                  onChange={handleInputChange}
+                  value={loginPass}
+                  name='loginPass'
+                  label='Password'
+                  variant='outlined'
+                  type='password'
+                />
 
                 <Button
                   variant='contained'
@@ -125,8 +137,11 @@ const AuthScreen = () => {
           }
 
           { tabIndex === 1 &&
-            <div className='auth-form-container'>
-              <form autoComplete='off' onSubmit={handleRegisterSubmit} className='auth-form'>
+            <div className={classes.authFormContainer}>
+              <form autoComplete='off'
+                onSubmit={handleRegisterSubmit}
+                className={classes.authForm}
+              >
                 <TextField onChange={handleInputChange} value={registerEmail} name='registerEmail' label='Email' variant='outlined' />
                 {/* <TextField onChange={handleInputChange} value={registerUsername} name='registerUsername' label='Username' variant='outlined' /> */}
                 <TextField onChange={handleInputChange} value={registerPass} name='registerPass' label='Password' variant='outlined' type='password'/>

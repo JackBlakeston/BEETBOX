@@ -3,7 +3,6 @@ import * as Tone from 'tone';
 import { useParams } from 'react-router-dom';
 import { child, get, remove, update } from 'firebase/database';
 
-import '../../App.css'; // TODO change name or refactor all styles
 import Track from './Track/Track';
 import MasterControls from '../MasterControls/MasterControls';
 import { dbRef, getBankRefList } from '../../firebase/firebaseService';
@@ -11,6 +10,7 @@ import { DarkModeContext, LoopContext, PlaybackContext } from '../../contexts';
 import { useInterval, calculateTempo } from './utils';
 import Navbar from '../Navbar/Navbar';
 import NewTrackButton from './NewTrackButton/NewTrackButton';
+import classes from './sequencer.module.css';
 
 
 async function getLoop (ref) {
@@ -92,37 +92,34 @@ const Sequencer = () => {
   return (
     <>
       <PlaybackContext.Provider value={playbackValues} >
-        <div className='sequencer' >
-          <Navbar isInSequencer={true}/>
-          <div>
-            <div
-              style={{
-                backgroundColor: useDarkMode ? 'rgb(40, 40, 40)' : 'rgb(230 230 230)'
-              }}
-            >
-              { loop && <MasterControls/>}
-            </div>
-
-            <div className='pads-container' >
-              { loop?.trackList && Object.keys(loop.trackList)?.map((trackId, index) => {
-                return <Track
-                  trackRef={child(loopRef.current, `trackList/${trackId}`)}
-                  trackId={trackId}
-                  key={trackId}
-                  pos={pos}
-                  pads={loop?.pads[index]}
-                  handleClickDelete={ handleClickDelete }
-                  rowIndex={index}
-                  bankList={bankList}
-                  gridSize={loop?.gridSize}
-                  precision={loop?.precision}
-                />;
-              }) }
-            </div>
-
-            <NewTrackButton/>
-
+        <Navbar isInSequencer={true}/>
+        <div>
+          <div
+            style={{
+              backgroundColor: useDarkMode ? 'rgb(40, 40, 40)' : 'rgb(230 230 230)'
+            }}
+          >
+            { loop && <MasterControls/>}
           </div>
+
+          <div className={classes.padsContainer} >
+            { loop?.trackList && Object.keys(loop.trackList)?.map((trackId, index) => {
+              return <Track
+                trackRef={child(loopRef.current, `trackList/${trackId}`)}
+                trackId={trackId}
+                key={trackId}
+                pos={pos}
+                pads={loop?.pads[index]}
+                handleClickDelete={ handleClickDelete }
+                rowIndex={index}
+                bankList={bankList}
+                gridSize={loop?.gridSize}
+                precision={loop?.precision}
+              />;
+            }) }
+          </div>
+
+          <NewTrackButton/>
         </div>
       </PlaybackContext.Provider>
     </>

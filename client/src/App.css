@@ -1,79 +1,3 @@
-/* AUTH */
-.auth-container {
-  padding-top: 50px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  min-height: 100vh;
-  text-align: center;
-}
-.auth-container h1 {
-  font-size: 60px;
-}
-
-.auth-form-container {
-  display: flex;
-  justify-content: center;
-}
-
-.auth-form {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 30px;
-  padding-top: 30px;
-}
-
-.auth-form > * {
-  width: 350px;
-}
-
-/* DASHBOARD */
-
-
-/* Loop list */
-.loop-list {
-  list-style: none;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 40px;
-  overflow-y: overlay;
-  margin-top: 60px;
-  padding-left: unset;
-}
-
-.loop-info-container {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
-  align-items: center;
-}
-
-.loop-details-container {
-  width: 80%;
-  display: flex;
-  justify-content: space-between;
-}
-
-.loop-list-item:hover > .loop-delete-button {
-  opacity: 1;
-  fill: white;
-}
-
-.loop-delete-button {
-  transition: 0.2s ease;
-  pointer-events: auto;
-}
-
-.no-loops-message-container {
-  text-align: center;
-  font-size: 14px;
-  width: 400px;
-}
-
-
 /* SEQUENCER */
 
 /* Controls */
@@ -118,25 +42,6 @@
 
 
 /* Tracks and pads */
-.pads-container {
-  overflow: hidden;
-  padding: 10px 0 15px 5px;
-  margin-right: 20px;
-}
-
-/* .pads-container::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
-}
-.pads-container::-webkit-scrollbar-track {
-  background-color: transparent;
-  border-radius: 10px;
-}
-.pads-container::-webkit-scrollbar-thumb {
-  background-color: rgba(0, 0, 0, 0.4);
-  border-radius: 10px;
-} */
-
 .pads-container:hover {
   overflow-x: overlay;
 }

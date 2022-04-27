@@ -4,12 +4,13 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { pink, yellow } from '@mui/material/colors';
 import { CssBaseline } from '@mui/material';
 
-import AuthScreen from './components/AuthScreen';
-import Dashboard from './components/Dashboard';
+import AuthScreen from './components/AuthScreen/AuthScreen';
+import Dashboard from './components/Dashboard/Dashboard';
 import Sequencer from './components/Sequencer/Sequencer';
 import { DarkModeContext, DbRefsContext, LoopContext, UserContext } from './contexts';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from './firebase/firebaseService';
+import './App.css';
 
 export function App () {
 
