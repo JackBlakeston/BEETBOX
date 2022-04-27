@@ -17,3 +17,8 @@ Beets can be saved and accessed by their creators. Users have full access to the
 
 Audio effects for each track.
 Audio tracks that can record your audio input and loop it.
+Export beets.
+Tracks can be grabbed and moved. 
+Midi instruments.
+Zoom
+Track colors.
