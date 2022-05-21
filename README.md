@@ -10,8 +10,8 @@ With hundreds of samples available, all the user needs to do is log in, load som
 
 ## Start
 
+In client folder:
 ```bash
-cd client
 npm i
 npm start
 ````
