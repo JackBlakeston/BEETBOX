@@ -31,11 +31,11 @@ Beets can be saved and accessed by their creators. Users have full access to the
 
 ## Planned features
 
-Rework of audio triggering system.
-Audio effects for each track.
-Audio tracks that can record your audio input and loop it.
-Export beets.
-Tracks can be grabbed and moved. 
-Midi instruments.
-Zoom
-Track colors.
+- Rework of audio triggering system.
+- Audio effects for each track.
+- Audio tracks that can record your audio input and loop it.
+- Export beets.
+- Tracks can be grabbed and moved. 
+- Midi instruments.
+- Zoom
+- Track colors.
