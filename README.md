@@ -18,7 +18,7 @@ npm start
 
 ## Features
 
-The sequencer allows for an indefinite ammount of tracks, although there can be performance issues on high track counts.
+The sequencer allows for an indefinite ammount of tracks (although there can be performance issues on high track counts and low end machines).
 Tracks are fully customizeable, you can add any sample from the library.
 Global controls allow for the adjusting of tempo, grid size, and grid precision (how many pads represent one beat).
 Every track has track controls that allow to set bank and sample, change volume and panning, and mute or solo the track.
