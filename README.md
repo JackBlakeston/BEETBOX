@@ -1,4 +1,4 @@
-![LOGO] (https://github.com/JackBlakeston/BEETBOX/blob/main/client/src/assets/images/BEETBOX_LOGO.png)
+![LOGO](https://github.com/JackBlakeston/BEETBOX/blob/main/client/src/assets/images/BEETBOX_LOGO.png)
 
 # BEETBOX
 Beetbox is a drum sequencer that you can run in your browser. 
