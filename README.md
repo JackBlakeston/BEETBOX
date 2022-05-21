@@ -26,11 +26,12 @@ Beets can be saved and accessed by their creators. Users have full access to the
 
 ## Tech stack
 
--React, Javascript, Tone.js, MUI
--Firebase authentication, firebase database, firebase storage
+- React, Javascript, Tone.js, MUI
+- Firebase authentication, firebase database, firebase storage
 
 ## Planned features
 
+Rework of audio triggering system.
 Audio effects for each track.
 Audio tracks that can record your audio input and loop it.
 Export beets.
