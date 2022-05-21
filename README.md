@@ -8,6 +8,14 @@ With hundreds of samples available, all the user needs to do is log in, load som
 
 [Watch the video!](https://www.youtube.com/watch?v=e780VrMg_1k&ab_channel=JackBlakeston)
 
+## Start
+
+```bash
+cd client
+npm i
+npm start
+````
+
 ## Features
 
 The sequencer allows for an indefinite ammount of tracks, although there can be performance issues on high track counts.
@@ -16,6 +24,10 @@ Global controls allow for the adjusting of tempo, grid size, and grid precision 
 Every track has track controls that allow to set bank and sample, change volume and panning, and mute or solo the track.
 Beets can be saved and accessed by their creators. Users have full access to their entire library of beets at any time.
 
+## Tech stack
+
+-React, Javascript, Tone.js, MUI
+-Firebase authentication, firebase database, firebase storage
 
 ## Planned features
 
