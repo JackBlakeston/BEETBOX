@@ -5,6 +5,7 @@ Beetbox is a drum sequencer that you can run in your browser.
 With hundreds of samples available, all the user needs to do is log in, load some sounds and start making beets.
 
 [Try BEETBOX!](https://beetbox.netlify.app/)
+
 [Watch the video!](https://www.youtube.com/watch?v=e780VrMg_1k&ab_channel=JackBlakeston)
 
 ## Features
