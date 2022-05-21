@@ -39,3 +39,7 @@ Beets can be saved and accessed by their creators. Users have full access to the
 - Midi instruments.
 - Zoom
 - Track colors.
+
+## Contribute
+
+This project is actively looking for contributors who want to take BEETBOX to the next level. If you want to contribute, feel free to open a PR, or get in touch and we can discuss!
